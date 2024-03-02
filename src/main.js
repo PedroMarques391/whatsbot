@@ -1,7 +1,10 @@
 const qrcode = require('qrcode-terminal');
 const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
 const {
-  showPastMembers, listMembers, join, init,
+  showPastMembers, listMembers,
+  join, init, addParticipant,
+  removeParticipant, promoteParticipant,
+  demoteParticipant,
 } = require('./functions/groupFunctions');
 const { makeSticker } = require('./functions/generalFunctions');
 
@@ -37,6 +40,8 @@ client.on('message_create', async (message) => {
   if (message.body === '/start') {
     const chat = await message.getChat();
     const contact = await message.getContact();
+    const isUser = contact.isWAContact;
+    console.log(isUser);
     console.log(message);
     console.log('=========================================================');
     console.log(chat);
@@ -50,6 +55,13 @@ client.on('message_create', async (message) => {
 
   🔹 👥 /list - Listar os membros do grupo.
   🔹 🕰️ /past - Mostra os antigos membros do grupo.
+
+  🌟 *Comandos para administradores:* 🌟
+
+  🔹 ➕ /add + número - Adiciona um participante ao grupo.
+  🔹 ➖ /rm + número - Remove um participante ao grupo.
+  🔹 ⬆ /promote + número - Promove um membro em Administrador.
+  🔹 ⬇ /demote + número - Rebaixa um administrador a membro.
     
   🌟 *Comandos gerais:* 🌟
     
@@ -67,6 +79,7 @@ client.on('message_create', async (message) => {
 
 client.on('message_create', async (msg) => {
   const chat = await msg.getChat();
+  const contact = await msg.getContact();
   // console.log(msg);
   if (msg.body === '/list') {
     const allowed = chat.isGroup
@@ -80,11 +93,30 @@ client.on('message_create', async (msg) => {
     return allowed;
   } if (msg.body.startsWith('/sticker')) {
     makeSticker(msg, client);
+  } if (msg.body.startsWith('/add')) {
+    const allowed = chat.isGroup
+      ? addParticipant(msg, chat)
+      : await msg.reply(`O comando '${msg.body}' só pode ser usado em grupos`);
+    return allowed;
+  } if (msg.body.startsWith('/rm')) {
+    const allowed = chat.isGroup
+      ? removeParticipant(msg, chat)
+      : await msg.reply(`O comando '${msg.body}' só pode ser usado em grupos`);
+    return allowed;
+  } if (msg.body.startsWith('/promote')) {
+    const allowed = chat.isGroup
+      ? promoteParticipant(msg, chat, client)
+      : await msg.reply(`O comando '${msg.body}' só pode ser usado em grupos`);
+    return allowed;
+  } if (msg.body.startsWith('/demote')) {
+    const allowed = chat.isGroup
+      ? demoteParticipant(msg, chat, client)
+      : await msg.reply(`O comando '${msg.body}' só pode ser usado em grupos`);
+    return allowed;
   } if (msg.body.startsWith('Teste')) {
 
   }
 });
-
 // client.on('message_revoke_everyone', async (teste, teste2) => {
 //  const chat = (await teste.getChat()).id._serialized;
 //  await teste.reply('Tentou apagar a mensagem foi? ');

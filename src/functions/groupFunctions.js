@@ -1,3 +1,15 @@
+const {
+  isAdmin,
+  botIsAdmin,
+  extractNumberFromBody,
+  groupParticipants,
+  isNotAValidNumber,
+  authorIsAdmin,
+  isAuthorOrBot,
+  isNotInGroup,
+
+} = require('./auxiliaryFunctions');
+
 /**
  * @description Mostra os membros antigos de um grupo.
  * @param {WAWebJS.Chat} chat Chat do grupo em questão.
@@ -16,7 +28,6 @@ async function showPastMembers(chat) {
   });
   await chat.sendMessage(message);
 }
-
 /**
  * @description Marca todos os usuários de um grupo.
  * @param {WAWebJS.Chat} chat Chat do grupo em questão.
@@ -31,7 +42,6 @@ async function listMembers(chat) {
   }
   await chat.sendMessage(text, { mentions });
 }
-
 /**
  * @description Função de boas vindas de usuário.
  * @param { WAWebJS.GroupNotification} notification Acesso as notificações de grupo.
@@ -39,7 +49,7 @@ async function listMembers(chat) {
  */
 async function join(notification, client) {
   const { recipientIds, chatId } = notification;
-  const chatIds = ['120363046974763940@g.us', '559185100593-1484272786@g.us'];
+  const chatIds = ['120363046974763940@g.us', '559185100593-1484272786@g.us', '120363165993258703@g.us'];
   try {
     if (chatIds.includes(chatId)) {
       const newMemberId = recipientIds[recipientIds.length - 1];
@@ -52,7 +62,6 @@ async function join(notification, client) {
     await client.sendMessage(chatId, 'Algo deu errado :(');
   }
 }
-
 /**
  * @description Marca todos os usuários de um grupo.
  * @param { MessageMedia} photo Acesso as funções da classe MessageMedia
@@ -62,7 +71,7 @@ async function init(client, photo) {
   try {
     await new Promise((resolve) => { setTimeout(resolve, 2000); });
 
-    const groupID = ['120363046974763940@g.us', '559185100593-1484272786@g.us'];
+    const groupID = ['120363046974763940@g.us'];
     for (let i = 0; i < groupID.length; i++) {
       const media = photo.fromFilePath('./src/img/hasturInit.jpg');
 
@@ -76,10 +85,132 @@ async function init(client, photo) {
     console.error('Ocorreu um erro ao enviar a mensagem:', error);
   }
 }
+/**
+ * @description Adiciona um usuário no grupo
+ * @param { WAWebJS.Message} msg Acesso as funções da classe MessageMedia
+ * @param { WAWebJS.Chat } chat Acesso as funções da classe Client
+ */
+async function addParticipant(msg, chat) {
+  const isBotAdmin = await botIsAdmin(chat, msg);
+  if (!isBotAdmin) {
+    return;
+  }
+  const notValid = await isNotAValidNumber(msg, '/add');
+  if (notValid) {
+    return;
+  }
+  const messageAuthorIsAdmin = await authorIsAdmin(chat, msg);
+  if (!messageAuthorIsAdmin) {
+    return;
+  }
+  const phoneRegex = /^\d{12,}$/;
+  if (phoneRegex.test(extractNumberFromBody(msg.body))) {
+    if (groupParticipants(chat).includes(`${extractNumberFromBody(msg.body)}@c.us`)) {
+      return msg.reply(`O número ${extractNumberFromBody(msg.body)} já está no grupo. 😚`);
+    }
+    return chat.addParticipants([`${extractNumberFromBody(msg.body)}@c.us`]);
+  }
+  await msg.reply('O número de telefone que você digitou não parece ser válido. Por favor, verifique e tente novamente.');
+}
+/**
+ * @description Remove um usuário do grupo.
+ * @param { WAWebJS.Message} msg Acesso as funções da classe MessageMedia
+ * @param { WAWebJS.Chat } chat Acesso as funções da classe Client
+ */
+async function removeParticipant(msg, chat) {
+  const isBotAdmin = await botIsAdmin(chat, msg);
+  if (!isBotAdmin) {
+    return;
+  }
+  const notValid = await isNotAValidNumber(msg, '/rm');
+  if (notValid) {
+    return;
+  }
+  const messageAuthorIsAdmin = await authorIsAdmin(chat, msg);
+  if (!messageAuthorIsAdmin) {
+    return;
+  }
+  const userToRemove = await isNotInGroup(chat, msg);
+  if (userToRemove) {
+    return;
+  }
+  const canRemove = isAuthorOrBot(msg)
+    ? await msg.reply('Você não pode se remover ou tentar remover o Bot. 😡')
+    : await chat.removeParticipants([`${extractNumberFromBody(msg.body)}@c.us`]);
+  return canRemove;
+}
+/**
+ * @description Promover usuário a administrador.
+ * @param { WAWebJS.Message} msg Acesso as funções da classe MessageMedia
+ * @param { WAWebJS.Chat } chat Acesso as funções da classe Client
+ * @param { Client } client Acesso as funções da classe Client.
+ */
+async function promoteParticipant(msg, chat, client) {
+  const isBotAdmin = await botIsAdmin(chat, msg);
+  if (!isBotAdmin) {
+    return;
+  }
+  const notValid = await isNotAValidNumber(msg, '/promote');
+  if (notValid) {
+    return;
+  }
+  const messageAuthorIsAdmin = await authorIsAdmin(chat, msg);
+  if (!messageAuthorIsAdmin) {
+    return;
+  }
+  const userPromove = await isNotInGroup(chat, msg);
+  if (userPromove) {
+    return;
+  }
+  if (isAdmin(chat).includes(`${extractNumberFromBody(msg.body)}@c.us`)) {
+    return msg.reply('O membro que você deseja promover já é um administrador. 🙁');
+  }
+  await chat.promoteParticipants([`${extractNumberFromBody(msg.body)}@c.us`]);
+  await client.sendMessage(chat.id._serialized, `Parabéns @${extractNumberFromBody(msg.body)}, você foi promovido a administrador do grupo. Contamos com você! 😄🥳🎉`, { mentions: [`${extractNumberFromBody(msg.body)}@c.us`] });
+}
+
+async function demoteParticipant(msg, chat, client) {
+  const isBotAdmin = await botIsAdmin(chat, msg);
+  if (!isBotAdmin) {
+    return;
+  }
+  const notValid = await isNotAValidNumber(msg, '/demote');
+  if (notValid) {
+    return;
+  }
+  const messageAuthorIsAdmin = await authorIsAdmin(chat, msg);
+  if (!messageAuthorIsAdmin) {
+    return;
+  }
+  const userToDemote = await isNotInGroup(chat, msg);
+  if (userToDemote) {
+    return;
+  }
+
+  if (!isAdmin(chat).includes(`${extractNumberFromBody(msg.body)}@c.us`)) {
+    return msg.reply('O membro que você deseja rebaixar já está no menor nível. 🙁');
+  }
+  if (isAuthorOrBot(msg)) {
+    return msg.reply('Você não pode se rebaixar ou tentar rebaixar o Bot.');
+  }
+
+  if (!isAdmin(chat).includes(`${extractNumberFromBody(msg.body)}@c.us`)) {
+    return msg.reply('O membro que você deseja rebaixar já está no menor nível. 🙁');
+  }
+  if (isAuthorOrBot(msg)) {
+    return msg.reply('Você não pode se rebaixar ou tentar rebaixar o Bot.');
+  }
+  await chat.demoteParticipants([`${extractNumberFromBody(msg.body)}@c.us`]);
+  await client.sendMessage(chat.id._serialized, `Poxa @${extractNumberFromBody(msg.body)}, você foi rebaixado a membro comum do grupo. Parece que suas atitudes deixaram a desejar. ☹`, { mentions: [`${extractNumberFromBody(msg.body)}@c.us`] });
+}
 
 module.exports = {
   showPastMembers,
   listMembers,
   join,
   init,
+  addParticipant,
+  removeParticipant,
+  promoteParticipant,
+  demoteParticipant,
 };

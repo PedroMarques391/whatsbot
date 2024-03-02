@@ -11,7 +11,11 @@ async function makeSticker(msg, client) {
 
   const media = await msg.downloadMedia();
   await msg.reply('Fazendo figurinha, aguarde....');
-  client.sendMessage(msg.from === '559185480955@c.us' ? msg.to : msg.from, media, { sendMediaAsSticker: true });
+  client.sendMessage(msg.from === '559185480955@c.us' ? msg.to : msg.from, media, {
+    sendMediaAsSticker: true,
+    stickerName: '💀Created by',
+    stickerAuthor: 'HasturBot💀',
+  });
 }
 
 module.exports = {
