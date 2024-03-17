@@ -1,7 +1,7 @@
 const {
   isAdmin,
   botIsAdmin,
-  extractNumberFromBody,
+  extractTextFromBody,
   groupParticipants,
   isNotAValidNumber,
   authorIsAdmin,
@@ -104,11 +104,11 @@ async function addParticipant(msg, chat) {
     return;
   }
   const phoneRegex = /^\d{12,}$/;
-  if (phoneRegex.test(extractNumberFromBody(msg.body))) {
-    if (groupParticipants(chat).includes(`${extractNumberFromBody(msg.body)}@c.us`)) {
-      return msg.reply(`O número ${extractNumberFromBody(msg.body)} já está no grupo. 😚`);
+  if (phoneRegex.test(extractTextFromBody(msg.body))) {
+    if (groupParticipants(chat).includes(`${extractTextFromBody(msg.body)}@c.us`)) {
+      return msg.reply(`O número ${extractTextFromBody(msg.body)} já está no grupo. 😚`);
     }
-    return chat.addParticipants([`${extractNumberFromBody(msg.body)}@c.us`]);
+    return chat.addParticipants([`${extractTextFromBody(msg.body)}@c.us`]);
   }
   await msg.reply('O número de telefone que você digitou não parece ser válido. Por favor, verifique e tente novamente.');
 }
@@ -136,7 +136,7 @@ async function removeParticipant(msg, chat) {
   }
   const canRemove = isAuthorOrBot(msg)
     ? await msg.reply('Você não pode se remover ou tentar remover o Bot. 😡')
-    : await chat.removeParticipants([`${extractNumberFromBody(msg.body)}@c.us`]);
+    : await chat.removeParticipants([`${extractTextFromBody(msg.body)}@c.us`]);
   return canRemove;
 }
 /**
@@ -162,11 +162,11 @@ async function promoteParticipant(msg, chat, client) {
   if (userPromove) {
     return;
   }
-  if (isAdmin(chat).includes(`${extractNumberFromBody(msg.body)}@c.us`)) {
+  if (isAdmin(chat).includes(`${extractTextFromBody(msg.body)}@c.us`)) {
     return msg.reply('O membro que você deseja promover já é um administrador. 🙁');
   }
-  await chat.promoteParticipants([`${extractNumberFromBody(msg.body)}@c.us`]);
-  await client.sendMessage(chat.id._serialized, `Parabéns @${extractNumberFromBody(msg.body)}, você foi promovido a administrador do grupo. Contamos com você! 😄🥳🎉`, { mentions: [`${extractNumberFromBody(msg.body)}@c.us`] });
+  await chat.promoteParticipants([`${extractTextFromBody(msg.body)}@c.us`]);
+  await client.sendMessage(chat.id._serialized, `Parabéns @${extractTextFromBody(msg.body)}, você foi promovido a administrador do grupo. Contamos com você! 😄🥳🎉`, { mentions: [`${extractTextFromBody(msg.body)}@c.us`] });
 }
 
 async function demoteParticipant(msg, chat, client) {
@@ -187,21 +187,21 @@ async function demoteParticipant(msg, chat, client) {
     return;
   }
 
-  if (!isAdmin(chat).includes(`${extractNumberFromBody(msg.body)}@c.us`)) {
+  if (!isAdmin(chat).includes(`${extractTextFromBody(msg.body)}@c.us`)) {
     return msg.reply('O membro que você deseja rebaixar já está no menor nível. 🙁');
   }
   if (isAuthorOrBot(msg)) {
     return msg.reply('Você não pode se rebaixar ou tentar rebaixar o Bot.');
   }
 
-  if (!isAdmin(chat).includes(`${extractNumberFromBody(msg.body)}@c.us`)) {
+  if (!isAdmin(chat).includes(`${extractTextFromBody(msg.body)}@c.us`)) {
     return msg.reply('O membro que você deseja rebaixar já está no menor nível. 🙁');
   }
   if (isAuthorOrBot(msg)) {
     return msg.reply('Você não pode se rebaixar ou tentar rebaixar o Bot.');
   }
-  await chat.demoteParticipants([`${extractNumberFromBody(msg.body)}@c.us`]);
-  await client.sendMessage(chat.id._serialized, `Poxa @${extractNumberFromBody(msg.body)}, você foi rebaixado a membro comum do grupo. Parece que suas atitudes deixaram a desejar. ☹`, { mentions: [`${extractNumberFromBody(msg.body)}@c.us`] });
+  await chat.demoteParticipants([`${extractTextFromBody(msg.body)}@c.us`]);
+  await client.sendMessage(chat.id._serialized, `Poxa @${extractTextFromBody(msg.body)}, você foi rebaixado a membro comum do grupo. Parece que suas atitudes deixaram a desejar. ☹`, { mentions: [`${extractTextFromBody(msg.body)}@c.us`] });
 }
 
 module.exports = {

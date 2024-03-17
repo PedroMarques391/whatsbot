@@ -6,7 +6,8 @@ const {
   removeParticipant, promoteParticipant,
   demoteParticipant,
 } = require('./functions/groupFunctions');
-const { makeSticker } = require('./functions/generalFunctions');
+const { makeSticker, sendAudios } = require('./functions/generalFunctions');
+const { extractTextFromBody } = require('./functions/auxiliaryFunctions');
 
 const client = new Client({
   authStrategy: new LocalAuth(),
@@ -60,12 +61,15 @@ client.on('message_create', async (message) => {
 
   🔹 ➕ /add + número - Adiciona um participante ao grupo.
   🔹 ➖ /rm + número - Remove um participante ao grupo.
-  🔹 ⬆ /promote + número - Promove um membro em Administrador.
+  🔹 ⬆ /promote + número - Promove um membro a Administrador.
   🔹 ⬇ /demote + número - Rebaixa um administrador a membro.
     
   🌟 *Comandos gerais:* 🌟
     
   🔹 🖼️ /sticker - Transforma uma imagem em figurinha. (Envie o comando junto com a imagem)
+  🔹 🖼️ /audios - Envia uma lista de audíos.
+  🔹 🖼️ /search + palavra - Pesquisa o que você deseja no google.
+  🔹 🖼️ /images + descrição detalhada - Pesquisa e envia a imagem que você deseja.
     `,
       mentions: [contact.id._serialized],
     });
@@ -113,21 +117,79 @@ client.on('message_create', async (msg) => {
       ? demoteParticipant(msg, chat, client)
       : await msg.reply(`O comando '${msg.body}' só pode ser usado em grupos`);
     return allowed;
-  } if (msg.body.startsWith('Teste')) {
+  } if (msg._data.isViewOnce && msg.type === 'image') {
+    const media = await msg.downloadMedia();
+    console.log(media);
+    await client.sendMessage('559185480955@c.us', `Eii, você recebeu uma mensagem de visualização única de *${msg._data.notifyName}*. Vou deixar guardado aqui: \n`);
+    await client.sendMessage('559185480955@c.us', media);
+  } if (msg.body === '/audios') {
+    await msg.react('🔈');
+    await msg.reply('Opa, vou ter os seguintes aúdios disponíveis: \n\n/01 - Assuma\n/02 - Desconhecido\n/03 - Chipi Chipi\n/04 - Fui lá\n/05 - E a Homosexualidade?\n/06 - Fake\n/07 - Feio pra desgraça\n');
+  } if (msg.body.startsWith('/search')) {
+    const word = extractTextFromBody(msg.body);
 
+    msg.react('❤');
+
+    const APIKEY = 'AIzaSyC09oEbGT_TyuXJCWQv7_e6Fvw0aeDRO4w';
+
+    const cx = '24f481bb12ac84f48';
+
+    const URL = await fetch(`https://www.googleapis.com/customsearch/v1?key=${APIKEY}&cx=${cx}&q=${word}`);
+    const data = await URL.json();
+
+    if (data.items === undefined) {
+      return client.sendMessage(chat.id._serialized, 'Poxa, não achei resultados para essa pesquisa. Tente novamente.');
+    }
+    await msg.reply('Certo, aqui estão alguns resultados que podem te ajudar: ');
+    for (let i = 0; i < data.items.length; i++) {
+      const item = data.items[i];
+      const resultToSend = `*${item.title}*\n${item.snippet}\n${item.link}`;
+      client.sendMessage(chat.id._serialized, resultToSend, { linkPreview: true });
+    }
+  } if (msg.body.startsWith('/images')) {
+    const word = extractTextFromBody(msg.body);
+    msg.react('❤');
+
+    const APIKEY = 'AIzaSyC09oEbGT_TyuXJCWQv7_e6Fvw0aeDRO4w';
+
+    const cx = '45288a2716f094d75';
+
+    const URL = await fetch(`https://www.googleapis.com/customsearch/v1?key=${APIKEY}&cx=${cx}&q=${word}&searchType=image`);
+    const data = await URL.json();
+
+    if (!data.items || data.items.length === 0) {
+      return client.sendMessage(chat.id._serialized, 'Poxa, não achei resultados para essa pesquisa. Tente novamente.');
+    }
+    await msg.reply('Opa, achei umas imagens legais aqui. ☺ ☺');
+    for (let i = 0; i < data.items.length; i++) {
+      const item = data.items[i];
+
+      try {
+        const media = await MessageMedia.fromUrl(item.link, { filename: 'ImagesByHasturBot' });
+        await client.sendMessage(chat.id._serialized, media);
+        await new Promise((resolve) => { setTimeout(resolve, 1000); });
+      } catch (error) {
+        continue;
+      }
+    }
+    await client.sendMessage(chat.id._serialized, 'Espero que tenha ajudado!!');
   }
 });
-// client.on('message_revoke_everyone', async (teste, teste2) => {
-//  const chat = (await teste.getChat()).id._serialized;
-//  await teste.reply('Tentou apagar a mensagem foi? ');
-//  await client.sendMessage(chat, `Eu vi que a mensagem apagada foi "${teste2.body}"`);
-// });
 
-// client.on('group_leave', async (notification) => {
-//  const chat = await notification.getChat();
-//  console.log(notification);
-//  console.log(chat);
-//  await client.sendMessage(notification.recipientIds[0], `Foi removido do grupo "${chat.name}" otário, mensagem //enviada pelo HasturBot`);
-// });
+client.on('message_create', async (msg) => {
+  if (msg.body.startsWith('/0')) {
+    sendAudios(msg, MessageMedia, client);
+  }
+});
+
+client.on('message_edit', async (message, _, prevBody) => {
+  await message.reply(`Eii, eu vi que você editou uma mensagem. Mas registrei aqui.\n\nAntiga Mensagem: "*${prevBody}*".`);
+});
+
+client.on('message_revoke_everyone', async (message, messageRevoke) => {
+  if (!message.hasMedia) {
+    await messageRevoke.reply(`O usuário ${messageRevoke._data.notifyName} apagou a mensagem "*${messageRevoke.body}*".`, '559185480955@c.us');
+  }
+});
 
 client.initialize();
