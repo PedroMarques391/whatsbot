@@ -35,9 +35,9 @@ function groupParticipants(chat) {
 }
 
 /**
- * @description Separa o numero de telefone do comando.
+ * @description Separa oo texto do comando.
  */
-function extractNumberFromBody(body) {
+function extractTextFromBody(body) {
   const words = body.split(' ');
   words.shift();
   return words.join(' ').trim();
@@ -47,7 +47,7 @@ function extractNumberFromBody(body) {
  * @description Verifica se um numero é válido.
  */
 async function isNotAValidNumber(msg, command) {
-  if (extractNumberFromBody(msg.body) === '' || extractNumberFromBody(msg.body).match(/[+\-()]/)) {
+  if (extractTextFromBody(msg.body) === '' || extractTextFromBody(msg.body).match(/[+\-()]/)) {
     await msg.reply(`Por favor, adicione um número após '${command}' sem caracteres especiais. \nPor exemplo, use '${command} 551188889999'.`);
     return true;
   }
@@ -69,15 +69,15 @@ async function authorIsAdmin(chat, msg) {
  * @description Retorna verdadeiro se o bot for autor da mensagem.
  */
 function isAuthorOrBot(msg) {
-  return `${extractNumberFromBody(msg.body)}@c.us` === msg.author || `${extractNumberFromBody(msg.body)}@c.us` === msg.to;
+  return `${extractTextFromBody(msg.body)}@c.us` === msg.author || `${extractTextFromBody(msg.body)}@c.us` === msg.to;
 }
 
 /**
  * @description Retorna verdadeiro se o usuário não está no grupo.
  */
 async function isNotInGroup(chat, msg) {
-  if (!groupParticipants(chat).includes(`${extractNumberFromBody(msg.body)}@c.us`)) {
-    await msg.reply(`O número "${extractNumberFromBody(msg.body)}" não está presente no grupo.`);
+  if (!groupParticipants(chat).includes(`${extractTextFromBody(msg.body)}@c.us`)) {
+    await msg.reply(`O número "${extractTextFromBody(msg.body)}" não está presente no grupo.`);
     return true;
   }
   return false;
@@ -87,7 +87,7 @@ module.exports = {
   isAdmin,
   botIsAdmin,
   groupParticipants,
-  extractNumberFromBody,
+  extractTextFromBody,
   isNotAValidNumber,
   authorIsAdmin,
   isAuthorOrBot,

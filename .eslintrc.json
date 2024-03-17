@@ -11,8 +11,11 @@
     "rules": {
         "linebreak-style": "off",
         "no-plusplus": "off",
-        "import/no-extraneous-dependencies": "off",
+        "no-continue": "off",
         "consistent-return": "off",
+        "import/no-extraneous-dependencies": "off",
+        "no-await-in-loop": "off",
+        "no-new": "off",
         "no-restricted-syntax": "off",
         "no-underscore-dangle": "off"
     }
