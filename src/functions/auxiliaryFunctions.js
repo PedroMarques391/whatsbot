@@ -1,3 +1,4 @@
+require('dotenv').config();
 /**
  * @description Retorna todos os administradores do grupo.
  */
@@ -15,7 +16,7 @@ function isAdmin(chat) {
  * @description Retorna verdadeiro se o bot for administador.
  */
 async function botIsAdmin(chat, msg) {
-  const admin = isAdmin(chat).includes('559185480955@c.us');
+  const admin = isAdmin(chat).includes(process.env.CLIENT_NUMBER);
   if (!admin) {
     await msg.reply('Para executar essa função o bot precisar ser administrador do grupo. 👤');
     return false;

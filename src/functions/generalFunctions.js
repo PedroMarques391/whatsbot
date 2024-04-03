@@ -1,3 +1,4 @@
+require('dotenv').config();
 /**
  * @description Transforma uma imagem em figurinha.
  * @param {WAWebJS.Message} msg Chat do grupo em questão.
@@ -9,8 +10,8 @@ async function makeSticker(msg, client) {
   }
 
   const media = await msg.downloadMedia();
-  await msg.reply('Fazendo figurinha, aguarde....');
-  client.sendMessage(msg.from === '559185480955@c.us' ? msg.to : msg.from, media, {
+  (await msg.reply('Fazendo figurinha, aguarde....')).react('⏳');
+  client.sendMessage(msg.from === process.env.CLIENT_NUMBER ? msg.to : msg.from, media, {
     sendMediaAsSticker: true,
     stickerName: '💀Created by',
     stickerAuthor: 'HasturBot💀',

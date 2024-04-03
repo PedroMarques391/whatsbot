@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.4.5",
     "google-translate-api-browser": "^4.3.0",
     "puppeteer": "^22.3.0",
     "qrcode-terminal": "^0.12.0",
