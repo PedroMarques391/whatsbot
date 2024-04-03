@@ -49,15 +49,17 @@ async function listMembers(chat) {
  */
 async function join(notification, client) {
   const { recipientIds, chatId } = notification;
-  const chatIds = ['120363046974763940@g.us', '559185100593-1484272786@g.us', '120363165993258703@g.us'];
+  //  const chatIds = [
+  //   '120363046974763940@g.us',
+  //   '559185100593-1484272786@g.us',
+  //   '120363165993258703@g.us'
+  // ];
   try {
-    if (chatIds.includes(chatId)) {
-      const newMemberId = recipientIds[recipientIds.length - 1];
+    const newMemberId = recipientIds[recipientIds.length - 1];
 
-      const mention = newMemberId.split('@')[0];
+    const mention = newMemberId.split('@')[0];
 
-      await client.sendMessage(chatId, `Olá @${mention}! Bem-vindo ao grupo. Eu sou o HasturBot, digíte "/start" para ver os comandos disponíveis!`, { mentions: [newMemberId] });
-    }
+    await client.sendMessage(chatId, `Olá @${mention}! Bem-vindo ao grupo. Eu sou o HasturBot, digíte "/start" para ver os comandos disponíveis!`, { mentions: [newMemberId] });
   } catch (error) {
     await client.sendMessage(chatId, 'Algo deu errado :(');
   }
