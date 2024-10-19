@@ -1,5 +1,5 @@
 node_modules/
 .wwebjs_auth/
 .wwebjs_cache/
-.env/
-info.txt/
+.env
+info.txt
