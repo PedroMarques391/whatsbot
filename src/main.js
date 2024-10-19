@@ -15,8 +15,8 @@ const { extractTextFromBody } = require('./functions/auxiliaryFunctions');
 const client = new Client({
   authStrategy: new LocalAuth(),
   puppeteer: {
-    executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe',
-    headless: false,
+    headless: true,
+    executablePath: process.env.EXECUTABLE_PATH,
   },
 });
 
@@ -189,6 +189,7 @@ client.on('message_create', async (msg) => {
     }
     await client.sendMessage(chat.id._serialized, 'Prontinho, espero que tenha ajudado!!');
   } if (msg.body.startsWith('/youtubeVideo')) {
+    // Funçaõ em teste
     if (extractTextFromBody(msg.body) === '') {
       return client.sendMessage(chat.id._serialized, 'Eu preciso de um link para baixar o vídeo. Tente: *"https://youtu.be/videoID"*');
     }
