@@ -16,10 +16,7 @@ const client = new Client({
   authStrategy: new LocalAuth(),
   puppeteer: {
     executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe',
-  },
-  webVersionCache: {
-    type: 'remote',
-    remotePath: 'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2409.2.html',
+    headless: false,
   },
 });
 
@@ -57,7 +54,7 @@ client.on('message_create', async (message) => {
     const date = new Date();
     const hours = `${date.getHours()}` < 10 ? `0${date.getHours()}` : date.getHours();
     const minutes = `${date.getMinutes()}` < 10 ? `0${date.getMinutes()}` : date.getMinutes();
-    const seconds = `${date.getSeconds()}` < 10 ? `0${date.getSeconds}` : date.getSeconds();
+    const seconds = `${date.getSeconds()}` < 10 ? `0${date.getSeconds()}` : date.getSeconds();
     const menu = `
 ╭━━━━━◉   Menu   ◉━━━━━╮ 
 
@@ -104,6 +101,7 @@ client.on('message_create', async (message) => {
 
 client.on('message_create', async (msg) => {
   const chat = await msg.getChat();
+  const contact = await msg.getContact();
   if (msg.body === '/list') {
     const allowed = chat.isGroup
       ? listMembers(chat)
@@ -251,6 +249,21 @@ client.on('message_create', async (msg) => {
     } catch (error) {
       console.error('Erro:', error);
       await client.sendMessage(chat.id._serialized, 'Ocorreu um erro ao baixar o áudio. Verifique se o link está correto ou se o arquivo não excede o limite de 65mb.');
+    }
+  } if (msg.body.startsWith('/block')) {
+    try {
+      const contactIdToBlock = await client.getContactById(`${extractTextFromBody(msg.body)}@c.us`);
+      if (contactIdToBlock.isBlocked) {
+        const unBlock = await contactIdToBlock.unblock();
+        await client.sendMessage(chat.id._serialized, `Prontinho, *${contact.pushname}*, *${contactIdToBlock.pushname}* foi desbloqueado com sucesso.`);
+        return unBlock;
+      }
+      const block = await contactIdToBlock.block();
+      await client.sendMessage(chat.id._serialized, `Prontinho, *${contact.pushname}*, *${contactIdToBlock.pushname}* foi bloqueado com sucesso. Para desbloquear execute o mesmo comando.`);
+      return block;
+    } catch (error) {
+      console.log(error);
+      await client.sendMessage(chat.id._serialized, 'Tive algum problema para bloquear o contato, ou já está bloqueado, ou o numero é inválido.');
     }
   }
 });
