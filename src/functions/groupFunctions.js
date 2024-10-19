@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const {
   isAdmin,
   botIsAdmin,
@@ -49,11 +51,6 @@ async function listMembers(chat) {
  */
 async function join(notification, client) {
   const { recipientIds, chatId } = notification;
-  //  const chatIds = [
-  //   '120363046974763940@g.us',
-  //   '559185100593-1484272786@g.us',
-  //   '120363165993258703@g.us'
-  // ];
   try {
     const newMemberId = recipientIds[recipientIds.length - 1];
 
@@ -73,7 +70,7 @@ async function init(client, photo) {
   try {
     await new Promise((resolve) => { setTimeout(resolve, 2000); });
 
-    const groupID = ['120363046974763940@g.us'];
+    const groupID = process.env.GROUPS_IDS.split(','); // ID dos grupos para mensagem de inicialização, é opcional.
     for (let i = 0; i < groupID.length; i++) {
       const media = photo.fromFilePath('./src/img/hasturInit.jpg');
 
