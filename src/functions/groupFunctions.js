@@ -11,6 +11,7 @@ const {
   isNotInGroup,
 
 } = require('./auxiliaryFunctions');
+const { debuggingLifeMembers } = require('./utils');
 
 /**
  * @description Mostra os membros antigos de um grupo.
@@ -48,13 +49,47 @@ async function listMembers(chat) {
  * @description Função de boas vindas de usuário.
  * @param { WAWebJS.GroupNotification} notification Acesso as notificações de grupo.
  * @param { Client } client Acesso as funções da classe Client.
- */
-async function join(notification, client) {
+ * @param { WAWebJS.Chat } chat Acesso as funções da classe Client
+*/
+async function join(notification, client, chat) {
   const { recipientIds, chatId } = notification;
+  console.log(notification);
+
   try {
     const newMemberId = recipientIds[recipientIds.length - 1];
-
     const mention = newMemberId.split('@')[0];
+    let text = '';
+
+    const mentions = [];
+
+    for (const member of debuggingLifeMembers) {
+      mentions.push(`${member.id}@c.us`);
+      text += `
+@${member.id}
+Nome: ${member.name}
+Apelidos: ${member.nicknames.join(', ')}
+Personalidade: ${member.personality}
+Idade: ${member.age}
+Estado: ${member.state}
+Animais Favoritos: ${member.favoriteAnimals.join(', ')}
+Emojis Favoritos: ${member.favoriteEmojis.join(' ')}
+Músicas Favoritas: ${member.favoriteSongs.join(', ')}
+Hobby: ${member.hobbies.join(', ')}
+Fato Aleatório: ${member.randomFact}
+Gatilhos: ${member.triggers.join(', ')}
+Estudos: ${member.studies}
+Profissão: ${member.profession}
+------------------------------------------
+        `;
+    }
+
+    if (chatId === '120363370825903481@g.us' || chatId === '120363046974763940@g.us') {
+      console.log(text);
+
+      await client.sendMessage(chatId, `Olá @${mention}! Bem-vindo ao grupo.`, { mentions: [newMemberId] });
+      await chat.sendMessage(text, { mentions });
+      return;
+    }
 
     await client.sendMessage(chatId, `Olá @${mention}! Bem-vindo ao grupo. Eu sou o HasturBot, digíte "/start" para ver os comandos disponíveis!`, { mentions: [newMemberId] });
   } catch (error) {

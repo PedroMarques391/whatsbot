@@ -1,8 +1,6 @@
 const qrcode = require('qrcode-terminal');
 const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
-const fs = require('fs');
 require('dotenv').config();
-const ytdl = require('ytdl-core');
 const {
   showPastMembers, listMembers,
   join, init, addParticipant,
@@ -11,6 +9,7 @@ const {
 } = require('./functions/groupFunctions');
 const { makeSticker, sendAudios } = require('./functions/generalFunctions');
 const { extractTextFromBody } = require('./functions/auxiliaryFunctions');
+const { groupIdsBlocked } = require('./functions/utils');
 
 const client = new Client({
   authStrategy: new LocalAuth(),
@@ -40,11 +39,26 @@ client.on('ready', () => {
 });
 
 client.on('authenticated', async () => {
-  init(client, MessageMedia);
+  await init(client, MessageMedia);
 });
 
 client.on('group_join', async (notification) => {
-  join(notification, client);
+  const chat = await notification.getChat();
+  if (groupIdsBlocked.includes(chat.id.user)) {
+    console.log('evento  de grupo ignorado', chat.name);
+    return;
+  }
+  await join(notification, client, chat);
+});
+
+client.on('call', async (call) => {
+  console.log(call);
+  await call.reject();
+
+  await client.sendMessage(
+    call.from,
+    'O bot rejeita ligaçãoes automaticamente, mas se ele estiver por perto ele jaja fala com você\ncalma ai',
+  );
 });
 
 client.on('message_create', async (message) => {
@@ -102,7 +116,14 @@ client.on('message_create', async (message) => {
 client.on('message_create', async (msg) => {
   const chat = await msg.getChat();
   const contact = await msg.getContact();
+
+  if (groupIdsBlocked.includes(chat.id.user)) {
+    console.log('chat bloqueado', chat.name);
+    return;
+  }
+
   if (msg.body === '/list') {
+    console.log(chat);
     const allowed = chat.isGroup
       ? listMembers(chat)
       : await msg.reply(`O comando '${msg.body}' só pode ser usado em grupos`);
@@ -190,67 +211,70 @@ client.on('message_create', async (msg) => {
     await client.sendMessage(chat.id._serialized, 'Prontinho, espero que tenha ajudado!!');
   } if (msg.body.startsWith('/youtubeVideo')) {
     // Funçaõ em teste
-    if (extractTextFromBody(msg.body) === '') {
-      return client.sendMessage(chat.id._serialized, 'Eu preciso de um link para baixar o vídeo. Tente: *"https://youtu.be/videoID"*');
-    }
-    const outputFileName = './src/videos/video.mp4';
-    await client.sendMessage(chat.id._serialized, 'Baixando vídeo, aguarde um instante..');
-    const videoUrl = extractTextFromBody(msg.body);
-    const outputStream = fs.createWriteStream(outputFileName);
-    try {
-      await new Promise((resolve, reject) => {
-        ytdl(videoUrl, {
-          quality: 'highestvideo',
-          filter: 'audioandvideo',
-        })
-          .on('error', (error) => {
-            console.error('Erro ao baixar o vídeo:', error);
-            reject(error);
-          })
-          .on('end', () => {
-            console.log('Download do vídeo concluído!');
-            resolve();
-          })
-          .pipe(outputStream);
-      });
+    // if (extractTextFromBody(msg.body) === '') {
+    //   return client.sendMessage(chat.id._serialized, 'Eu preciso de um link para baixar o vídeo. Tente: *"https://youtu.be/videoID"*');
+    // }
+    // const outputFileName = './src/videos/video.mp4';
+    // await client.sendMessage(chat.id._serialized, 'Baixando vídeo, aguarde um instante..');
+    // const videoUrl = extractTextFromBody(msg.body);
+    // const outputStream = fs.createWriteStream(outputFileName);
+    // try {
+    //   await new Promise((resolve, reject) => {
+    //     ytdl(videoUrl, {
+    //       quality: 'highestvideo',
+    //       filter: 'audioandvideo',
+    //     })
+    //       .on('error', (error) => {
+    //         console.error('Erro ao baixar o vídeo:', error);
+    //         reject(error);
+    //       })
+    //       .on('end', () => {
+    //         console.log('Download do vídeo concluído!');
+    //         resolve();
+    //       })
+    //       .pipe(outputStream);
+    //   });
 
-      const media = MessageMedia.fromFilePath(outputFileName);
-      await client.sendMessage(chat.id._serialized, media, { caption: 'Download concluído!' });
-    } catch (error) {
-      console.error('Erro:', error);
-      await client.sendMessage(chat.id._serialized, 'Ocorreu um erro ao baixar o vídeo. Verifique se o link está correto ou se o vídeo não excede o limite de 65mb.');
-    }
+    //   const media = MessageMedia.fromFilePath(outputFileName);
+    //   await client.sendMessage(chat.id._serialized, media, { caption: 'Download concluído!' });
+    // } catch (error) {
+    //   console.error('Erro:', error);
+    //   await client.sendMessage(chat.id._serialized, 'Ocorreu um erro ao baixar o vídeo.
+    // Verifique se o link está correto ou se o vídeo não excede o limite de 65mb.');
+    // }
   } if (msg.body.startsWith('/youtubeAudio')) {
-    // FUNÇÃO EM FASE DE TESTE
-    if (extractTextFromBody(msg.body) === '') {
-      return client.sendMessage(chat.id._serialized, 'Eu preciso de um link para baixar o áudio. Tente: *"https://youtu.be/videoID"*');
-    }
-    const outputFileName = './src/audios/audio.mp3';
-    await client.sendMessage(chat.id._serialized, 'Baixando áudio, aguarde um instante..');
-    const videoUrl = extractTextFromBody(msg.body);
-    const outputStream = fs.createWriteStream(outputFileName);
-    try {
-      await new Promise((resolve, reject) => {
-        ytdl(videoUrl, {
-          filter: 'audioonly',
-        })
-          .on('error', (error) => {
-            console.error('Erro ao baixar o áudio:', error);
-            reject(error);
-          })
-          .on('end', () => {
-            console.log('Download do áudio concluído!');
-            resolve();
-          })
-          .pipe(outputStream);
-      });
-      await new Promise((resolve) => { setTimeout(resolve, 1000); });
-      const media = MessageMedia.fromFilePath('./src/audios/audio.mp3');
-      await client.sendMessage(chat.id._serialized, media, { sendAudioAsVoice: false });
-    } catch (error) {
-      console.error('Erro:', error);
-      await client.sendMessage(chat.id._serialized, 'Ocorreu um erro ao baixar o áudio. Verifique se o link está correto ou se o arquivo não excede o limite de 65mb.');
-    }
+    // // FUNÇÃO EM FASE DE TESTE
+    // if (extractTextFromBody(msg.body) === '') {
+    //   return client.sendMessage(chat.id._serialized, 'Eu preciso de um link para baixar o áudio. Tente: *"https://youtu.be/videoID"*');
+    // }
+    // const outputFileName = './src/audios/audio.mp3';
+    // await client.sendMessage(chat.id._serialized, 'Baixando áudio, aguarde um instante..');
+    // const videoUrl = extractTextFromBody(msg.body);
+    // const outputStream = fs.createWriteStream(outputFileName);
+    // try {
+    //   await new Promise((resolve, reject) => {
+    //     ytdl(videoUrl, {
+    //       filter: 'audioonly',
+    //     })
+    //       .on('error', (error) => {
+    //         console.error('Erro ao baixar o áudio:', error);
+    //         reject(error);
+    //       })
+    //       .on('end', () => {
+    //         console.log('Download do áudio concluído!');
+    //         resolve();
+    //       })
+    //       .pipe(outputStream);
+    //   });
+    //   await new Promise((resolve) => { setTimeout(resolve, 1000); });
+    //   const media = MessageMedia.fromFilePath('./src/audios/audio.mp3');
+    //   await client.sendMessage(chat.id._serialized, media, { sendAudioAsVoice: false });
+    // } catch (error) {
+    //   console.error('Erro:', error);
+    //   await client.sendMessage(chat.id._serialized, 'Ocorreu um erro
+    // ao baixar o áudio. Verifique se o link está correto ou se o arquivo não
+    // excede o limite de 65mb.');
+    // }
   } if (msg.body.startsWith('/block')) {
     try {
       const contactIdToBlock = await client.getContactById(`${extractTextFromBody(msg.body)}@c.us`);
@@ -266,6 +290,9 @@ client.on('message_create', async (msg) => {
       console.log(error);
       await client.sendMessage(chat.id._serialized, 'Tive algum problema para bloquear o contato, ou já está bloqueado, ou o numero é inválido.');
     }
+  } if (msg.body.startsWith('/test')) {
+    const a = await client.getChatById('120363370825903481@g.us');
+    console.log(a.participants);
   }
 });
 
