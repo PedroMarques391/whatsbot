@@ -9,7 +9,9 @@ const {
 } = require('./functions/groupFunctions');
 const { makeSticker, sendAudios } = require('./functions/generalFunctions');
 const { extractTextFromBody } = require('./functions/auxiliaryFunctions');
-const { groupIdsBlocked } = require('./functions/utils');
+const { groupIdsAllowed } = require('./functions/utils');
+const { DLIntro } = require('./functions/runInSpecificGroup');
+const groupMembers = require('../dlMembers.json');
 
 const client = new Client({
   authStrategy: new LocalAuth(),
@@ -44,8 +46,7 @@ client.on('authenticated', async () => {
 
 client.on('group_join', async (notification) => {
   const chat = await notification.getChat();
-  if (groupIdsBlocked.includes(chat.id.user)) {
-    console.log('evento  de grupo ignorado', chat.name);
+  if (groupIdsAllowed.length > 0 && !groupIdsAllowed.includes(chat.id.user)) {
     return;
   }
   await join(notification, client, chat);
@@ -76,27 +77,27 @@ client.on('message_create', async (message) => {
   ◉━━━━━ HasturBot ━━━━━◉
   ╚┉｡˚┉═══『💀』═══┉｡˚┉╝   
    
- ╰━━━━━━◉*^__~*◉━━━━━━╯
+ ╰━━━━━━◉^__~◉━━━━━━╯
 
-╭•━━━━━━≺ *Infos* ≻━━━━━━•╮ 
-┃￫ *Chat:* ${contact.pushname}
-┃￫ *Hora:* ${hours}:${minutes}:${seconds}
+╭•━━━━━━≺ Infos ≻━━━━━━•╮ 
+┃￫ Chat: ${contact.pushname}
+┃￫ Hora: ${hours}:${minutes}:${seconds}
 ┃￫ Olá @${contact.number}! Eu sou o HasturBot. Todos com comandos devem iniciar com ' / '.
 ╰╼━══━━━━≺∆≻━━━━══━╾╯
 
-╭•━━━━━≺ *Grupos* ≻━━━━━•╮
+╭•━━━━━≺ Grupos ≻━━━━━•╮
 ┃￫ /list - Listar os membros do grupo.
 ┃￫ /past - Mostra os antigos membros do grupo.
 ╰╼━══━━━━≺∆≻━━━━══━╾╯
 
-╭•━━≺ *Administradores* ≻━━•╮ 
+╭•━━≺ Administradores ≻━━•╮ 
 ┃￫ /add + número - Adiciona um participante ao grupo.
 ┃￫ /rm + número - Remove um participante ao grupo.
 ┃￫ /promote + número - Promove um membro a Administrador.
 ┃￫ /demote + número - Rebaixa um administrador a membro.
 ╰╼━══━━━━≺∆≻━━━━══━╾╯ 
 
-╭•━━━━━━≺ *Geral* ≻━━━━━━•╮ 
+╭•━━━━━━≺ Geral ≻━━━━━━•╮ 
 ┃￫ /sticker - Transforma uma imagem em figurinha. (Envie o comando junto com a imagem)
 ┃￫ /audios - Envia uma lista de áudios.
 ┃￫ /search + palavra - Pesquisa o que você deseja no google.
@@ -117,13 +118,11 @@ client.on('message_create', async (msg) => {
   const chat = await msg.getChat();
   const contact = await msg.getContact();
 
-  if (groupIdsBlocked.includes(chat.id.user)) {
-    console.log('chat bloqueado', chat.name);
+  if (groupIdsAllowed.length > 0 && !groupIdsAllowed.includes(chat.id.user)) {
     return;
   }
 
   if (msg.body === '/list') {
-    console.log(chat);
     const allowed = chat.isGroup
       ? listMembers(chat)
       : await msg.reply(`O comando '${msg.body}' só pode ser usado em grupos`);
@@ -157,7 +156,7 @@ client.on('message_create', async (msg) => {
     return allowed;
   } if (msg._data.isViewOnce) {
     const media = await msg.downloadMedia();
-    await client.sendMessage(process.env.CLIENT_NUMBER, `Eii, você recebeu uma mensagem de visualização única de *${msg._data.notifyName}*. Vou deixar guardado aqui: \n`);
+    await client.sendMessage(process.env.CLIENT_NUMBER, `Eii, você recebeu uma mensagem de visualização única de ${msg._data.notifyName}. Vou deixar guardado aqui: \n`);
     await client.sendMessage(process.env.CLIENT_NUMBER, media);
   } if (msg.body === '/audios') {
     await msg.react('🔈');
@@ -179,7 +178,7 @@ client.on('message_create', async (msg) => {
     await msg.reply('Certo, aqui estão alguns resultados que podem te ajudar: ');
     for (let i = 0; i < data.items.length; i++) {
       const item = data.items[i];
-      const resultToSend = `*${item.title}*\n${item.snippet}\n${item.link}`;
+      const resultToSend = `${item.title}\n${item.snippet}\n${item.link}`;
       client.sendMessage(chat.id._serialized, resultToSend, { linkPreview: true });
     }
   } if (msg.body.startsWith('/images')) {
@@ -209,90 +208,47 @@ client.on('message_create', async (msg) => {
       }
     }
     await client.sendMessage(chat.id._serialized, 'Prontinho, espero que tenha ajudado!!');
-  } if (msg.body.startsWith('/youtubeVideo')) {
-    // Funçaõ em teste
-    // if (extractTextFromBody(msg.body) === '') {
-    //   return client.sendMessage(chat.id._serialized, 'Eu preciso de um link para baixar o vídeo. Tente: *"https://youtu.be/videoID"*');
-    // }
-    // const outputFileName = './src/videos/video.mp4';
-    // await client.sendMessage(chat.id._serialized, 'Baixando vídeo, aguarde um instante..');
-    // const videoUrl = extractTextFromBody(msg.body);
-    // const outputStream = fs.createWriteStream(outputFileName);
-    // try {
-    //   await new Promise((resolve, reject) => {
-    //     ytdl(videoUrl, {
-    //       quality: 'highestvideo',
-    //       filter: 'audioandvideo',
-    //     })
-    //       .on('error', (error) => {
-    //         console.error('Erro ao baixar o vídeo:', error);
-    //         reject(error);
-    //       })
-    //       .on('end', () => {
-    //         console.log('Download do vídeo concluído!');
-    //         resolve();
-    //       })
-    //       .pipe(outputStream);
-    //   });
-
-    //   const media = MessageMedia.fromFilePath(outputFileName);
-    //   await client.sendMessage(chat.id._serialized, media, { caption: 'Download concluído!' });
-    // } catch (error) {
-    //   console.error('Erro:', error);
-    //   await client.sendMessage(chat.id._serialized, 'Ocorreu um erro ao baixar o vídeo.
-    // Verifique se o link está correto ou se o vídeo não excede o limite de 65mb.');
-    // }
-  } if (msg.body.startsWith('/youtubeAudio')) {
-    // // FUNÇÃO EM FASE DE TESTE
-    // if (extractTextFromBody(msg.body) === '') {
-    //   return client.sendMessage(chat.id._serialized, 'Eu preciso de um link para baixar o áudio. Tente: *"https://youtu.be/videoID"*');
-    // }
-    // const outputFileName = './src/audios/audio.mp3';
-    // await client.sendMessage(chat.id._serialized, 'Baixando áudio, aguarde um instante..');
-    // const videoUrl = extractTextFromBody(msg.body);
-    // const outputStream = fs.createWriteStream(outputFileName);
-    // try {
-    //   await new Promise((resolve, reject) => {
-    //     ytdl(videoUrl, {
-    //       filter: 'audioonly',
-    //     })
-    //       .on('error', (error) => {
-    //         console.error('Erro ao baixar o áudio:', error);
-    //         reject(error);
-    //       })
-    //       .on('end', () => {
-    //         console.log('Download do áudio concluído!');
-    //         resolve();
-    //       })
-    //       .pipe(outputStream);
-    //   });
-    //   await new Promise((resolve) => { setTimeout(resolve, 1000); });
-    //   const media = MessageMedia.fromFilePath('./src/audios/audio.mp3');
-    //   await client.sendMessage(chat.id._serialized, media, { sendAudioAsVoice: false });
-    // } catch (error) {
-    //   console.error('Erro:', error);
-    //   await client.sendMessage(chat.id._serialized, 'Ocorreu um erro
-    // ao baixar o áudio. Verifique se o link está correto ou se o arquivo não
-    // excede o limite de 65mb.');
-    // }
   } if (msg.body.startsWith('/block')) {
     try {
       const contactIdToBlock = await client.getContactById(`${extractTextFromBody(msg.body)}@c.us`);
       if (contactIdToBlock.isBlocked) {
         const unBlock = await contactIdToBlock.unblock();
-        await client.sendMessage(chat.id._serialized, `Prontinho, *${contact.pushname}*, *${contactIdToBlock.pushname}* foi desbloqueado com sucesso.`);
+        await client.sendMessage(chat.id._serialized, `Prontinho, ${contact.pushname}, ${contactIdToBlock.pushname} foi desbloqueado com sucesso.`);
         return unBlock;
       }
       const block = await contactIdToBlock.block();
-      await client.sendMessage(chat.id._serialized, `Prontinho, *${contact.pushname}*, *${contactIdToBlock.pushname}* foi bloqueado com sucesso. Para desbloquear execute o mesmo comando.`);
+      await client.sendMessage(chat.id._serialized, `Prontinho, ${contact.pushname}, ${contactIdToBlock.pushname} foi bloqueado com sucesso. Para desbloquear execute o mesmo comando.`);
       return block;
     } catch (error) {
       console.log(error);
       await client.sendMessage(chat.id._serialized, 'Tive algum problema para bloquear o contato, ou já está bloqueado, ou o numero é inválido.');
     }
   } if (msg.body.startsWith('/test')) {
-    const a = await client.getChatById('120363370825903481@g.us');
-    console.log(a.participants);
+    const a = await client.getChatById(chat.id_serialized);
+    console.log(a);
+  } if (msg.body.startsWith('/apt')) {
+    if (typeof DLIntro === 'function') {
+      await DLIntro(chat, client, groupMembers);
+    } else {
+      console.log(`
+\u001b[1m⚠️  \u001b[31mFunção "DLIntro" não encontrada!\u001b[0m
+\u001b[33m============================================================\u001b[0m
+
+\u001b[36m🔧 Para corrigir este problema:\u001b[0m
+\u001b[37m- Substitua a função "DLIntro" por uma função personalizada 
+  para apresentar os usuários do grupo ou exclua o comando /apt.\u001b[0m
+\u001b[32m- Exemplo:\u001b[0m Crie uma função '\u001b[1mpresentGroupMembers\u001b[0m' que recebe 
+  os parâmetros necessários: (chat, client, members).
+
+\u001b[36m🚀 Objetivo:\u001b[0m Essa função deve listar ou apresentar os membros 
+do grupo de maneira personalizada conforme sua necessidade.
+
+\u001b[36m🔗 Dica:\u001b[0m Garanta que a função está definida ou importada 
+corretamente no escopo do projeto.
+
+\u001b[33m============================================================\u001b[0m
+                `);
+    }
   }
 });
 
@@ -304,7 +260,7 @@ client.on('message_create', async (msg) => {
 
 client.on('message_revoke_everyone', async (message, messageRevoke) => {
   if (!message.hasMedia) {
-    await messageRevoke.reply(`O usuário ${messageRevoke._data.notifyName} apagou a mensagem "*${messageRevoke.body}*".`, process.env.CLIENT_NUMBER);
+    await messageRevoke.reply(`O usuário ${messageRevoke._data.notifyName} apagou a mensagem "${messageRevoke.body}".`, process.env.CLIENT_NUMBER);
   }
 });
 
