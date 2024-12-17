@@ -82,7 +82,7 @@ async function init(client, photo) {
 
       const messageToSend = 'HasturBot está online agora!\nDigíte "/start" para ver opções.';
 
-      client.sendMessage(groupID[i], media, { caption: messageToSend });
+      client.sendMessage(`${groupID[i]}@g.us`, media, { caption: messageToSend });
     }
 
     console.log('Mensagem enviada com sucesso para o grupo:', groupID);
