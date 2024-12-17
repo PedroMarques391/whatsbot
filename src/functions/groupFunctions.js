@@ -52,16 +52,14 @@ async function listMembers(chat) {
 */
 async function join(notification, client, chat) {
   const { recipientIds, chatId } = notification;
-  console.log(notification);
 
   try {
     const newMemberId = recipientIds[recipientIds.length - 1];
     const mention = newMemberId.split('@')[0];
-    if (chatId === '120363370825903481@g.us' || chatId === '120363046974763940@g.us') {
+    if (chatId === `${process.env.ALLOWED_GROUPS.split(',')[1]}@g.us`) {
       await client.sendMessage(chatId, `Olá @${mention}! Bem-vindo ao ${chat.name}! Digíte "/apt" para ver a ficha dos membros.`, { mentions: [newMemberId] });
       return;
     }
-
     await client.sendMessage(chatId, `Olá @${mention}! Bem-vindo ao grupo. Eu sou o HasturBot, digíte "/start" para ver os comandos disponíveis!`, { mentions: [newMemberId] });
   } catch (error) {
     await client.sendMessage(chatId, 'Algo deu errado :(');
