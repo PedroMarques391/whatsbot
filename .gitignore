@@ -3,5 +3,5 @@ node_modules/
 .wwebjs_cache/
 .env
 info.txt
-functions/runInSpecificGroup.js
-dlMembers.js
+src/functions/runInSpecificGroup.js
+dlMembers.json
