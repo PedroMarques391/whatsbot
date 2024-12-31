@@ -62,7 +62,7 @@ async function join(notification, client, chat) {
     }
     await client.sendMessage(chatId, `Olá @${mention}! Bem-vindo ao grupo. Eu sou o HasturBot, digíte "/start" para ver os comandos disponíveis!`, { mentions: [newMemberId] });
   } catch (error) {
-    await client.sendMessage(chatId, 'Algo deu errado :(');
+    await client.sendMessage(chatId, 'Algo deu errado. :(');
   }
 }
 /**
