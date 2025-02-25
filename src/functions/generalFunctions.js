@@ -1,30 +1,89 @@
 require('dotenv').config();
+const ffmpeg = require('fluent-ffmpeg');
+const fs = require('fs');
+const path = require('path');
+const { MessageMedia } = require('whatsapp-web.js');
+
 /**
  * @description Transforma uma imagem em figurinha.
  * @param {WAWebJS.Message} msg Chat do grupo em questão.
  * @param {Client} client Chat do grupo em questão.
  */
+
 async function makeSticker(msg, client) {
-  if (msg.type !== 'image') {
-    return msg.reply(`O comando '${msg.body}' deve vir como legenda de uma imagem.`);
+  const media = await msg.downloadMedia();
+  const authorName = msg._data.notifyName || 'Bot';
+  if (!media || !media.data) {
+    await msg.reply('Uai, você acha que eu faço milagre? 😆 Envie um vídeo ou imagem para criar o sticker!').then((message) => {
+      message.react('❌');
+    });
+    return;
   }
 
-  const media = await msg.downloadMedia();
-  (await msg.reply('Fazendo figurinha, aguarde....')).react('⏳');
-  client.sendMessage(msg.from === process.env.CLIENT_NUMBER ? msg.to : msg.from, media, {
-    sendMediaAsSticker: true,
-    stickerName: '💀Created by',
-    stickerAuthor: 'HasturBot💀',
-  });
-}
+  const outputDir = path.resolve(__dirname, '../videos/gift');
+  if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir, { recursive: true });
+  }
 
+  if (msg.type === 'video') {
+    const inputPath = path.join(outputDir, 'video.mp4');
+    const outputPath = path.join(outputDir, 'sticker.webp');
+
+    fs.writeFileSync(inputPath, Buffer.from(media.data, 'base64'));
+    ffmpeg(inputPath)
+      .setStartTime(0)
+      .setDuration(6)
+      .output(outputPath)
+      .outputFormat('webp')
+      .videoCodec('libwebp')
+      .size('512x512')
+      .fps(10)
+      .noAudio()
+      .on('start', async () => {
+        await msg.react('⏳');
+      })
+      .on('progress', async () => {
+        await msg.react('⌛');
+      })
+      .on('end', async () => {
+        const stickerMedia = MessageMedia.fromFilePath(outputPath);
+        await client.sendMessage(
+          msg.from === process.env.CLIENT_NUMBER ? msg.to : msg.from,
+          stickerMedia,
+          {
+            sendMediaAsSticker: true,
+            stickerName: `💀Created by ${authorName}`,
+            stickerAuthor: 'HasturBot💀',
+          },
+        );
+        await msg.react('✅');
+      })
+      .on('error', (err) => {
+        console.error('Erro na conversão:', err);
+      })
+      .run();
+  } else {
+    await msg.react('⏳');
+
+    const stickerMedia = new MessageMedia(media.mimetype, media.data);
+    await client.sendMessage(
+      msg.from === process.env.CLIENT_NUMBER ? msg.to : msg.from,
+      stickerMedia,
+      {
+        sendMediaAsSticker: true,
+        stickerName: `💀Created by ${authorName}`,
+        stickerAuthor: 'HasturBot💀',
+      },
+    );
+    await msg.react('✅');
+  }
+}
 /**
  * @description Transforma uma imagem em figurinha.
  * @param {WAWebJS.Message} msg Chat do grupo em questão.
- * @param {WAWebJS.MessageMedia} MessageMedia Midia baixada.
  * @param {Client} client Chat do grupo em questão.
  */
-async function sendAudios(msg, MessageMedia, client) {
+async function sendAudios(msg, client) {
   const chat = await msg.getChat();
   const audios = {
     '/01': 'assuma',
