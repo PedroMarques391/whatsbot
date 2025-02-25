@@ -1,5 +1,6 @@
 const qrcode = require('qrcode-terminal');
 const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 require('dotenv').config();
 const {
   showPastMembers, listMembers,
@@ -34,7 +35,7 @@ client.on('ready', () => {
   ┃━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━━━━   
   ┃｡˚💀 ￫ Telefone do cliente: ${client.info.wid.user}       
   ┃━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━━━━
-  ┃｡˚💀 ￫ Plataforma do cliente: ${client.info.platform}
+  ┃｡˚💀 ￫ Plataforma do cliente: ${client.info.platform === 'iphone' ? 'IOS' : client.info.platform}
   ╰╼━━━━━━━━╾━━━━━━╾━━━━━━╾≺End≻━═━╾━━━╾━━━━━━╾━━━━━━━━━━━╯
 
   `);
@@ -118,7 +119,14 @@ client.on('message_create', async (msg) => {
   const chat = await msg.getChat();
   const contact = await msg.getContact();
 
-  if (groupIdsAllowed.length > 0 && !groupIdsAllowed.includes(chat.id.user)) {
+  // const chats = await client.getChats();
+  // const groupChats = chats
+  //   .filter((group) => chat.isGroup)
+  //   .map((group) => ({ name: chat.name, id: chat.id._serialized }));
+  // console.log(groupChats);
+
+  if (chat.isGroup && groupIdsAllowed.length > 0 && !groupIdsAllowed.includes(chat.id.user)) {
+    console.log('comando bloqueado');
     return;
   }
 
@@ -132,7 +140,7 @@ client.on('message_create', async (msg) => {
       ? showPastMembers(chat)
       : await msg.reply(`O comando '${msg.body}' só pode ser usado em grupos`);
     return allowed;
-  } if (msg.body.startsWith('/sticker')) {
+  } if (msg.body.startsWith('/sticker') || msg.body === '/s') {
     makeSticker(msg, client);
   } if (msg.body.startsWith('/add')) {
     const allowed = chat.isGroup
@@ -224,8 +232,47 @@ client.on('message_create', async (msg) => {
       await client.sendMessage(chat.id._serialized, 'Tive algum problema para bloquear o contato, ou já está bloqueado, ou o numero é inválido.');
     }
   } if (msg.body.startsWith('/test')) {
-    const a = await client.getChatById(chat.id_serialized);
-    console.log(a);
+    await client.sendMessage(chat.id._serialized, 'Certo, vou ler as ultimas 100 mensagens e resumir.');
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const messages = await chat.fetchMessages({
+      limit: 100,
+    });
+
+    const textMessages = messages
+      .filter((message) => !message.hasMedia)
+      .map((message) => ({
+        messageText: message.body,
+      }));
+
+    const formattedMessages = textMessages
+      .map((message) => ` ${message.messageText}`)
+      .join('\n');
+
+    const prompt = `Resuma a conversa abaixo de forma clara e objetiva, destacando os principais temas discutidos.  
+Se possível, mencione os nomes dos participantes e suas contribuições.  
+Ignore mensagens irrelevantes e priorize as mais informativas.  
+O resumo deve ser conciso, mantendo o contexto original:\n\n${formattedMessages}`;
+
+    console.log(prompt);
+
+    // try {
+    //   const options = {
+    //     temperature: 0.5,
+    //     max_tokens: 500,
+    //     top_p: 0.9,
+    //   };
+
+    //   const result = await model.generateContent(prompt, options);
+    //   const response = await result.response;
+    //   const text = await response.text();
+
+    //   console.log(text);
+    //   await msg.reply(text);
+    // } catch (error) {
+    //   console.error('Erro ao gerar resumo:', error);
+    //   await msg.reply('Desculpe, não consegui processar o resumo no momento.');
+    // }
   } if (msg.body.startsWith('/apt')) {
     if (typeof DLIntro === 'function') {
       await DLIntro(chat, client, groupMembers);
@@ -254,7 +301,7 @@ corretamente no escopo do projeto.
 
 client.on('message_create', async (msg) => {
   if (msg.body.startsWith('/0')) {
-    sendAudios(msg, MessageMedia, client);
+    sendAudios(msg, client);
   }
 });
 
