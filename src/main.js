@@ -11,8 +11,7 @@ const {
 const { makeSticker, sendAudios, resumeMessages } = require('./functions/generalFunctions');
 const { extractTextFromBody } = require('./functions/auxiliaryFunctions');
 const { groupIdsAllowed } = require('./functions/utils');
-const { DLIntro } = require('./functions/runInSpecificGroup');
-const groupMembers = require('../dlMembers.json');
+const { botResponses } = require('./utils/messages');
 
 const client = new Client({
   authStrategy: new LocalAuth(),
@@ -240,29 +239,9 @@ client.on('message_create', async (msg) => {
       limit: 10,
     });
     console.log(messages);
-  } if (msg.body.startsWith('/apt')) {
-    if (typeof DLIntro === 'function') {
-      await DLIntro(chat, client, groupMembers);
-    } else {
-      console.log(`
-\u001b[1m⚠️  \u001b[31mFunção "DLIntro" não encontrada!\u001b[0m
-\u001b[33m============================================================\u001b[0m
-
-\u001b[36m🔧 Para corrigir este problema:\u001b[0m
-\u001b[37m- Substitua a função "DLIntro" por uma função personalizada 
-  para apresentar os usuários do grupo ou exclua o comando /apt.\u001b[0m
-\u001b[32m- Exemplo:\u001b[0m Crie uma função '\u001b[1mpresentGroupMembers\u001b[0m' que recebe 
-  os parâmetros necessários: (chat, client, members).
-
-\u001b[36m🚀 Objetivo:\u001b[0m Essa função deve listar ou apresentar os membros 
-do grupo de maneira personalizada conforme sua necessidade.
-
-\u001b[36m🔗 Dica:\u001b[0m Garanta que a função está definida ou importada 
-corretamente no escopo do projeto.
-
-\u001b[33m============================================================\u001b[0m
-                `);
-    }
+  } if (msg.body.toLowerCase().startsWith('hasturbot')) {
+    const getRandomResponse = botResponses[Math.floor(Math.random() * botResponses.length)];
+    await msg.reply(getRandomResponse);
   }
 });
 
