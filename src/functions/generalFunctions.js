@@ -1,4 +1,5 @@
 require('dotenv').config();
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 const ffmpeg = require('fluent-ffmpeg');
 const fs = require('fs');
 const path = require('path');
@@ -11,6 +12,7 @@ const { MessageMedia } = require('whatsapp-web.js');
  */
 
 async function makeSticker(msg, client) {
+  const chat = await msg.getChat();
   const media = await msg.downloadMedia();
   const authorName = msg._data.notifyName || 'Bot';
   if (!media || !media.data) {
@@ -48,7 +50,7 @@ async function makeSticker(msg, client) {
       .on('end', async () => {
         const stickerMedia = MessageMedia.fromFilePath(outputPath);
         await client.sendMessage(
-          msg.from === process.env.CLIENT_NUMBER ? msg.to : msg.from,
+          chat.id._serialized,
           stickerMedia,
           {
             sendMediaAsSticker: true,
@@ -58,8 +60,8 @@ async function makeSticker(msg, client) {
         );
         await msg.react('✅');
       })
-      .on('error', (err) => {
-        console.error('Erro na conversão:', err);
+      .on('error', async () => {
+        await client.sendMessage(chat.id._serialized, 'Erro na conversão.');
       })
       .run();
   } else {
@@ -67,7 +69,7 @@ async function makeSticker(msg, client) {
 
     const stickerMedia = new MessageMedia(media.mimetype, media.data);
     await client.sendMessage(
-      msg.from === process.env.CLIENT_NUMBER ? msg.to : msg.from,
+      chat.id._serialized,
       stickerMedia,
       {
         sendMediaAsSticker: true,
@@ -79,9 +81,9 @@ async function makeSticker(msg, client) {
   }
 }
 /**
- * @description Transforma uma imagem em figurinha.
- * @param {WAWebJS.Message} msg Chat do grupo em questão.
- * @param {Client} client Chat do grupo em questão.
+ * @description Envia uma lista de audios.
+ * @param {WAWebJS.Message} msg Mensagem recebida no chat.
+ * @param {Client} client Instância do cliente do WhatsApp Web.
  */
 async function sendAudios(msg, client) {
   const chat = await msg.getChat();
@@ -103,6 +105,54 @@ async function sendAudios(msg, client) {
   }
 }
 
+/**
+ * @description Resume as ultimas mensagens de uma conversa
+ * @param {WAWebJS.Message} msg Mensagem recebida no chat.
+ * @param {Client} client Instância do cliente do WhatsApp Web.
+ */
+async function resumeMessages(client, msg) {
+  const chat = await msg.getChat();
+  await client.sendMessage(chat.id._serialized, 'Entendido! Vou analisar as últimas mensagens e gerar um resumo.');
+
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+  const model = genAI.getGenerativeModel({
+    model: 'gemini-1.5-flash',
+    systemInstruction: 'You are a bot. Your name is HasturBot.',
+  });
+  const messages = await chat.fetchMessages({
+    limit: 400,
+  });
+
+  const textMessages = messages
+    .filter((message) => !message.hasMedia)
+    .map((message) => ({
+      messageText: message.body,
+      author: message._data.notifyName || 'Alguém',
+    }));
+
+  const formattedMessages = textMessages
+    .slice(0, -2)
+    .map((message) => ` ${message.messageText} : ${message.author}`)
+    .join('\n');
+
+  const prompt = `Resuma a conversa a seguir de forma clara e objetiva, destacando os principais temas abordados. Identifique os participantes pelo nome e mencione suas contribuições mais relevantes. Caso o nome não esteja disponível, utilize "Alguém". Ignore mensagens irrelevantes e priorize as informações mais importantes. O resumo deve ser conciso, mantendo o contexto original da conversa:\n\n${formattedMessages}`;
+
+  try {
+    const result = await model.generateContent(prompt, {
+      generationConfig: {
+        maxOutputTokens: 800,
+        temperature: 0.6,
+      },
+    });
+    const response = await result.response;
+    const text = await response.text();
+
+    await client.sendMessage(chat.id._serialized, text).then(() => msg.react('⏳').finally(() => msg.react('✅')));
+  } catch (error) {
+    await client.sendMessage(chat.id._serialized, 'Desculpe, não consegui processar o resumo no momento.');
+  }
+}
+
 function formatDate(unixTimeStamp) {
   const date = new Date(unixTimeStamp * 1000);
 
@@ -114,11 +164,12 @@ function formatDate(unixTimeStamp) {
   const seconds = (`0${date.getSeconds()}`).slice(-2);
 
   const formattedTime = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
-  console.log(formattedTime);
+  return formattedTime;
 }
 
 module.exports = {
   makeSticker,
   sendAudios,
   formatDate,
+  resumeMessages,
 };

@@ -1,6 +1,6 @@
+/* eslint-disable no-console */
 const qrcode = require('qrcode-terminal');
 const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
-const { GoogleGenerativeAI } = require('@google/generative-ai');
 require('dotenv').config();
 const {
   showPastMembers, listMembers,
@@ -8,7 +8,7 @@ const {
   removeParticipant, promoteParticipant,
   demoteParticipant,
 } = require('./functions/groupFunctions');
-const { makeSticker, sendAudios } = require('./functions/generalFunctions');
+const { makeSticker, sendAudios, resumeMessages } = require('./functions/generalFunctions');
 const { extractTextFromBody } = require('./functions/auxiliaryFunctions');
 const { groupIdsAllowed } = require('./functions/utils');
 const { DLIntro } = require('./functions/runInSpecificGroup');
@@ -72,38 +72,39 @@ client.on('message_create', async (message) => {
     const minutes = `${date.getMinutes()}` < 10 ? `0${date.getMinutes()}` : date.getMinutes();
     const seconds = `${date.getSeconds()}` < 10 ? `0${date.getSeconds()}` : date.getSeconds();
     const menu = `
-╭━━━━━◉   Menu   ◉━━━━━╮ 
+  ╭━━━━━◉   Menu   ◉━━━━━╮ 
 
-  ╔┉｡˚┉═══『💀』═══┉｡˚┉╗    
-  ◉━━━━━ HasturBot ━━━━━◉
-  ╚┉｡˚┉═══『💀』═══┉｡˚┉╝   
-   
- ╰━━━━━━◉^__~◉━━━━━━╯
+    ╔┉｡˚┉═══『💀』═══┉｡˚┉╗    
+    ◉━━━━━ HasturBot ━━━━━◉
+    ╚┉｡˚┉═══『💀』═══┉｡˚┉╝   
+     
+   ╰━━━━━━◉^__~◉━━━━━━╯
 
-╭•━━━━━━≺ Infos ≻━━━━━━•╮ 
-┃￫ Chat: ${contact.pushname}
-┃￫ Hora: ${hours}:${minutes}:${seconds}
-┃￫ Olá @${contact.number}! Eu sou o HasturBot. Todos com comandos devem iniciar com ' / '.
-╰╼━══━━━━≺∆≻━━━━══━╾╯
+  ╭•━━━━━━≺ Infos ≻━━━━━━•╮ 
+  ┃￫ Chat: ${contact.pushname}
+  ┃￫ Hora: ${hours}:${minutes}:${seconds}
+  ┃￫ Olá @${contact.number}! Eu sou o HasturBot. Todos os comandos devem iniciar com ' / '.
+  ╰╼━══━━━━≺∆≻━━━━══━╾╯
 
-╭•━━━━━≺ Grupos ≻━━━━━•╮
-┃￫ /list - Listar os membros do grupo.
-┃￫ /past - Mostra os antigos membros do grupo.
-╰╼━══━━━━≺∆≻━━━━══━╾╯
+  ╭•━━━━━≺ Grupos ≻━━━━━•╮
+  ┃￫ /list - Listar os membros do grupo.
+  ┃￫ /past - Mostrar os antigos membros do grupo.
+  ╰╼━══━━━━≺∆≻━━━━══━╾╯
 
-╭•━━≺ Administradores ≻━━•╮ 
-┃￫ /add + número - Adiciona um participante ao grupo.
-┃￫ /rm + número - Remove um participante ao grupo.
-┃￫ /promote + número - Promove um membro a Administrador.
-┃￫ /demote + número - Rebaixa um administrador a membro.
-╰╼━══━━━━≺∆≻━━━━══━╾╯ 
+  ╭•━━≺ Administradores ≻━━•╮ 
+  ┃￫ /add + número - Adicionar um participante ao grupo.
+  ┃￫ /rm + número - Remover um participante do grupo.
+  ┃￫ /promote + número - Promover um membro a Administrador.
+  ┃￫ /demote + número - Rebaixar um administrador a membro.
+  ╰╼━══━━━━≺∆≻━━━━══━╾╯ 
 
-╭•━━━━━━≺ Geral ≻━━━━━━•╮ 
-┃￫ /sticker - Transforma uma imagem em figurinha. (Envie o comando junto com a imagem)
-┃￫ /audios - Envia uma lista de áudios.
-┃￫ /search + palavra - Pesquisa o que você deseja no google.
-┃￫ /images + descrição detalhada - Pesquisa e envia a imagem que você deseja.
-╰╼━══━━━━≺∆≻━━━━══━╾╯
+  ╭•━━━━━━≺ Geral ≻━━━━━━•╮ 
+  ┃￫ /sticker - Transformar uma imagem em figurinha. (Envie o comando junto com a imagem ou vídeo).
+  ┃￫ /resume - Resumir as últimas mensagens da conversa.
+  ┃￫ /audios - Enviar uma lista de áudios.
+  ┃￫ /search + palavra - Pesquisar o que você deseja no Google.
+  ┃￫ /images + descrição detalhada - Pesquisar e enviar a imagem que você deseja.
+  ╰╼━══━━━━≺∆≻━━━━══━╾╯
     `;
     const media = MessageMedia.fromFilePath('./src/img/hasturProfile.jpg');
     await client.sendMessage(chat.id._serialized, media, {
@@ -231,48 +232,13 @@ client.on('message_create', async (msg) => {
       console.log(error);
       await client.sendMessage(chat.id._serialized, 'Tive algum problema para bloquear o contato, ou já está bloqueado, ou o numero é inválido.');
     }
+  } if (msg.body.startsWith('/resume')) {
+    await resumeMessages(client, msg);
   } if (msg.body.startsWith('/test')) {
-    await client.sendMessage(chat.id._serialized, 'Certo, vou ler as ultimas 100 mensagens e resumir.');
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
     const messages = await chat.fetchMessages({
-      limit: 100,
+      limit: 10,
     });
-
-    const textMessages = messages
-      .filter((message) => !message.hasMedia)
-      .map((message) => ({
-        messageText: message.body,
-      }));
-
-    const formattedMessages = textMessages
-      .map((message) => ` ${message.messageText}`)
-      .join('\n');
-
-    const prompt = `Resuma a conversa abaixo de forma clara e objetiva, destacando os principais temas discutidos.  
-Se possível, mencione os nomes dos participantes e suas contribuições.  
-Ignore mensagens irrelevantes e priorize as mais informativas.  
-O resumo deve ser conciso, mantendo o contexto original:\n\n${formattedMessages}`;
-
-    console.log(prompt);
-
-    // try {
-    //   const options = {
-    //     temperature: 0.5,
-    //     max_tokens: 500,
-    //     top_p: 0.9,
-    //   };
-
-    //   const result = await model.generateContent(prompt, options);
-    //   const response = await result.response;
-    //   const text = await response.text();
-
-    //   console.log(text);
-    //   await msg.reply(text);
-    // } catch (error) {
-    //   console.error('Erro ao gerar resumo:', error);
-    //   await msg.reply('Desculpe, não consegui processar o resumo no momento.');
-    // }
+    console.log(messages);
   } if (msg.body.startsWith('/apt')) {
     if (typeof DLIntro === 'function') {
       await DLIntro(chat, client, groupMembers);
