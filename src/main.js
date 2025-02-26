@@ -239,7 +239,7 @@ client.on('message_create', async (msg) => {
       limit: 10,
     });
     console.log(messages);
-  } if (msg.body.toLowerCase().startsWith('hasturbot')) {
+  } if (msg.body.toLowerCase().startsWith('hasturbot') || msg.body.startsWith(`@${process.env.CLIENT_NUMBER.split('@')[0]}`)) {
     const getRandomResponse = botResponses[Math.floor(Math.random() * botResponses.length)];
     await msg.reply(getRandomResponse);
   }
