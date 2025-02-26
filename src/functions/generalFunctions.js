@@ -57,7 +57,7 @@ async function makeSticker(msg, client) {
             stickerName: `💀Created by ${authorName}`,
             stickerAuthor: 'HasturBot💀',
           },
-        );
+        ).then((message) => message.react('❤'));
         await msg.react('✅');
       })
       .on('error', async () => {
@@ -76,7 +76,7 @@ async function makeSticker(msg, client) {
         stickerName: `💀Created by ${authorName}`,
         stickerAuthor: 'HasturBot💀',
       },
-    );
+    ).then((message) => message.react('❤'));
     await msg.react('✅');
   }
 }
@@ -111,46 +111,60 @@ async function sendAudios(msg, client) {
  * @param {Client} client Instância do cliente do WhatsApp Web.
  */
 async function resumeMessages(client, msg) {
-  const chat = await msg.getChat();
-  await client.sendMessage(chat.id._serialized, 'Entendido! Vou analisar as últimas mensagens e gerar um resumo.');
-
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
   const model = genAI.getGenerativeModel({
     model: 'gemini-1.5-flash',
+    generationConfig: {
+      maxOutputTokens: 800,
+      temperature: 0.6,
+
+    },
     systemInstruction: 'You are a bot. Your name is HasturBot.',
   });
-  const messages = await chat.fetchMessages({
-    limit: 400,
-  });
+  const chat = await msg.getChat();
+  const contact = await client.getContactById(chat.id._serialized);
 
-  const textMessages = messages
-    .filter((message) => !message.hasMedia)
-    .map((message) => ({
-      messageText: message.body,
-      author: message._data.notifyName || 'Alguém',
-    }));
+  await client.sendMessage(chat.id._serialized, 'Entendido! Vou analisar as últimas mensagens e gerar um resumo.')
+    .then(async (message) => {
+      await message.react('⏳');
 
-  const formattedMessages = textMessages
-    .slice(0, -2)
-    .map((message) => ` ${message.messageText} : ${message.author}`)
-    .join('\n');
+      const messages = await chat.fetchMessages({ limit: 500 });
 
-  const prompt = `Resuma a conversa a seguir de forma clara e objetiva, destacando os principais temas abordados. Identifique os participantes pelo nome e mencione suas contribuições mais relevantes. Caso o nome não esteja disponível, utilize "Alguém". Ignore mensagens irrelevantes e priorize as informações mais importantes. O resumo deve ser conciso, mantendo o contexto original da conversa:\n\n${formattedMessages}`;
+      const textMessages = messages
+        .filter((textMessage) => !textMessage.hasMedia)
+        .map((textMessage) => textMessage.body)
+        .join('\n');
+      await message.react('⌛');
 
-  try {
-    const result = await model.generateContent(prompt, {
-      generationConfig: {
-        maxOutputTokens: 800,
-        temperature: 0.6,
-      },
+      const chatName = chat.isGroup ? chat.groupMetadata.subject : contact.pushname;
+
+      const groupPrompt = `Analise as mensagens abaixo e elabore um resumo claro e objetivo da conversa no grupo "${chatName}".  
+      Destaque os principais temas abordados e identifique os participantes, referindo-se a eles como "participantes" ou "usuários".  
+      Priorize as informações mais relevantes e ignore mensagens irrelevantes.  
+      No final, adicione uma breve opinião do bot sobre a conversa, com um tom descontraído e irônico.  
+      O resumo deve ser conciso, mantendo o contexto original:\n\n${textMessages}`;
+
+      const userPrompt = `Analise as mensagens abaixo e elabore um resumo claro e objetivo da conversa com "${chatName}".  
+      Destaque os principais temas abordados e mencione as contribuições mais relevantes do usuário.  
+      Priorize as informações mais importantes e ignore mensagens irrelevantes.  
+      No final, adicione uma breve opinião do bot sobre a conversa, com um tom descontraído e envolvente.  
+      O resumo deve ser conciso, mantendo o contexto original:\n\n${textMessages}`;
+
+      const prompt = chat.isGroup ? groupPrompt : userPrompt;
+
+      try {
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        const text = await response.text();
+
+        await message.react('✅');
+
+        await client.sendMessage(chat.id._serialized, text);
+      } catch (error) {
+        await message.react('❌');
+        await client.sendMessage(chat.id._serialized, 'Desculpe, não consegui processar o resumo no momento.');
+      }
     });
-    const response = await result.response;
-    const text = await response.text();
-
-    await client.sendMessage(chat.id._serialized, text).then(() => msg.react('⏳').finally(() => msg.react('✅')));
-  } catch (error) {
-    await client.sendMessage(chat.id._serialized, 'Desculpe, não consegui processar o resumo no momento.');
-  }
 }
 
 function formatDate(unixTimeStamp) {

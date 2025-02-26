@@ -234,6 +234,7 @@ client.on('message_create', async (msg) => {
     }
   } if (msg.body.startsWith('/resume')) {
     await resumeMessages(client, msg);
+    return;
   } if (msg.body.startsWith('/test')) {
     const messages = await chat.fetchMessages({
       limit: 10,
