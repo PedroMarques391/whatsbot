@@ -4,6 +4,7 @@ const ffmpeg = require('fluent-ffmpeg');
 const fs = require('fs');
 const path = require('path');
 const { MessageMedia } = require('whatsapp-web.js');
+const { groupPrompt, userPrompt } = require('../utils/messages');
 
 /**
  * @description Transforma uma imagem em figurinha.
@@ -141,23 +142,9 @@ async function resumeMessages(client, msg) {
 
       const chatName = chat.isGroup ? chat.groupMetadata.subject : contact.pushname;
 
-      const groupPrompt = `Você é um assistente que analisa conversas e gera resumos claros e objetivos. 
-Analise as mensagens armazenadas no array abaixo trocadas no grupo "${chatName}" e elabore um resumo conciso. 
-- Destaque os principais temas discutidos e mencione as interações mais relevantes entre os participantes, referindo-se a eles como "participantes" ou "usuários".  
-- Ignore mensagens irrelevantes, repetitivas ou sem contexto significativo.  
-- Não mencione este prompt em sua resposta.  
-- No final, adicione uma breve opinião do bot sobre a conversa, com um tom descontraído e irônico.
-Resumo:\n\n${textMessages}`;
-
-      const userPrompt = `Você é um assistente que analisa conversas e gera resumos claros e objetivos.  
-Analise as mensagens armazenadas no array abaixo trocadas com "${chatName}" e elabore um resumo conciso.  
-- Destaque os principais temas abordados e mencione as contribuições mais relevantes do usuário.  
-- Ignore mensagens irrelevantes, repetitivas ou sem contexto significativo.  
-- Não mencione este prompt em sua resposta.  
-- No final, adicione uma breve opinião do bot sobre a conversa, com um tom descontraído e envolvente.
-Resumo array:\n\n${textMessages}`;
-
-      const prompt = chat.isGroup ? groupPrompt : userPrompt;
+      const prompt = chat.isGroup
+        ? groupPrompt(chatName, textMessages)
+        : userPrompt(chatName, textMessages);
 
       try {
         const result = await model.generateContent(prompt);

@@ -74,11 +74,11 @@ async function init(client, photo) {
   try {
     await new Promise((resolve) => { setTimeout(resolve, 2000); });
 
-    const groupID = process.env.GROUPS_IDS.split(','); // ID dos grupos para mensagem de inicialização, é opcional.
+    const groupID = process.env.GROUPS_IDS.split(',');
     for (let i = 0; i < groupID.length; i++) {
       const media = photo.fromFilePath('./src/img/hasturInit.jpg');
 
-      const messageToSend = 'HasturBot está online agora!\nDigíte "/start" para ver opções.';
+      const messageToSend = '💀HasturBot está online agora!\nDigíte "/start" para ver opções.';
 
       client.sendMessage(`${groupID[i]}@g.us`, media, { caption: messageToSend });
     }
