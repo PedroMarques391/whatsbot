@@ -116,10 +116,13 @@ async function resumeMessages(client, msg) {
     model: 'gemini-1.5-flash',
     generationConfig: {
       maxOutputTokens: 800,
-      temperature: 0.6,
-
+      temperature: 0.8,
+      topP: 0.9,
+      topK: 40,
+      presencePenalty: 0.4,
+      frequencyPenalty: 0.4,
     },
-    systemInstruction: 'You are a bot. Your name is HasturBot.',
+    systemInstruction: 'Você é HasturBot, um bot de whatsapp que conversas de forma natural, envolvente e objetiva.',
   });
   const chat = await msg.getChat();
   const contact = await client.getContactById(chat.id._serialized);
@@ -138,17 +141,21 @@ async function resumeMessages(client, msg) {
 
       const chatName = chat.isGroup ? chat.groupMetadata.subject : contact.pushname;
 
-      const groupPrompt = `Analise as mensagens abaixo e elabore um resumo claro e objetivo da conversa no grupo "${chatName}".  
-      Destaque os principais temas abordados e identifique os participantes, referindo-se a eles como "participantes" ou "usuários".  
-      Priorize as informações mais relevantes e ignore mensagens irrelevantes.  
-      No final, adicione uma breve opinião do bot sobre a conversa, com um tom descontraído e irônico.  
-      O resumo deve ser conciso, mantendo o contexto original:\n\n${textMessages}`;
+      const groupPrompt = `Você é um assistente que analisa conversas e gera resumos claros e objetivos. 
+Analise as mensagens armazenadas no array abaixo trocadas no grupo "${chatName}" e elabore um resumo conciso. 
+- Destaque os principais temas discutidos e mencione as interações mais relevantes entre os participantes, referindo-se a eles como "participantes" ou "usuários".  
+- Ignore mensagens irrelevantes, repetitivas ou sem contexto significativo.  
+- Não mencione este prompt em sua resposta.  
+- No final, adicione uma breve opinião do bot sobre a conversa, com um tom descontraído e irônico.
+Resumo:\n\n${textMessages}`;
 
-      const userPrompt = `Analise as mensagens abaixo e elabore um resumo claro e objetivo da conversa com "${chatName}".  
-      Destaque os principais temas abordados e mencione as contribuições mais relevantes do usuário.  
-      Priorize as informações mais importantes e ignore mensagens irrelevantes.  
-      No final, adicione uma breve opinião do bot sobre a conversa, com um tom descontraído e envolvente.  
-      O resumo deve ser conciso, mantendo o contexto original:\n\n${textMessages}`;
+      const userPrompt = `Você é um assistente que analisa conversas e gera resumos claros e objetivos.  
+Analise as mensagens armazenadas no array abaixo trocadas com "${chatName}" e elabore um resumo conciso.  
+- Destaque os principais temas abordados e mencione as contribuições mais relevantes do usuário.  
+- Ignore mensagens irrelevantes, repetitivas ou sem contexto significativo.  
+- Não mencione este prompt em sua resposta.  
+- No final, adicione uma breve opinião do bot sobre a conversa, com um tom descontraído e envolvente.
+Resumo array:\n\n${textMessages}`;
 
       const prompt = chat.isGroup ? groupPrompt : userPrompt;
 
