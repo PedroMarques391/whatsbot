@@ -17,7 +17,7 @@ const client = new Client({
   authStrategy: new LocalAuth(),
   puppeteer: {
     headless: true,
-    executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe',
+    executablePath: process.env.CHROME_PATH,
   },
 });
 
@@ -203,8 +203,9 @@ client.on('message_create', async (msg) => {
       return client.sendMessage(chat.id._serialized, 'Poxa, não achei resultados para essa pesquisa. Tente novamente.');
     }
     await msg.reply('Opa, achei umas imagens legais aqui. ☺ ☺');
-    (await client.sendMessage(chat.id._serialized, 'Aguarde um instante...')).react('⏳');
-    for (let i = 0; i < data.items.length; i++) {
+    await client.sendMessage(chat.id._serialized, 'Aguarde um instante...').then((message) => message.react('⏳'));
+    console.log(data.items);
+    for (let i = 0; i < 5; i++) {
       const item = data.items[i];
 
       try {
