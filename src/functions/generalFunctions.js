@@ -4,7 +4,7 @@ const ffmpeg = require('fluent-ffmpeg');
 const fs = require('fs');
 const path = require('path');
 const { MessageMedia } = require('whatsapp-web.js');
-const { groupPrompt, userPrompt } = require('../utils/messages');
+const { groupPrompt, userPrompt, sendStickerErrors } = require('../utils/messages');
 
 /**
  * @description Transforma uma imagem em figurinha.
@@ -16,6 +16,7 @@ async function makeSticker(msg, client) {
   const chat = await msg.getChat();
   const media = await msg.downloadMedia();
   const authorName = msg._data.notifyName || 'Bot';
+  const errorMessage = sendStickerErrors[Math.floor(Math.random() * sendStickerErrors.length)];
   if (!media || !media.data) {
     await msg.reply('Uai, você acha que eu faço milagre? 😆 Envie um vídeo ou imagem para criar o sticker!').then((message) => {
       message.react('❌');
@@ -50,6 +51,11 @@ async function makeSticker(msg, client) {
       })
       .on('end', async () => {
         const stickerMedia = MessageMedia.fromFilePath(outputPath);
+        const stats = fs.statSync(outputPath);
+        if (stats.size >= 1000000) {
+          await client.sendMessage(chat.id._serialized, errorMessage).then((message) => message.react('😢'));
+          return;
+        }
         await client.sendMessage(
           chat.id._serialized,
           stickerMedia,
@@ -65,10 +71,18 @@ async function makeSticker(msg, client) {
         await client.sendMessage(chat.id._serialized, 'Erro na conversão.');
       })
       .run();
-  } else {
+    return;
+  }
+  if (msg.type === 'image') {
     await msg.react('⏳');
-
     const stickerMedia = new MessageMedia(media.mimetype, media.data);
+    const buffer = Buffer.from(media.data, 'base64');
+    const size = buffer.length;
+
+    if (size >= 1000000) {
+      await client.sendMessage(chat.id._serialized, errorMessage).then((message) => message.react('😢'));
+      return;
+    }
     await client.sendMessage(
       chat.id._serialized,
       stickerMedia,
@@ -78,7 +92,7 @@ async function makeSticker(msg, client) {
         stickerAuthor: 'HasturBot💀',
       },
     ).then((message) => message.react('❤'));
-    await msg.react('✅');
+    return msg.react('✅');
   }
 }
 /**
