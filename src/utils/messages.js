@@ -21,6 +21,26 @@ const botResponses = [
 ];
 
 /**
+ * Respostas automáticas para erros ao enviar stickers.
+ * O bot escolhe uma dessas respostas de forma aleatória.
+ * @type {string[]}
+ */
+const sendStickerErrors = [
+    'Ei, tá afim de estourar meu processamento? Envie um arquivo menor!',
+    'Calma aí! Essa figurinha é grande demais para caber no WhatsApp.',
+    'Erro 413: Figurinha gigante detectada! O limite é 1MB, tente algo menor.',
+    'Essa figurinha ultrapassou 1MB e o WhatsApp já jogou a toalha.',
+    'Isso era pra ser uma figurinha ou um filme em alta resolução? Reduza para menos de 1MB.',
+    'Se fosse menor, caberia. Mas passou de 1MB, então não vai rolar!',
+    'O WhatsApp olhou para essa figurinha e disse: “Não, obrigado”. O limite é 1MB!',
+    'O sistema entrou em choque. Essa figurinha ultrapassa o limite de 1MB!',
+    'Essa figurinha tá tão grande que quase virou um wallpaper. O máximo é 1MB!',
+    'Quer enviar um cartaz de cinema? Porque essa figurinha ultrapassou o limite de 1MB!',
+    'Ops, o WhatsApp só aceita figurinhas menores que 1MB. Essa aí tá querendo ser um pôster!',
+    'Sua figurinha tentou entrar, mas foi barrada na porta. O limite é 1MB!',
+];
+
+/**
  * Gera um prompt para analisar e resumir mensagens em um grupo.
  * @param {string} chatName - Nome do grupo onde ocorreu a conversa.
  * @param {string[]} textMessages - Array de mensagens trocadas no grupo.
@@ -52,6 +72,7 @@ Analise as mensagens armazenadas no array abaixo trocadas com "${chatName}" e el
 
 module.exports = {
     botResponses,
+    sendStickerErrors,
     userPrompt,
     groupPrompt,
 };
