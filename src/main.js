@@ -9,12 +9,13 @@ const {
   demoteParticipant,
 } = require('./functions/groupFunctions');
 const { makeSticker, sendAudios, resumeMessages } = require('./functions/generalFunctions');
-const { saveUsers, usersResponded } = require('./utils/saveUsers');
 const {
   rejectCallResponses,
   firstInteractionMessages,
   botResponses,
   extractTextFromBody,
+  saveUsers,
+  usersResponded,
 } = require('./utils');
 
 const client = new Client({
