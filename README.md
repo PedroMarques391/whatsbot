@@ -1,13 +1,13 @@
 
-**HasturBot**
+**AdaBot**
 
-![Imagem do HasturBot](./src/img/hasturProfile.jpg)
+![Imagem do AdaBot](./src/img/hasturProfile.jpg)
 
-**HasturBot** é um bot desenvolvido com **JavaScript** utilizando a biblioteca **whatsapp-web.js**. Ele oferece uma variedade de funcionalidades para automação de tarefas dentro do WhatsApp, com foco especial em **funções específicas para grupos** e **usuários**. O bot possui funções como pesquisa online, criação de figurinhas, envio de áudios, entre outras.
+**AdaBot** é um bot desenvolvido com **JavaScript** utilizando a biblioteca **whatsapp-web.js**. Ele oferece uma variedade de funcionalidades para automação de tarefas dentro do WhatsApp, com foco especial em **funções específicas para grupos** e **usuários**. O bot possui funções como pesquisa online, criação de figurinhas, envio de áudios, entre outras.
 
 ## **Funcionalidades**
 
-O **HasturBot** possui diversas funções que podem ser utilizadas dentro de grupos do WhatsApp, incluindo comandos específicos para administradores, funcionalidades para interagir com os membros, e ações gerais. Veja abaixo algumas das principais funcionalidades:
+O **AdaBot** possui diversas funções que podem ser utilizadas dentro de grupos do WhatsApp, incluindo comandos específicos para administradores, funcionalidades para interagir com os membros, e ações gerais. Veja abaixo algumas das principais funcionalidades:
 
 ### **Funções Gerais**
 
@@ -30,7 +30,7 @@ O **HasturBot** possui diversas funções que podem ser utilizadas dentro de gru
 
 ## **Configuração do Ambiente**
 
-Para que o **HasturBot** tenhas todas suas funções ativas, você precisa preencher as variáveis de ambiente no arquivo `.env.example`. Esse arquivo contém várias configurações importantes, como IDs dos grupos, chave da API do Google e configurações do cliente. Após preencher as variáveis corretamente, você pode renomear o arquivo para `.env` e iniciar o bot.
+Para que o **AdaBot** tenhas todas suas funções ativas, você precisa preencher as variáveis de ambiente no arquivo `.env.example`. Esse arquivo contém várias configurações importantes, como IDs dos grupos, chave da API do Google e configurações do cliente. Após preencher as variáveis corretamente, você pode renomear o arquivo para `.env` e iniciar o bot.
 
 ### **Passos para Preencher o Arquivo `.env.example`**
 
@@ -101,6 +101,6 @@ GOOGLE_SEARCH_API_CTX_IMAGES="seu_search_engine_id_para_imagens"
 
 ---
 
-Com o arquivo `.env` configurado corretamente, o **HasturBot** estará pronto para ser executado e você poderá usar todas as funcionalidades que ele oferece no WhatsApp!
+Com o arquivo `.env` configurado corretamente, o **AdaBot** estará pronto para ser executado e você poderá usar todas as funcionalidades que ele oferece no WhatsApp!
 
 

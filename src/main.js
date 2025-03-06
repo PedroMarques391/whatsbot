@@ -10,7 +10,8 @@ const {
 } = require('./functions/groupFunctions');
 const { makeSticker, sendAudios, resumeMessages } = require('./functions/generalFunctions');
 const { extractTextFromBody } = require('./functions/auxiliaryFunctions');
-const { botResponses } = require('./utils/messages');
+const { botResponses, rejectCallResponses, firstInteractionMessages } = require('./utils/messages');
+const { saveUsers, usersResponded } = require('./utils/saveUsers');
 
 const client = new Client({
   authStrategy: new LocalAuth(),
@@ -48,12 +49,12 @@ client.on('group_join', async (notification) => {
 });
 
 client.on('call', async (call) => {
-  console.log(call);
+  const rejectCall = rejectCallResponses[Math.floor(Math.random() * rejectCallResponses.length)];
   await call.reject();
 
   await client.sendMessage(
     call.from,
-    'O bot rejeita ligaçãoes automaticamente, mas se ele estiver por perto ele jaja fala com você\ncalma ai',
+    rejectCall,
   );
 });
 
@@ -114,11 +115,18 @@ client.on('message_create', async (msg) => {
   const chat = await msg.getChat();
   const contact = await msg.getContact();
 
-  // const chats = await client.getChats();
-  // const groupChats = chats
-  //   .filter((group) => chat.isGroup)
-  //   .map((group) => ({ name: chat.name, id: chat.id._serialized }));
-  // console.log(groupChats);
+  if (msg.from.includes('@c.us') && !msg.fromMe) {
+    const getResponse = firstInteractionMessages[
+      Math.floor(
+        Math.random() * firstInteractionMessages.length,
+      )];
+    if (!usersResponded.has(msg.from)) {
+      await client.sendMessage(chat.id._serialized, getResponse);
+      usersResponded.add(msg.from);
+      saveUsers();
+      return;
+    }
+  }
 
   if (msg.body === '/list') {
     const allowed = chat.isGroup
@@ -244,7 +252,7 @@ client.on('message_create', async (msg) => {
 
 client.on('message_revoke_everyone', async (message, messageRevoke) => {
   if (!message.hasMedia) {
-    await messageRevoke.reply(`O usuário ${messageRevoke._data.notifyName} apagou a mensagem "${messageRevoke.body}".`, process.env.CLIENT_NUMBER);
+    await messageRevoke.reply(`O usuário ${message._data.notifyName} apagou a mensagem "${messageRevoke.body}".`, process.env.CLIENT_NUMBER);
   }
 });
 
