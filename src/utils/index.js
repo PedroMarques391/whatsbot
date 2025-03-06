@@ -1,5 +1,5 @@
 const groupUtils = require('./group');
-const textUtils = require('./text');
+const textUtils = require('./helpers');
 const validationsUtils = require('./validations');
 const messagesUtils = require('./messages');
 

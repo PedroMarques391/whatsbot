@@ -1,5 +1,5 @@
 const { groupParticipants } = require('./group');
-const { extractTextFromBody } = require('./text');
+const { extractTextFromBody } = require('./helpers');
 
 require('dotenv').config();
 
