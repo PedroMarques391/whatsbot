@@ -16,6 +16,7 @@
         "import/no-extraneous-dependencies": "off",
         "no-await-in-loop": "off",
         "no-new": "off",
+        "indent": "off",
         "no-restricted-syntax": "off",
         "no-underscore-dangle": "off"
     }

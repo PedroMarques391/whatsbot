@@ -1,16 +1,10 @@
-require('dotenv').config();
-
 const {
-  isAdmin,
-  botIsAdmin,
-  extractTextFromBody,
-  groupParticipants,
-  isNotAValidNumber,
-  authorIsAdmin,
-  isAuthorOrBot,
-  isNotInGroup,
+  botIsAdmin, isNotAValidNumber, authorIsAdmin,
+  extractTextFromBody, groupParticipants,
+  isNotInGroup, isAuthorOrBot, isAdmin,
+} = require('../utils');
 
-} = require('./auxiliaryFunctions');
+require('dotenv').config();
 
 /**
  * @description Mostra os membros antigos de um grupo.

@@ -5,8 +5,8 @@
   "main": "src/main.js",
   "scripts": {
     "start": "node --watch .",
-    "start:pm2:daemon": "pm2 start src/main.js --name hasturBotDaemon --no-daemon",
-    "start:pm2": "pm2 start --name hasturBot src/main.js"
+    "start:pm2:daemon": "pm2 start src/main.js --name AdaBotDaemon --no-daemon",
+    "start:pm2": "pm2 start --name AdaBot src/main.js"
   },
   "keywords": [],
   "author": "",

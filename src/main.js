@@ -9,9 +9,13 @@ const {
   demoteParticipant,
 } = require('./functions/groupFunctions');
 const { makeSticker, sendAudios, resumeMessages } = require('./functions/generalFunctions');
-const { extractTextFromBody } = require('./functions/auxiliaryFunctions');
-const { botResponses, rejectCallResponses, firstInteractionMessages } = require('./utils/messages');
 const { saveUsers, usersResponded } = require('./utils/saveUsers');
+const {
+  rejectCallResponses,
+  firstInteractionMessages,
+  botResponses,
+  extractTextFromBody,
+} = require('./utils');
 
 const client = new Client({
   authStrategy: new LocalAuth(),
