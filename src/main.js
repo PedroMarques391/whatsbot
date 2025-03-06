@@ -10,7 +10,6 @@ const {
 } = require('./functions/groupFunctions');
 const { makeSticker, sendAudios, resumeMessages } = require('./functions/generalFunctions');
 const { extractTextFromBody } = require('./functions/auxiliaryFunctions');
-const { groupIdsAllowed } = require('./functions/utils');
 const { botResponses } = require('./utils/messages');
 
 const client = new Client({
@@ -28,13 +27,13 @@ client.on('qr', (qr) => {
 client.on('ready', () => {
   console.log(`    
   ╭•╼━━≺∆≻━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾≺∆≻━━━╾•╮ 
-  ┃｡˚💀 ￫ Cliente Conectado                                        
+  ┃｡˚⭐ ￫ Cliente Conectado                                        
   ┃━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━━━━   
-  ┃｡˚💀 ￫ Nome do cliente: ${client.info.pushname}              
+  ┃｡˚⭐ ￫ Nome do cliente: ${client.info.pushname}              
   ┃━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━━━━   
-  ┃｡˚💀 ￫ Telefone do cliente: ${client.info.wid.user}       
+  ┃｡˚⭐ ￫ Telefone do cliente: ${client.info.wid.user}       
   ┃━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━━━━
-  ┃｡˚💀 ￫ Plataforma do cliente: ${client.info.platform === 'iphone' ? 'IOS' : client.info.platform}
+  ┃｡˚⭐ ￫ Plataforma do cliente: ${client.info.platform === 'iphone' ? 'IOS' : client.info.platform}
   ╰╼━━━━━━━━╾━━━━━━╾━━━━━━╾≺End≻━═━╾━━━╾━━━━━━╾━━━━━━━━━━━╯
 
   `);
@@ -45,11 +44,7 @@ client.on('authenticated', async () => {
 });
 
 client.on('group_join', async (notification) => {
-  const chat = await notification.getChat();
-  if (groupIdsAllowed.length > 0 && !groupIdsAllowed.includes(chat.id.user)) {
-    return;
-  }
-  await join(notification, client, chat);
+  await join(notification, client);
 });
 
 client.on('call', async (call) => {
@@ -71,41 +66,41 @@ client.on('message_create', async (message) => {
     const minutes = `${date.getMinutes()}` < 10 ? `0${date.getMinutes()}` : date.getMinutes();
     const seconds = `${date.getSeconds()}` < 10 ? `0${date.getSeconds()}` : date.getSeconds();
     const menu = `
-  ╭━━━━━◉   Menu   ◉━━━━━╮ 
+╭━━━━━━━━━━◉ *Menu* ◉━━━━━━━━━━╮
 
-    ╔┉｡˚┉═══『💀』═══┉｡˚┉╗    
-    ◉━━━━━ HasturBot ━━━━━◉
-    ╚┉｡˚┉═══『💀』═══┉｡˚┉╝   
-     
-   ╰━━━━━━◉^__~◉━━━━━━╯
+◉━━━━━━━━ *AdaBot* ━━━━━━━━◉
+🌟 Olá, @${contact.number}! Eu sou a AdaBot. 🌟
+🌟 Todos os comandos devem iniciar com " / ". 🌟
+🌟 Chat: ${contact.pushname} | Hora: ${hours}:${minutes}:${seconds} 🌟
 
-  ╭•━━━━━━≺ Infos ≻━━━━━━•╮ 
-  ┃￫ Chat: ${contact.pushname}
-  ┃￫ Hora: ${hours}:${minutes}:${seconds}
-  ┃￫ Olá @${contact.number}! Eu sou o HasturBot. Todos os comandos devem iniciar com ' / '.
-  ╰╼━══━━━━≺∆≻━━━━══━╾╯
+╭•━━━━━━━━≺ *Infos* ≻━━━━━━━━•╮
+┃￫ /start - Mostrar este menu.
+┃￫ /info - Ver informações do bot.
+╰╼━══━━━━━━≺∆≻━━━━━━══━╾╯
 
-  ╭•━━━━━≺ Grupos ≻━━━━━•╮
-  ┃￫ /list - Listar os membros do grupo.
-  ┃￫ /past - Mostrar os antigos membros do grupo.
-  ╰╼━══━━━━≺∆≻━━━━══━╾╯
+╭•━━━━━━━━≺ *Grupos* ≻━━━━━━━━•╮
+┃￫ /list - Listar membros do grupo.
+┃￫ /past - Mostrar ex-membros do grupo.
+╰╼━══━━━━━━≺∆≻━━━━━━══━╾╯
 
-  ╭•━━≺ Administradores ≻━━•╮ 
-  ┃￫ /add + número - Adicionar um participante ao grupo.
-  ┃￫ /rm + número - Remover um participante do grupo.
-  ┃￫ /promote + número - Promover um membro a Administrador.
-  ┃￫ /demote + número - Rebaixar um administrador a membro.
-  ╰╼━══━━━━≺∆≻━━━━══━╾╯ 
+╭•━━━━━━≺ *Administradores* ≻━━━━━━•╮
+┃￫ /add + número - Adicionar participante.
+┃￫ /rm + número - Remover participante.
+┃￫ /promote + número - Promover a admin.
+┃￫ /demote + número - Rebaixar admin.
+╰╼━══━━━━━━≺∆≻━━━━━━══━╾╯
 
-  ╭•━━━━━━≺ Geral ≻━━━━━━•╮ 
-  ┃￫ /sticker - Transformar uma imagem em figurinha. (Envie o comando junto com a imagem ou vídeo).
-  ┃￫ /resume - Resumir as últimas mensagens da conversa.
-  ┃￫ /audios - Enviar uma lista de áudios.
-  ┃￫ /search + palavra - Pesquisar o que você deseja no Google.
-  ┃￫ /images + descrição detalhada - Pesquisar e enviar a imagem que você deseja.
-  ╰╼━══━━━━≺∆≻━━━━══━╾╯
-    `;
-    const media = MessageMedia.fromFilePath('./src/img/hasturProfile.jpg');
+╭•━━━━━━━━≺ *Geral* ≻━━━━━━━━•╮
+┃￫ /sticker - Criar figurinha (envie imagem/vídeo).
+┃￫ /resume - Resumir últimas mensagens.
+┃￫ /audios - Lista de áudios disponíveis.
+┃￫ /search + palavra - Pesquisar no Google.
+┃￫ /images + descrição - Buscar imagens.
+╰╼━══━━━━━━≺∆≻━━━━━━══━╾╯
+
+╰━━━━━━━━━━◉^__~◉━━━━━━━━━━╯
+`;
+    const media = MessageMedia.fromFilePath('./src/img/adaProfile.jpeg');
     await client.sendMessage(chat.id._serialized, media, {
       caption: menu,
       mentions: [contact.id._serialized],
@@ -124,11 +119,6 @@ client.on('message_create', async (msg) => {
   //   .filter((group) => chat.isGroup)
   //   .map((group) => ({ name: chat.name, id: chat.id._serialized }));
   // console.log(groupChats);
-
-  if (chat.isGroup && groupIdsAllowed.length > 0 && !groupIdsAllowed.includes(chat.id.user)) {
-    console.log('comando bloqueado');
-    return;
-  }
 
   if (msg.body === '/list') {
     const allowed = chat.isGroup
@@ -209,7 +199,7 @@ client.on('message_create', async (msg) => {
       const item = data.items[i];
 
       try {
-        const media = await MessageMedia.fromUrl(item.link, { filename: 'ImagesByHasturBot' });
+        const media = await MessageMedia.fromUrl(item.link, { filename: 'ImagesByAdaBot' });
         await client.sendMessage(chat.id._serialized, media);
         await new Promise((resolve) => { setTimeout(resolve, 1000); });
       } catch (error) {
@@ -240,7 +230,7 @@ client.on('message_create', async (msg) => {
       limit: 10,
     });
     console.log(messages);
-  } if (msg.body.toLowerCase().startsWith('hasturbot') || msg.body.startsWith(`@${process.env.CLIENT_NUMBER.split('@')[0]}`)) {
+  } if (msg.body.toLowerCase().startsWith('adabot') || msg.body.toLowerCase().startsWith('ada') || msg.body.startsWith(`@${process.env.CLIENT_NUMBER.split('@')[0]}`)) {
     const getRandomResponse = botResponses[Math.floor(Math.random() * botResponses.length)];
     await msg.reply(getRandomResponse);
   }

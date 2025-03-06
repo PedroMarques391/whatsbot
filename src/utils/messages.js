@@ -5,19 +5,19 @@
  * @type {string[]}
  */
 const botResponses = [
-    'Opa! Me chamou ou foi sem querer? Se precisar, manda um /start e eu te ajudo!',
-    'Cheguei igual update de madrugada! Que tal testar o /sticker e criarF umas figurinhas maneiras?',
-    'O grande HasturBot está ON! Se quiser um resumo das últimas mensagens, só mandar um /resume!',
-    'Eu previ que alguém ia me chamar...Mas já que estou aqui, que tal um /start pra ver o que eu posso fazer? ',
-    '⚡ * Pisca duas vezes e aparece * Tô aqui! Quer transformar algo em figurinha ? Manda um /sticker!',
-    'Oi, humano! Tá precisando de um resumo das fofocas ? Digita /resume e eu te conto tudo!',
-    'Eu sou apenas um bot, mas sou um bot incrível! Quer saber por onde começar? Tenta o /start!',
-    'Diretamente dos servidores, aqui estou! Quer umas figurinhas? Manda um /sticker e eu resolvo!',
-    'Quer que eu investigue as últimas mensagens ? Digita /resume e eu te conto os bafos!',
-    'Pensa rápido! Se precisar de algo, testa /start e eu te mostro do que sou capaz!',
-    'Alguém me chamou? Se foi pra brincadeira, já testou o comando /sticker? Vem coisa boa por aí!',
-    'Você invocou o HasturBot! Já testou o /resume? Vai que tem fofoca nova por aí... 👀',
-    'Sua sorte do dia: bots legais respondem rápido! Manda um /start pra ver o que eu faço!',
+    'Opa! Você me chamou? ✨ Se precisar de algo, é só mandar um /start que eu te ajudo com todo carinho!',
+    'Tcharaaam~! 🌟 Cheguei igual surpresa boa! Que tal testar o /sticker e criar figurinhas super fofas? 💖',
+    'AdaBot prontinha para ajudar! ✨ Se quiser um resuminho das últimas mensagens, manda um /resume! 📜💌',
+    'Nyaa~! 🐾 Eu senti que alguém precisava de mim! Coincidência? Acho que não! Manda um /start e deixa eu te ajudar! 💙',
+    '⚡ *Pisca, pisca* Tô aqui! ✨ Quer transformar algo em figurinha? Manda um /sticker e eu faço com muito capricho! 🎀',
+    'Oi, oi! 🥰 Quer ficar por dentro das últimas novidades? Digita /resume e eu te conto tudinho com detalhes! 📖💕',
+    'Eu sou só um bot… MAS UM BOT MUITO LEGAL! Quer saber como posso te ajudar? Testa o /start! 💖',
+    'Cheguei direto dos servidores pra deixar seu dia mais feliz! 💻💙 Quer figurinhas? Manda um /sticker! ✨',
+    'Quer que eu organize as últimas mensagens pra você? 🔍 Manda um /resume e eu te conto tudo direitinho! 📜💛',
+    'Pensa rápido! ⚡ Se precisar de algo, manda um /start e vem ver como eu posso te ajudar com muito carinho! 🥰',
+    'Alguém me chamou? 🥺 Se foi só pra brincar, já testou o /sticker? Eu amo fazer figurinhas fofas! 🎀✨',
+    'Oi, oi! 💕 AdaBot na área! Já testou o /resume? Vai que tem algo super interessante pra você! 👀💖',
+    'Sabe qual sua sorte do dia? bons bots respondem rapidinho! Manda um /start e vem comigo! 💫',
 ];
 
 /**
@@ -26,18 +26,18 @@ const botResponses = [
  * @type {string[]}
  */
 const sendStickerErrors = [
-    'Ei, tá afim de estourar meu processamento? Envie um arquivo menor!',
-    'Calma aí! Essa figurinha é grande demais para caber no WhatsApp.',
-    'Erro 413: Figurinha gigante detectada! O limite é 1MB, tente algo menor.',
-    'Essa figurinha ultrapassou 1MB e o WhatsApp já jogou a toalha.',
-    'Isso era pra ser uma figurinha ou um filme em alta resolução? Reduza para menos de 1MB.',
-    'Se fosse menor, caberia. Mas passou de 1MB, então não vai rolar!',
-    'O WhatsApp olhou para essa figurinha e disse: “Não, obrigado”. O limite é 1MB!',
-    'O sistema entrou em choque. Essa figurinha ultrapassa o limite de 1MB!',
-    'Essa figurinha tá tão grande que quase virou um wallpaper. O máximo é 1MB!',
-    'Quer enviar um cartaz de cinema? Porque essa figurinha ultrapassou o limite de 1MB!',
-    'Ops, o WhatsApp só aceita figurinhas menores que 1MB. Essa aí tá querendo ser um pôster!',
-    'Sua figurinha tentou entrar, mas foi barrada na porta. O limite é 1MB!',
+    'Ei, essa figurinha é grandinha demais pra mim! Que tal uma mais levinha? O limite é 1MB, hehe. 😊',
+    'Opa, essa figurinha tá pesada! O WhatsApp só aceita até 1MB. Vamos tentar outra? 💖',
+    'Erro 413: Figurinha gigante detectada! Mas não se preocupe, o limite é 1MB. Tente uma menor, tá bem? 🌸',
+    'Essa figurinha é tão grande que o WhatsApp já desistiu! O máximo é 1MB, viu? 😅',
+    'Isso era pra ser uma figurinha ou um filme em 4K? Reduza para menos de 1MB, por favorzinho! 🎀',
+    'Essa figurinha é um pouquinho grandinha para o WhatsApp! O limite é 1MB, mas tenho certeza que você vai encontrar outra perfeitinha. Vamos tentar? 😊💖',
+    'O WhatsApp olhou pra essa figurinha e disse: “Não, obrigado”. O limite é 1MB, meu bem! 💕',
+    'O sistema ficou assustadinho! Essa figurinha ultrapassa o limite de 1MB. Vamos tentar outra? 🌈',
+    'Essa figurinha tá tão grande que quase virou um pôster! O máximo é 1MB, tá? 😘',
+    'Quer enviar um cartaz de cinema? Porque essa figurinha ultrapassou o limite de 1MB! Vamos de outra? 🎬',
+    'Ops, o WhatsApp só aceita figurinhas menores que 1MB. Essa aí tá querendo ser um outdoor! 😂',
+    'Até criei sua figurinhan, mas o WhatsApp não deixou enviar. O limite é 1MB, viu? Vamos tentar de novo? 🚪💖',
 ];
 
 /**
@@ -47,13 +47,14 @@ const sendStickerErrors = [
  * @returns {string} Um prompt estruturado para ser usado em um modelo de IA.
  */
 const groupPrompt = (chatName, textMessages) => `
-Você é um assistente que analisa conversas e gera resumos claros e objetivos.
-Analise as mensagens armazenadas no array abaixo trocadas no grupo "${chatName}" e elabore um resumo conciso. 
-- Destaque os principais temas discutidos e mencione as interações mais relevantes entre os participantes, referindo - se a eles como "participantes" ou "usuários".  
-- Ignore mensagens irrelevantes, repetitivas ou sem contexto significativo.  
-- Não mencione este prompt em sua resposta.  
-- No final, adicione uma breve opinião, mas sem citar que é uma opnião do bot sobre a conversa, com um tom descontraído e irônico.
-    Resumo: \n\n${textMessages} `;
+Oi, pessoal! Sou a AdaBot, sua assistente super amigável! 🌸 Vou analisar as mensagens do grupo "${chatName}" e fazer um resuminho bem clarinho e objetivo pra vocês. Aqui estão as regrinhas que vou seguir:
+1. **Destaque os principais temas:** Vou identificar os assuntos mais importantes que vocês discutiram.  
+2. **Interações relevantes:** Vou mencionar as conversas mais interessantes entre os participantes, sempre chamando vocês de "participantes" ou "usuários".  
+3. **Ignorar o irrelevante:** Mensagens repetidas ou sem contexto significativo? Nem vou citar!  
+4. **Opinião descontraída:** No final, vou soltar uma observaçãozinha leve e irônica, mas sem falar que é minha opinião, tá? 😉  
+
+Agora, vamos ao resumo do grupo "${chatName}": \n\n${textMessages}
+`;
 
 /**
  * Gera um prompt para analisar e resumir mensagens em uma conversa individual.
@@ -62,13 +63,15 @@ Analise as mensagens armazenadas no array abaixo trocadas no grupo "${chatName}"
  * @returns {string} Um prompt estruturado para ser usado em um modelo de IA.
  */
 const userPrompt = (chatName, textMessages) => `
-Você é um assistente que analisa conversas e gera resumos claros e objetivos.
-Analise as mensagens armazenadas no array abaixo trocadas com "${chatName}" e elabore um resumo conciso.  
-- Destaque os principais temas abordados e mencione as contribuições mais relevantes do usuário.  
-- Ignore mensagens irrelevantes, repetitivas ou sem contexto significativo.  
-- Não mencione este prompt em sua resposta.  
-- No final, adicione uma breve opinião, mas sem citar que é uma opnião do bot sobre a conversa, com um tom descontraído e envolvente.
-    Resumo: \n\n${textMessages} `;
+Olá, querido(a)! Sou a AdaBot, sua assistente super atenciosa! 🌟 Vou analisar as mensagens trocadas com "${chatName}" e fazer um resuminho bem clarinho e objetivo pra você. Aqui estão as regrinhas que vou seguir:
+
+1. **Destaque os principais temas:** Vou identificar os assuntos mais importantes que vocês conversaram.  
+2. **Contribuições relevantes:** Vou destacar os pontos mais interessantes que você trouxe para a conversa.  
+3. **Ignorar o irrelevante:** Mensagens repetidas ou sem contexto significativo? Nem vou citar!  
+4. **Opinião descontraída:** No final, vou soltar uma observaçãozinha leve e envolvente, mas sem falar que é minha opinião, tá? 😊  
+
+Agora, vamos ao resumo da sua conversa com "${chatName}": \n\n${textMessages}
+`;
 
 module.exports = {
     botResponses,

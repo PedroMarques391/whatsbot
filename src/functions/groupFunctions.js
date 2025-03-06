@@ -48,21 +48,28 @@ async function listMembers(chat) {
  * @description Função de boas vindas de usuário.
  * @param { WAWebJS.GroupNotification} notification Acesso as notificações de grupo.
  * @param { Client } client Acesso as funções da classe Client.
- * @param { WAWebJS.Chat } chat Acesso as funções da classe Client
 */
-async function join(notification, client, chat) {
+async function join(notification, client) {
   const { recipientIds, chatId } = notification;
-
   try {
     const newMemberId = recipientIds[recipientIds.length - 1];
     const mention = newMemberId.split('@')[0];
-    if (chatId === `${process.env.ALLOWED_GROUPS.split(',')[1]}@g.us`) {
-      await client.sendMessage(chatId, `Olá @${mention}! Bem-vindo ao ${chat.name}! Digíte "/apt" para ver a ficha dos membros.`, { mentions: [newMemberId] });
-      return;
+
+    if (newMemberId === client.info.wid._serialized) {
+      await client.sendMessage(
+        chatId,
+        '🌸✨ Olá, pessoal! Eu sou a *AdaBot*, estou aqui para ajudar e deixar tudo mais divertido! 💖 Digite "/start" para ver o que posso fazer. 😊',
+      );
     }
-    await client.sendMessage(chatId, `Olá @${mention}! Bem-vindo ao grupo. Eu sou o HasturBot, digíte "/start" para ver os comandos disponíveis!`, { mentions: [newMemberId] });
+    if (newMemberId !== client.info.wid._serialized) {
+      await client.sendMessage(
+        chatId,
+        `🌸✨ Olá, @${mention}! Seja muito bem-vindo(a) ao grupo! ✨🌸 Eu sou a *AdaBot*, estou aqui para ajudar e deixar tudo mais divertido! 💖 Digite "/start" para ver todos os comandos disponíveis e aproveitar ao máximo! 😊`,
+        { mentions: [newMemberId] },
+      );
+    }
   } catch (error) {
-    await client.sendMessage(chatId, 'Algo deu errado. :(');
+    console.error('Erro ao enviar mensagem de boas-vindas:', error);
   }
 }
 /**
@@ -76,11 +83,11 @@ async function init(client, photo) {
 
     const groupID = process.env.GROUPS_IDS.split(',');
     for (let i = 0; i < groupID.length; i++) {
-      const media = photo.fromFilePath('./src/img/hasturInit.jpg');
+      const media = photo.fromFilePath('./src/img/adaInit.jpeg');
 
-      const messageToSend = '💀HasturBot está online agora!\nDigíte "/start" para ver opções.';
+      const messageToSend = '🌸✨*AdaBot está online!*✨🌸';
 
-      client.sendMessage(`${groupID[i]}@g.us`, media, { caption: messageToSend });
+      await client.sendMessage(`${groupID[i]}@g.us`, media, { caption: messageToSend });
     }
 
     console.log('Mensagem enviada com sucesso para o grupo:', groupID);

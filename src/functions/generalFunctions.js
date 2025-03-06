@@ -61,8 +61,8 @@ async function makeSticker(msg, client) {
           stickerMedia,
           {
             sendMediaAsSticker: true,
-            stickerName: `💀Created by ${authorName}`,
-            stickerAuthor: 'HasturBot💀',
+            stickerName: `❤Created by ${authorName}`,
+            stickerAuthor: 'AdaBot❤',
           },
         ).then((message) => message.react('❤'));
         await msg.react('✅');
@@ -88,8 +88,8 @@ async function makeSticker(msg, client) {
       stickerMedia,
       {
         sendMediaAsSticker: true,
-        stickerName: `💀Created by ${authorName}`,
-        stickerAuthor: 'HasturBot💀',
+        stickerName: `❤Created by ${authorName}`,
+        stickerAuthor: 'AdaBot❤',
       },
     ).then((message) => message.react('❤'));
     return msg.react('✅');
@@ -137,7 +137,7 @@ async function resumeMessages(client, msg) {
       presencePenalty: 0.4,
       frequencyPenalty: 0.4,
     },
-    systemInstruction: 'Você é HasturBot, um bot de whatsapp que conversas de forma natural, envolvente e objetiva.',
+    systemInstruction: 'Você é a AdaBot, um bot de whatsapp que conversas de forma natural, envolvente e objetiva.',
   });
   const chat = await msg.getChat();
   const contact = await client.getContactById(chat.id._serialized);
