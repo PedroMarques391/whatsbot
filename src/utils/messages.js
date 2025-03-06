@@ -19,6 +19,25 @@ const botResponses = [
     'Oi, oi! 💕 AdaBot na área! Já testou o /resume? Vai que tem algo super interessante pra você! 👀💖',
     'Sabe qual sua sorte do dia? bons bots respondem rapidinho! Manda um /start e vem comigo! 💫',
 ];
+/**
+ * Respostas automáticas do bot quando recebe ligações.
+ * O bot escolhe uma dessas respostas de forma aleatória.
+ * @type {string[]}
+ */
+const rejectCallResponses = [
+    '📞 *AdaBot*: Oiê! Eu rejeito ligações automaticamente, mas se eu estiver por perto, jaja falo com você! 😊 Calma aí, já volto! 💖✨',
+    '📞 *AdaBot*: Olá! Ligação rejeitada, mas não se preocupe, se eu estiver aqui, já te respondo! 😉 Fica tranquilo(a)! 💕🌸',
+    '📞 *AdaBot*: Oops! Rejeitei a ligação, mas se eu estiver por perto, jaja te ajudo! 😊 Espera só um pouquinho! 💖✨',
+    '📞 *AdaBot*: Eita! Ligação recusada, mas se eu estiver online, já te atendo! 😄 Fica de boa, já volto! 💕🌟',
+    '📞 *AdaBot*: Oi! Rejeitei a ligação, mas se eu estiver por aqui, jaja falo com você! 😊 Calma, já tô chegando! 💖🌸',
+    '📞 *AdaBot*: Olá! Ligação recusada, mas se eu estiver disponível, já te respondo! 😉 Relaxa, já volto! 💕✨',
+    '📞 *AdaBot*: Oiê! Rejeitei a ligação, mas se eu estiver por perto, jaja te ajudo! 😊 Espera só um instante! 💖🌟',
+    '📞 *AdaBot*: Oops! Ligação recusada, mas se eu estiver aqui, já te atendo! 😄 Fica tranquilo(a), já volto! 💕🌸',
+    '📞 *AdaBot*: Oi! Rejeitei a ligação, mas se eu estiver por perto, jaja falo com você! 😊 Calma aí, já tô chegando! 💖✨',
+    '📞 *AdaBot*: Olá! Ligação recusada, mas se eu estiver online, já te respondo! 😉 Relaxa, já volto! 💕🌟',
+    '📞 *AdaBot*: Oiê! Rejeitei a ligação, mas se eu estiver por aqui, jaja te ajudo! 😊 Espera só um pouquinho! 💖🌸',
+    '📞 *AdaBot*: Oops! Ligação recusada, mas se eu estiver disponível, já te atendo! 😄 Fica de boa, já volto! 💕✨',
+];
 
 /**
  * Respostas automáticas para erros ao enviar stickers.
@@ -73,9 +92,31 @@ Olá, querido(a)! Sou a AdaBot, sua assistente super atenciosa! 🌟 Vou analisa
 Agora, vamos ao resumo da sua conversa com "${chatName}": \n\n${textMessages}
 `;
 
+/**
+ * Respostas automáticas para primeira interação do usuário.
+ * O bot escolhe uma dessas respostas de forma aleatória.
+ * @type {string[]}
+ */
+const firstInteractionMessages = [
+    '🌸✨ Olá! Eu sou a AdaBot, sua assistente favorita. Estou aqui para ajudar! Use /start para ver minhas opções, /resume para resumir conversas e /sticker para criar figurinhas. Vamos começar? 😊',
+    '💖🌟 Oiê! Eu sou a AdaBot. Que tal usar /start para ver o que posso fazer? Também tenho /resume para resumir mensagens e /sticker para criar figurinhas. Estou aqui para ajudar! 😉',
+    '✨🌸 Olá! Eu sou a AdaBot. Use /start para ver meus comandos, /resume para resumir conversas e /sticker para transformar imagens em figurinhas. Como posso ajudar hoje? 💕',
+    '🌟💖 Oi! Eu sou a AdaBot. Que tal começar com /start para ver minhas funções? Também posso resumir conversas com /resume e criar figurinhas com /sticker. Vamos lá! 😊',
+    '🌸💫 Olá! Eu sou a AdaBot. Use /start para explorar minhas opções, /resume para resumir mensagens e /sticker para criar figurinhas. Estou aqui para ajudar! 💖',
+    '💫🌸 Oiê! Eu sou a AdaBot. Que tal usar /start para ver o que posso fazer? Também tenho /resume para resumir conversas e /sticker para criar figurinhas. Vamos começar? 😉',
+    '✨💖 Olá! Eu sou a AdaBot. Use /start para ver meus comandos, /resume para resumir mensagens e /sticker para transformar imagens em figurinhas. Como posso ajudar hoje? 💕',
+    '💖✨ Oi! Eu sou a AdaBot. Que tal começar com /start para ver minhas funções? Também posso resumir conversas com /resume e criar figurinhas com /sticker. Vamos lá! 😊',
+    '🌸🌟 Olá! Eu sou a AdaBot. Use /start para explorar minhas opções, /resume para resumir mensagens e /sticker para criar figurinhas. Estou aqui para ajudar! 💖',
+    '🌟🌸 Oiê! Eu sou a AdaBot. Que tal usar /start para ver o que posso fazer? Também tenho /resume para resumir conversas e /sticker para criar figurinhas. Vamos começar? 😉',
+    '💫💖 Olá! Eu sou a AdaBot. Use /start para ver meus comandos, /resume para resumir mensagens e /sticker para transformar imagens em figurinhas. Como posso ajudar hoje? 💕',
+    '✨🌟 Oeeee! Eu sou a AdaBot. Que tal começar com /start para ver minhas funções? Também posso resumir conversas com /resume e criar figurinhas com /sticker. Vamos lá! 😊',
+];
+
 module.exports = {
     botResponses,
     sendStickerErrors,
+    rejectCallResponses,
+    firstInteractionMessages,
     userPrompt,
     groupPrompt,
 };
