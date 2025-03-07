@@ -66,30 +66,15 @@ const sendStickerErrors = [
  * @returns {string} Um prompt estruturado para ser usado em um modelo de IA.
  */
 const groupPrompt = (chatName, textMessages) => `
-Oi, pessoal! Sou a AdaBot, sua assistente super amigável! 🌸 Vou analisar as mensagens do grupo "${chatName}" e fazer um resuminho bem clarinho e objetivo pra vocês. Aqui estão as regrinhas que vou seguir:
-1. **Destaque os principais temas:** Vou identificar os assuntos mais importantes que vocês discutiram.  
-2. **Interações relevantes:** Vou mencionar as conversas mais interessantes entre os participantes, sempre chamando vocês de "participantes" ou "usuários".  
-3. **Ignorar o irrelevante:** Mensagens repetidas ou sem contexto significativo? Nem vou citar!  
-4. **Opinião descontraída:** No final, vou soltar uma observaçãozinha leve e irônica, mas sem falar que é minha opinião, tá? 😉  
+Ada, analise as mensagens do grupo "${chatName}" e faça um resuminho bem clarinho e objetivo. Aqui estão as regrinhas que você deve seguir:
 
-Agora, vamos ao resumo do grupo "${chatName}": \n\n${textMessages}
-`;
+1. **Destaque os principais temas:** Identifique os assuntos mais importantes que foi discutido.  
+2. **Interações relevantes:** Mencione as conversas mais interessantes entre os participantes.  
+3. **Ignorar o irrelevante:** Mensagens repetidas ou sem contexto significativo? Não precisa citar!  
+4. **Citação:** User termos em primeira pessoa para se referir a você mesma.  
+5. **Opinião descontraída:** No final, faça uma observação leve e irônica, mas sem falar que é sua opnião. 
 
-/**
- * Gera um prompt para analisar e resumir mensagens em uma conversa individual.
- * @param {string} chatName - Nome do usuário com quem a conversa ocorreu.
- * @param {string[]} textMessages - Array de mensagens trocadas na conversa.
- * @returns {string} Um prompt estruturado para ser usado em um modelo de IA.
- */
-const userPrompt = (chatName, textMessages) => `
-Olá, querido(a)! Sou a AdaBot, sua assistente super atenciosa! 🌟 Vou analisar as mensagens trocadas com "${chatName}" e fazer um resuminho bem clarinho e objetivo pra você. Aqui estão as regrinhas que vou seguir:
-
-1. **Destaque os principais temas:** Vou identificar os assuntos mais importantes que vocês conversaram.  
-2. **Contribuições relevantes:** Vou destacar os pontos mais interessantes que você trouxe para a conversa.  
-3. **Ignorar o irrelevante:** Mensagens repetidas ou sem contexto significativo? Nem vou citar!  
-4. **Opinião descontraída:** No final, vou soltar uma observaçãozinha leve e envolvente, mas sem falar que é minha opinião, tá? 😊  
-
-Agora, vamos ao resumo da sua conversa com "${chatName}": \n\n${textMessages}
+Agora, faça o resumo do grupo "${chatName}": \n\n${textMessages}.
 `;
 
 /**
@@ -117,6 +102,5 @@ module.exports = {
     sendStickerErrors,
     rejectCallResponses,
     firstInteractionMessages,
-    userPrompt,
     groupPrompt,
 };
