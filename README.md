@@ -1,106 +1,99 @@
 
 **AdaBot**
 
-![Imagem do AdaBot](./src/img/hasturProfile.jpg)
+![Imagem do AdaBot](./src/img/adaProfile.jpeg)
 
-**AdaBot** é um bot desenvolvido com **JavaScript** utilizando a biblioteca **whatsapp-web.js**. Ele oferece uma variedade de funcionalidades para automação de tarefas dentro do WhatsApp, com foco especial em **funções específicas para grupos** e **usuários**. O bot possui funções como pesquisa online, criação de figurinhas, envio de áudios, entre outras.
+# AdaBot
 
-## **Funcionalidades**
+A **AdaBot** é uma assistente fofa e adorável desenvolvida com **JavaScript**, utilizando a biblioteca **whatsapp-web.js**. Criada para tornar suas interações no WhatsApp mais divertidas e práticas, a AdaBot conta com diversas funcionalidades, incluindo automação de tarefas, interações especiais em grupos e assistência personalizada para usuários.
 
-O **AdaBot** possui diversas funções que podem ser utilizadas dentro de grupos do WhatsApp, incluindo comandos específicos para administradores, funcionalidades para interagir com os membros, e ações gerais. Veja abaixo algumas das principais funcionalidades:
+---
+
+## Funcionalidades
+
+A **AdaBot** possui um conjunto de comandos projetados para tornar suas interações no WhatsApp mais dinâmicas e eficientes. Ela pode criar figurinhas, buscar informações, interagir com grupos e muito mais!
 
 ### **Funções Gerais**
 
-- **/sticker**: Transforma uma imagem em uma figurinha. (Envie o comando junto com a imagem)
-- **/audios**: Envia uma lista de áudios disponíveis.
-- **/search + palavra**: Pesquisa no Google o que você deseja.
+- **/sticker**: Transforma uma imagem em uma figurinha. (Basta enviar o comando junto com a imagem!)
+- **/audios**: Exibe uma lista de áudios disponíveis para envio.
+- **/search + palavra**: Pesquisa no Google o que você quiser.
 - **/images + descrição detalhada**: Pesquisa e envia uma imagem baseada na descrição fornecida.
+- **/resume**: Faz um resumo das ultimas conversas.
 
 ### **Funções para Grupos**
 
-- **/list**: Lista todos os membros do grupo.
+- **/list**: Lista todos os participantes do grupo.
 - **/past**: Mostra os antigos membros do grupo.
 
 ### **Funções para Administradores**
 
 - **/add + número**: Adiciona um participante ao grupo.
 - **/rm + número**: Remove um participante do grupo.
-- **/promote + número**: Promove um membro a Administrador.
-- **/demote + número**: Rebaixa um administrador a membro.
+- **/promote + número**: Promove um membro a administrador.
+- **/demote + número**: Rebaixa um administrador a membro comum.
 
-## **Configuração do Ambiente**
+---
 
-Para que o **AdaBot** tenhas todas suas funções ativas, você precisa preencher as variáveis de ambiente no arquivo `.env.example`. Esse arquivo contém várias configurações importantes, como IDs dos grupos, chave da API do Google e configurações do cliente. Após preencher as variáveis corretamente, você pode renomear o arquivo para `.env` e iniciar o bot.
+## Configuração do Ambiente
 
-### **Passos para Preencher o Arquivo `.env.example`**
+Para que a **AdaBot** funcione perfeitamente, é necessário configurar corretamente o arquivo `.env`. Este arquivo contém informações essenciais, como os IDs dos grupos, chaves da API do Google e configurações do cliente.
 
-*Esses Ids serão usados para que o bot envie a mensagem de inicialização(opcional)*
-1. **GROUPS_IDS**:
-   - **Descrição**: IDs dos grupos onde o bot pode ser usado.
-   - **Exemplo**:
-     ```plaintext
-     GROUPS_IDS="1234567890,0987654321"
-     ```
+### **Passos para Configurar o Arquivo `.env`**
 
-2. **ALLOWED_GROUPS (opcional)**:
-   - **Descrição**: Grupos permitidos para o bot. Caso não queira restringir, basta deixar em branco.
-   - **Exemplo**:
-     ```plaintext
-     ALLOWED_GROUPS="1234567890@c.us"
-     ```
-
-3. **CLIENT_NUMBER**:
-   - **Descrição**: Número de telefone do cliente (WhatsApp) utilizado pelo bot (use no mesmo formato expecificado).
-   - **Exemplo**:
+1. **CLIENT_NUMBER**
+   - Número do WhatsApp que será usado pelo bot.
+   - **Exemplo:**
      ```plaintext
      CLIENT_NUMBER="551187654321@c.us"
      ```
 
-4. **EXECUTABLE_PATH**:
-   - **Descrição**: Caminho do executável do navegador Google Chrome.
-   - **Exemplo**:
+2. **EXECUTABLE_PATH**
+   - Caminho do executável do Google Chrome utilizado pelo bot.
+   - **Exemplo:**
      ```plaintext
      EXECUTABLE_PATH="/usr/bin/google-chrome-stable"
      ```
 
-5. **GOOGLE_SEARCH_API_KEY**:
-   - **Descrição**: Chave da API do Google para realizar pesquisas.
-   - **Exemplo**:
+3. **GOOGLE_SEARCH_API_KEY**
+   - Chave da API do Google para realizar pesquisas.
+   - **Exemplo:**
      ```plaintext
      GOOGLE_SEARCH_API_KEY="sua_chave_da_api"
      ```
 
-6. **GOOGLE_SEARCH_API_CTX_GENERAL**:
-   - **Descrição**: Contexto da API de pesquisa do Google para pesquisas gerais.
-   - **Exemplo**:
+4. **GOOGLE_SEARCH_API_CTX_GENERAL**
+   - Contexto da API de pesquisa do Google para buscas gerais.
+   - **Exemplo:**
      ```plaintext
      GOOGLE_SEARCH_API_CTX_GENERAL="seu_search_engine_id"
      ```
 
-7. **GOOGLE_SEARCH_API_CTX_IMAGES**:
-   - **Descrição**: Contexto da API de pesquisa de imagens do Google.
-   - **Exemplo**:
+5. **GOOGLE_SEARCH_API_CTX_IMAGES**
+   - Contexto da API de pesquisa para imagens.
+   - **Exemplo:**
      ```plaintext
      GOOGLE_SEARCH_API_CTX_IMAGES="seu_search_engine_id_para_imagens"
      ```
 
-### **Exemplo Completo do Arquivo `.env`**
+###  **Exemplo Completo do Arquivo `.env`**
 
 ```plaintext
 GROUPS_IDS="1234567890@c.us,0987654321@c.us"
-ALLOWED_GROUPS="1234567890@c.us"
 CLIENT_NUMBER="551187654321@c.us"
 EXECUTABLE_PATH="/usr/bin/google-chrome-stable"
 GOOGLE_SEARCH_API_KEY="sua_chave_da_api"
 GOOGLE_SEARCH_API_CTX_GENERAL="seu_search_engine_id"
 GOOGLE_SEARCH_API_CTX_IMAGES="seu_search_engine_id_para_imagens"
+BOT_INSTRUCTIONS="intrucoes_para_gemini"
 ```
 
 ### **Importante!**
-- **Renomeie o arquivo**: Após preencher as variáveis no arquivo `.env.example`, renomeie-o para `.env` para que o bot possa utilizar essas configurações corretamente.
+- **Renomeie o arquivo**: Após preencher as variáveis no arquivo `.env.example`, renomeie-o para `.env` para que a AdaBot possa utilizar as configurações corretamente.
 
 ---
 
-Com o arquivo `.env` configurado corretamente, o **AdaBot** estará pronto para ser executado e você poderá usar todas as funcionalidades que ele oferece no WhatsApp!
+Com o arquivo `.env` configurado corretamente, a **AdaBot** estará pronta para ser usada!
 
+Agora é só chamar a AdaBot no WhatsApp e aproveitar todas as funcionalidades fofas e útis que ela oferece!
 
