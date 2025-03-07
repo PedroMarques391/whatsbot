@@ -1,10 +1,11 @@
 require('dotenv').config();
-const { GoogleGenerativeAI } = require('@google/generative-ai');
 const ffmpeg = require('fluent-ffmpeg');
 const fs = require('fs');
 const path = require('path');
 const { MessageMedia } = require('whatsapp-web.js');
-const { groupPrompt, userPrompt, sendStickerErrors } = require('../utils/messages');
+const { groupPrompt, sendStickerErrors } = require('../utils/messages');
+const { model } = require('../model/geminiModel');
+const { extractTextFromBody } = require('../utils');
 
 /**
  * @description Transforma uma imagem em figurinha.
@@ -61,8 +62,8 @@ async function makeSticker(msg, client) {
           stickerMedia,
           {
             sendMediaAsSticker: true,
-            stickerName: `❤Created by ${authorName}`,
-            stickerAuthor: 'AdaBot❤',
+            stickerName: `🌸Created by ${authorName}`,
+            stickerAuthor: 'AdaBot🌸',
           },
         ).then((message) => message.react('❤'));
         await msg.react('✅');
@@ -88,8 +89,8 @@ async function makeSticker(msg, client) {
       stickerMedia,
       {
         sendMediaAsSticker: true,
-        stickerName: `❤Created by ${authorName}`,
-        stickerAuthor: 'AdaBot❤',
+        stickerName: `🌸Created by ${authorName}`,
+        stickerAuthor: 'AdaBot🌸',
       },
     ).then((message) => message.react('❤'));
     return msg.react('✅');
@@ -126,19 +127,6 @@ async function sendAudios(msg, client) {
  * @param {Client} client Instância do cliente do WhatsApp Web.
  */
 async function resumeMessages(client, msg) {
-  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-  const model = genAI.getGenerativeModel({
-    model: 'gemini-1.5-flash',
-    generationConfig: {
-      maxOutputTokens: 800,
-      temperature: 0.8,
-      topP: 0.9,
-      topK: 40,
-      presencePenalty: 0.4,
-      frequencyPenalty: 0.4,
-    },
-    systemInstruction: 'Você é a AdaBot, um bot de whatsapp que conversas de forma natural, envolvente e objetiva.',
-  });
   const chat = await msg.getChat();
   const contact = await client.getContactById(chat.id._serialized);
 
@@ -156,9 +144,7 @@ async function resumeMessages(client, msg) {
 
       const chatName = chat.isGroup ? chat.groupMetadata.subject : contact.pushname;
 
-      const prompt = chat.isGroup
-        ? groupPrompt(chatName, textMessages)
-        : userPrompt(chatName, textMessages);
+      const prompt = groupPrompt(chatName, textMessages);
 
       try {
         const result = await model.generateContent(prompt);
@@ -170,9 +156,25 @@ async function resumeMessages(client, msg) {
         await client.sendMessage(chat.id._serialized, text);
       } catch (error) {
         await message.react('❌');
-        await client.sendMessage(chat.id._serialized, 'Desculpe, não consegui processar o resumo no momento.');
+        await client.sendMessage(chat.id._serialized, 'Desculpe, não consegui processar o resumo no momento. 😢');
       }
     });
+}
+
+async function talk(client, msg) {
+  const chat = await msg.getChat();
+  try {
+    const question = extractTextFromBody(msg.body);
+    const result = await model.generateContent(question);
+    const response = await result.response;
+    const text = await response.text();
+
+    await msg.react('✅');
+
+    await client.sendMessage(chat.id._serialized, text);
+  } catch (error) {
+    await client.sendMessage(chat.id._serialized, 'Desculpe, não sei como responder isso. 😫😫');
+  }
 }
 
 function formatDate(unixTimeStamp) {
@@ -194,4 +196,5 @@ module.exports = {
   sendAudios,
   formatDate,
   resumeMessages,
+  talk,
 };

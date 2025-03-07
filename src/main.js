@@ -8,7 +8,9 @@ const {
   removeParticipant, promoteParticipant,
   demoteParticipant,
 } = require('./functions/groupFunctions');
-const { makeSticker, sendAudios, resumeMessages } = require('./functions/generalFunctions');
+const {
+  makeSticker, sendAudios, resumeMessages, talk,
+} = require('./functions/generalFunctions');
 const {
   rejectCallResponses,
   firstInteractionMessages,
@@ -72,39 +74,47 @@ client.on('message_create', async (message) => {
     const minutes = `${date.getMinutes()}` < 10 ? `0${date.getMinutes()}` : date.getMinutes();
     const seconds = `${date.getSeconds()}` < 10 ? `0${date.getSeconds()}` : date.getSeconds();
     const menu = `
-╭━━━━━━━━━━◉ *Menu* ◉━━━━━━━━━━╮
+╭━━━ ◉ *Menu* ◉ ━━━╮
 
-◉━━━━━━━━ *AdaBot* ━━━━━━━━◉
-🌟 Olá, @${contact.number}! Eu sou a AdaBot. 🌟
-🌟 Todos os comandos devem iniciar com " / ". 🌟
-🌟 Chat: ${contact.pushname} | Hora: ${hours}:${minutes}:${seconds} 🌟
+◉━━━ *AdaBot* ━━━◉  
+🌺 Olá, @${contact.number}! Eu sou a Ada.  
+🌺 Todos os comandos devem iniciar com " / ".  
+🌺 Chat: ${contact.pushname} 
+🌺 Hora: ${hours}:${minutes}:${seconds}  
 
-╭•━━━━━━━━≺ *Infos* ≻━━━━━━━━•╮
-┃￫ /start - Mostrar este menu.
-┃￫ /info - Ver informações do bot.
-╰╼━══━━━━━━≺∆≻━━━━━━══━╾╯
+╭─≺ *Infos* ≻─╮  
+┃ ➤ /start - Mostrar este menu.  
+┃ ➤ /info - Ver informações do bot.  
+╰─────≺∆≻─────╯  
 
-╭•━━━━━━━━≺ *Grupos* ≻━━━━━━━━•╮
-┃￫ /list - Listar membros do grupo.
-┃￫ /past - Mostrar ex-membros do grupo.
-╰╼━══━━━━━━≺∆≻━━━━━━══━╾╯
+╭─≺ *Grupos* ≻─╮  
+┃ ➤ /list - Listar membros do grupo.  
+┃ ➤ /past - Mostrar ex-membros do grupo.  
+╰─────≺∆≻─────╯  
 
-╭•━━━━━━≺ *Administradores* ≻━━━━━━•╮
-┃￫ /add + número - Adicionar participante.
-┃￫ /rm + número - Remover participante.
-┃￫ /promote + número - Promover a admin.
-┃￫ /demote + número - Rebaixar admin.
-╰╼━══━━━━━━≺∆≻━━━━━━══━╾╯
+╭─≺ *Administradores* ≻─╮  
+┃ ➤ /add + número - Adicionar participante.  
+┃ ➤ /rm + número - Remover participante.  
+┃ ➤ /promote + número - Promover a admin.  
+┃ ➤ /demote + número - Rebaixar admin.  
+╰──────≺∆≻──────╯  
 
-╭•━━━━━━━━≺ *Geral* ≻━━━━━━━━•╮
-┃￫ /sticker - Criar figurinha (envie imagem/vídeo).
-┃￫ /resume - Resumir últimas mensagens.
-┃￫ /audios - Lista de áudios disponíveis.
-┃￫ /search + palavra - Pesquisar no Google.
-┃￫ /images + descrição - Buscar imagens.
-╰╼━══━━━━━━≺∆≻━━━━━━══━╾╯
+╭─≺ *Geral* ≻─╮  
+┃ ➤ /sticker - Criar figurinha (envie imagem/vídeo).  
+┃ ➤ /resume - Resumir últimas mensagens.  
+┃ ➤ /audios - Lista de áudios disponíveis.  
+┃ ➤ /search + palavra - Pesquisar no Google.  
+┃ ➤ /images + descrição - Buscar imagens.  
+╰─────≺∆≻─────╯  
 
-╰━━━━━━━━━━◉^__~◉━━━━━━━━━━╯
+╭─≺ *Converse Comigo* ≻─╮  
+┃ 💬 Me chame carinhosamente:  
+┃    Exemplo → *Ada, qual sua música favorita?* 🎶  
+┃ 🐾 Eu vou responder com muito amor e fofura! 💕  
+╰────────────╯
+
+╰━━━◉ ^__^ ◉━━━╯
+
 `;
     const media = MessageMedia.fromFilePath('./src/img/adaProfile.jpeg');
     await client.sendMessage(chat.id._serialized, media, {
@@ -118,7 +128,6 @@ client.on('message_create', async (message) => {
 
 client.on('message_create', async (msg) => {
   const chat = await msg.getChat();
-  const contact = await msg.getContact();
 
   if (msg.from.includes('@c.us') && !msg.fromMe) {
     const getResponse = firstInteractionMessages[
@@ -220,21 +229,6 @@ client.on('message_create', async (msg) => {
       }
     }
     await client.sendMessage(chat.id._serialized, 'Prontinho, espero que tenha ajudado!!');
-  } if (msg.body.startsWith('/block')) {
-    try {
-      const contactIdToBlock = await client.getContactById(`${extractTextFromBody(msg.body)}@c.us`);
-      if (contactIdToBlock.isBlocked) {
-        const unBlock = await contactIdToBlock.unblock();
-        await client.sendMessage(chat.id._serialized, `Prontinho, ${contact.pushname}, ${contactIdToBlock.pushname} foi desbloqueado com sucesso.`);
-        return unBlock;
-      }
-      const block = await contactIdToBlock.block();
-      await client.sendMessage(chat.id._serialized, `Prontinho, ${contact.pushname}, ${contactIdToBlock.pushname} foi bloqueado com sucesso. Para desbloquear execute o mesmo comando.`);
-      return block;
-    } catch (error) {
-      console.log(error);
-      await client.sendMessage(chat.id._serialized, 'Tive algum problema para bloquear o contato, ou já está bloqueado, ou o numero é inválido.');
-    }
   } if (msg.body.startsWith('/resume')) {
     await resumeMessages(client, msg);
     return;
@@ -243,6 +237,9 @@ client.on('message_create', async (msg) => {
       limit: 10,
     });
     console.log(messages);
+  } if ((msg.body.toLowerCase().startsWith('adabot') || msg.body.toLowerCase().startsWith('ada')) && msg.body.endsWith('?')) {
+    await talk(client, msg);
+    return;
   } if (msg.body.toLowerCase().startsWith('adabot') || msg.body.toLowerCase().startsWith('ada') || msg.body.startsWith(`@${process.env.CLIENT_NUMBER.split('@')[0]}`)) {
     const getRandomResponse = botResponses[Math.floor(Math.random() * botResponses.length)];
     await msg.reply(getRandomResponse);
