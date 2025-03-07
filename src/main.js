@@ -240,7 +240,10 @@ client.on('message_create', async (msg) => {
   } if ((msg.body.toLowerCase().startsWith('adabot') || msg.body.toLowerCase().startsWith('ada')) && msg.body.endsWith('?')) {
     await talk(client, msg);
     return;
-  } if (msg.body.toLowerCase().startsWith('adabot') || msg.body.toLowerCase().startsWith('ada') || msg.body.startsWith(`@${process.env.CLIENT_NUMBER.split('@')[0]}`)) {
+  } if (((msg.body.toLowerCase().includes('adabot')
+    || msg.body.toLowerCase().includes('ada'))
+    && !msg.fromMe)
+    || msg.body.startsWith(`@${process.env.CLIENT_NUMBER.split('@')[0]}`)) {
     const getRandomResponse = botResponses[Math.floor(Math.random() * botResponses.length)];
     await msg.reply(getRandomResponse);
   }
