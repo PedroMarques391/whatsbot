@@ -22,6 +22,7 @@ const model = genAI.getGenerativeModel({
             { text: instructions[2] },
             { text: instructions[3] },
             { text: instructions[4] },
+            { text: instructions[5] },
         ],
 
     },
