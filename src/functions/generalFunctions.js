@@ -162,7 +162,6 @@ async function resumeMessages(client, msg) {
 }
 
 async function talk(client, msg) {
-  const chat = await msg.getChat();
   try {
     const question = extractTextFromBody(msg.body);
     const result = await model.generateContent(question);
@@ -171,9 +170,9 @@ async function talk(client, msg) {
 
     await msg.react('✅');
 
-    await client.sendMessage(chat.id._serialized, text);
+    await msg.reply(text);
   } catch (error) {
-    await client.sendMessage(chat.id._serialized, 'Desculpe, não sei como responder isso. 😫😫');
+    await msg.reply('Desculpe, não sei como responder isso. 😫😫');
   }
 }
 
