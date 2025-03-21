@@ -43,7 +43,6 @@ client.on('ready', () => {
   ┃━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━━━━
   ┃｡˚⭐ ￫ Plataforma do cliente: ${client.info.platform === 'iphone' ? 'IOS' : client.info.platform}
   ╰╼━━━━━━━━╾━━━━━━╾━━━━━━╾≺End≻━═━╾━━━╾━━━━━━╾━━━━━━━━━━━╯
-
   `);
 });
 

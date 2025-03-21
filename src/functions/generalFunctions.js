@@ -41,7 +41,9 @@ async function makeSticker(msg, client) {
       .output(outputPath)
       .outputFormat('webp')
       .videoCodec('libwebp')
-      .size('512x512')
+      .outputOption(
+        '-vf scale=w=512:h=512:force_original_aspect_ratio=decrease',
+      )
       .fps(10)
       .noAudio()
       .on('start', async () => {
