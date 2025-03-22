@@ -236,14 +236,24 @@ client.on('message_create', async (msg) => {
       limit: 10,
     });
     console.log(messages);
-  } if ((msg.body.toLowerCase().startsWith('adabot') || msg.body.toLowerCase().startsWith('ada')) && msg.body.endsWith('?')) {
-    await talk(client, msg);
-    return;
-  } if ((msg.body.toLowerCase().startsWith('adabot')
-    || msg.body.toLowerCase().startsWith('ada'))
-    || msg.body.startsWith(`@${process.env.CLIENT_NUMBER.split('@')[0]}`)) {
-    const getRandomResponse = botResponses[Math.floor(Math.random() * botResponses.length)];
-    await msg.reply(getRandomResponse);
+  } if (!msg.fromMe) {
+    const greetingRegex = /\b(o{1,}i{1,}|olá|e{1,}i{1,}|salve{1,}|hey|e aí|como vai|como você está|tudo bem|bom dia|boa tarde|boa noite)\s*[,?!]?\s*(ada|adabot)\b/i;
+
+    if (greetingRegex.test(msg.body.toLowerCase())
+      || msg.body.toLowerCase() === 'ada'
+      || msg.body.toLowerCase() === 'adabot'
+      || msg.body.startsWith(`@${process.env.CLIENT_NUMBER.split('@')[0]}`)
+
+    ) {
+      const getRandomResponse = botResponses[Math.floor(Math.random() * botResponses.length)];
+      await msg.reply(getRandomResponse);
+      return;
+    }
+    if (msg.body.toLowerCase().startsWith('adabot')
+      || msg.body.toLowerCase().startsWith('ada')
+    ) {
+      await talk(client, msg);
+    }
   }
 });
 
