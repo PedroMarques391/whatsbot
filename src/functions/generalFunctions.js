@@ -3,7 +3,7 @@ const ffmpeg = require('fluent-ffmpeg');
 const fs = require('fs');
 const path = require('path');
 const { MessageMedia } = require('whatsapp-web.js');
-const { groupPrompt, sendStickerErrors } = require('../utils/messages');
+const { groupPrompt, sendStickerErrors, resumeErrorMessages } = require('../utils/messages');
 const { model } = require('../model/geminiModel');
 const { extractTextFromBody } = require('../utils');
 
@@ -135,11 +135,21 @@ async function resumeMessages(client, msg) {
       await message.react('⏳');
 
       const messages = await chat.fetchMessages({ limit: 500 });
-
       const textMessages = messages
-        .filter((textMessage) => !textMessage.hasMedia)
-        .map((textMessage) => textMessage.body)
-        .join('\n');
+        .filter((textMessage) => !textMessage.hasMedia && !textMessage.fromMe)
+        .map((textMessage) => textMessage.body);
+
+      if (textMessages.length < 20) {
+        await message.react('✅');
+        const randomMessages = resumeErrorMessages[
+          Math.floor(Math.random() * resumeErrorMessages.length)];
+        await client.sendMessage(chat.id._serialized, randomMessages)
+          .then((msgToReact) => msgToReact.react('😥'))
+          .finally(async () => {
+            await message.react('😥');
+          });
+        return;
+      }
       await message.react('⌛');
 
       const chatName = chat.isGroup ? chat.groupMetadata.subject : contact.pushname;
