@@ -41,10 +41,8 @@ async function makeSticker(msg, client) {
       .output(outputPath)
       .outputFormat('webp')
       .videoCodec('libwebp')
-      .outputOption(
-        '-vf scale=w=512:h=512:force_original_aspect_ratio=decrease',
-      )
-      .fps(10)
+      .outputOption('-vf scale=512:512:force_original_aspect_ratio=increase,crop=512:512')
+      .fps(12)
       .noAudio()
       .on('start', async () => {
         await msg.react('⏳');
