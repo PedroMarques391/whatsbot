@@ -127,6 +127,7 @@ client.on('message_create', async (message) => {
 
 client.on('message_create', async (msg) => {
   const chat = await msg.getChat();
+  const quotedMessage = await msg.getQuotedMessage();
 
   if (msg.from.includes('@c.us') && !msg.fromMe) {
     const getResponse = firstInteractionMessages[
@@ -151,8 +152,11 @@ client.on('message_create', async (msg) => {
       ? showPastMembers(chat)
       : await msg.reply(`O comando '${msg.body}' só pode ser usado em grupos`);
     return allowed;
-  } if (msg.body.startsWith('/sticker') || msg.body === '/s') {
-    makeSticker(msg, client);
+  } if (msg.body.toLowerCase().startsWith('/sticker') || msg.body.toLowerCase() === '/s') {
+    const isQuotedMessage = msg.hasQuotedMsg
+      ? makeSticker(quotedMessage, client)
+      : makeSticker(msg, client);
+    await isQuotedMessage;
   } if (msg.body.startsWith('/add')) {
     const allowed = chat.isGroup
       ? addParticipant(msg, chat)
@@ -232,10 +236,10 @@ client.on('message_create', async (msg) => {
     await resumeMessages(client, msg);
     return;
   } if (msg.body.startsWith('/test')) {
-    const messages = await chat.fetchMessages({
-      limit: 10,
-    });
-    console.log(messages);
+    if (msg.hasQuotedMsg) {
+      const a = await msg.getQuotedMessage();
+      await makeSticker(a, client);
+    }
   } if (!msg.fromMe) {
     const greetingRegex = msg.isGroup
       ? /\b(o{1,}i{1,}|olá|e{1,}i{1,}|salve{1,}|hey|e aí|como vai|como você está|tudo bem|bom dia|boa tarde|boa noite)\s*[,?!]?\s*(ada|adabot)\b/i
