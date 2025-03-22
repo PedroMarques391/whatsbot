@@ -97,10 +97,31 @@ const firstInteractionMessages = [
     '✨🌟 Oeeee! Eu sou a AdaBot. Que tal começar com /start para ver minhas funções? Também posso resumir conversas com /resume e criar figurinhas com /sticker. Vamos lá! 😊',
 ];
 
+/**
+ * Respostas de erro para quando o não tem mensagens o suficiente para o resumo.
+ * O bot escolhe uma dessas respostas de forma aleatória.
+ * @type {string[]}
+ */
+const resumeErrorMessages = [
+    'Hihi! Eu queria tanto resumir, mas não tem nadinha pra eu juntar! Me manda mais coisinhas? 🥺💕',
+    'Eita! Eu fui pegar o resumo e… cadê? 😱 Me ajuda aqui, docinho!',
+    'Awwwn, acho que alguém esqueceu de me dar mais mensagens! 😖 Me manda mais que eu faço um resuminho top!',
+    'Ops! Parece que o resumo ficou tão pequeno que virou um segredo invisível… 👀✨ Me manda mais, por favorzinho?',
+    'Ah nãooo! Eu queria te ajudar, mas só tem vento pra resumir! 🍃 Manda mais que eu resolvo!',
+    'Socorro, não tem conteúdo suficiente! 😵‍💫 Vou fingir que resumi: ‘Blá blá blá, fim!’ 😆 Mas sério, me manda mais!',
+    'O resumo? Sumiu no mundo! 🌍🔍 Sem mensagens suficientes, sem magia… me ajuda a fazer isso acontecer?',
+    'Ai ai… acho que isso é um resumo quase vazio! 🫥 Poxa não vou resumir 20 mensagens, lê pode ser incrível para você!',
+    'Tentei resumir, mas o resumo ficou do tamanho de uma formiguinha! 🐜 Manda mais que eu deixo gigante!',
+    'Poxa, que judiação! Eu queria tanto fazer um resuminho lindo, mas não tem nadinha aqui… 😭💕',
+    'Oh não! Sem mensagens suficientes, sem resumo fofo! 😿 Quer tentar de novo com mais textinhos?',
+    'Se fosse possível resumir o nada, eu faria, mas até eu tenho limites! 😂 Bora tentar de novo?',
+];
+
 module.exports = {
     botResponses,
     sendStickerErrors,
     rejectCallResponses,
     firstInteractionMessages,
+    resumeErrorMessages,
     groupPrompt,
 };
