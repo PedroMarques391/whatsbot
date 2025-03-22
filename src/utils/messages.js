@@ -63,18 +63,16 @@ const sendStickerErrors = [
  * Gera um prompt para analisar e resumir mensagens em um grupo.
  * @param {string} chatName - Nome do grupo onde ocorreu a conversa.
  * @param {string[]} textMessages - Array de mensagens trocadas no grupo.
+ * @param {boolean} isGroup - Verifica se o chat é de grupo.
  * @returns {string} Um prompt estruturado para ser usado em um modelo de IA.
  */
-const groupPrompt = (chatName, textMessages) => `
-Ada, analise as mensagens do grupo "${chatName}" e faça um resuminho bem clarinho e objetivo. Aqui estão as regrinhas que você deve seguir:
+const resumePrompt = (chatName, textMessages, isGroup) => `
+Ada, analise as mensagens do ${isGroup ? 'grupo' : 'chat'} "${chatName}" e faça um resuminho bem clarinho e objetivo. Aqui estão as regrinhas que você deve seguir:
 
 1. **Destaque os principais temas:** Identifique os assuntos mais importantes que foi discutido.  
 2. **Interações relevantes:** Mencione as conversas mais interessantes entre os participantes.  
-3. **Ignorar o irrelevante:** Mensagens repetidas ou sem contexto significativo? Não precisa citar!  
-4. **Citação:** User termos em primeira pessoa para se referir a você mesma.  
-5. **Opinião descontraída:** No final, faça uma observação leve e irônica, mas sem falar que é sua opnião. 
-
-Agora, faça o resumo do grupo "${chatName}": \n\n${textMessages}.
+3. **Citação:** User termos em primeira pessoa para se referir a você mesma.  
+4. **Opinião descontraída:** No final, faça uma observação leve e irônica, mas sem falar que é sua opnião. Agora veja o array: \n\n${textMessages}.
 `;
 
 /**
@@ -123,5 +121,5 @@ module.exports = {
     rejectCallResponses,
     firstInteractionMessages,
     resumeErrorMessages,
-    groupPrompt,
+    resumePrompt,
 };

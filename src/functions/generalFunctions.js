@@ -3,7 +3,7 @@ const ffmpeg = require('fluent-ffmpeg');
 const fs = require('fs');
 const path = require('path');
 const { MessageMedia } = require('whatsapp-web.js');
-const { groupPrompt, sendStickerErrors, resumeErrorMessages } = require('../utils/messages');
+const { resumePrompt, sendStickerErrors, resumeErrorMessages } = require('../utils/messages');
 const { model } = require('../model/geminiModel');
 const { extractTextFromBody } = require('../utils');
 
@@ -154,7 +154,7 @@ async function resumeMessages(client, msg) {
 
       const chatName = chat.isGroup ? chat.groupMetadata.subject : contact.pushname;
 
-      const prompt = groupPrompt(chatName, textMessages);
+      const prompt = resumePrompt(chatName, textMessages, chat.isGroup);
 
       try {
         const result = await model.generateContent(prompt);
