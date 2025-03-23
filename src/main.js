@@ -241,9 +241,9 @@ client.on('message_create', async (msg) => {
       await makeSticker(a, client);
     }
   } if (!msg.fromMe) {
-    const greetingRegex = chat.isGroup
-      ? /\b(o{1,}i{1,}|olá|e{1,}i{1,}|salve{1,}|hey|e aí|como vai|como você está|tudo bem|bom dia|boa tarde|boa noite)\s*[,?!]?\s+(ada|adabot)\b/i
-      : /\b((o{1,}i{1,}|olá|e{1,}i{1,}|salve{1,}|hey|e aí|como vai|como você está|tudo bem|bom dia|boa tarde|boa noite)\s*[,?!]?\s+)?(ada|adabot)?\b/i;
+    const greetingRegex = msg.isGroup
+      ? /\b((o{2,}i+|olá|e{1,}i+|salve{2,}|hey|e aí|como vai|como você está|tudo bem|bom dia|boa tarde|boa noite)\s*[,?!]?\s+)?(ada|adabot)\b/i
+      : /\b((o{2,}i+|olá|e{1,}i+|salve{2,}|hey|e aí|como vai|como você está|tudo bem|bom dia|boa tarde|boa noite)\s*[,?!]?\s+)?(ada|adabot)?\b/i;
 
     if (greetingRegex.test(msg.body.toLowerCase())
       || msg.body.toLowerCase() === 'ada'
