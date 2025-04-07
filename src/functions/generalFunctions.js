@@ -53,6 +53,7 @@ async function makeSticker(msg, client) {
       .on('end', async () => {
         const stickerMedia = MessageMedia.fromFilePath(outputPath);
         const stats = fs.statSync(outputPath);
+        console.log(stats.size);
         if (stats.size >= 1000000) {
           await client.sendMessage(chat.id._serialized, errorMessage).then((message) => message.react('😢'));
           return;
@@ -134,9 +135,9 @@ async function resumeMessages(client, msg) {
     .then(async (message) => {
       await message.react('⏳');
 
-      const messages = await chat.fetchMessages({ limit: 500 });
+      const messages = await chat.fetchMessages({ limit: 100 });
       const textMessages = messages
-        .filter((textMessage) => !textMessage.hasMedia && !textMessage.fromMe)
+        .filter((textMessage) => !textMessage.hasMedia && !textMessage.fromMe && !textMessage.body.startsWith('/'))
         .map((textMessage) => textMessage.body);
 
       if (textMessages.length < 20) {
