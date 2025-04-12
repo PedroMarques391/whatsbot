@@ -61,20 +61,16 @@ const sendStickerErrors = [
 
 /**
  * Gera um prompt para analisar e resumir mensagens em um grupo.
- * @param {string} chatName - Nome do grupo onde ocorreu a conversa.
  * @param {string[]} textMessages - Array de mensagens trocadas no grupo.
- * @param {boolean} isGroup - Verifica se o chat é de grupo.
  * @returns {string} Um prompt estruturado para ser usado em um modelo de IA.
  */
-const resumePrompt = (chatName, textMessages, isGroup) => `
-Ada, analise as mensagens do ${isGroup ? 'grupo' : 'chat'} "${chatName}" e faça um resuminho bem clarinho e objetivo. Aqui estão as regrinhas que você deve seguir:
-
-1. **Destaque os principais temas:** Identifique os assuntos mais importantes que foi discutido.  
-2. **Interações relevantes:** Mencione as conversas mais interessantes entre os participantes.  
-3. **Citação:** User termos em primeira pessoa para se referir a você mesma.  
-4. **Opinião descontraída:** No final, faça uma observação leve e irônica, mas sem falar que é sua opnião. Agora veja o array: \n\n${textMessages}.
-`;
-
+const resumePrompt = (textMessages) => `
+      A seguir estão as últimas ${textMessages.length} mensagens trocadas em um grupo de conversa no whats.
+      Resuma de forma objetiva e divertida, destacando os principais tópicos discutidos, decisões tomadas, dúvidas respondidas e conteúdos recorrentes. Ignore saudações e mensagens irrelevantes como emojis ou frases soltas.
+      o Formato da mensagem deve ser adaptavel para uma mensagem do whatsapp.
+      Mensagens:
+      ${textMessages.reverse().join('\n')}
+      `;
 /**
  * Respostas automáticas para primeira interação do usuário.
  * O bot escolhe uma dessas respostas de forma aleatória.
