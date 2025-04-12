@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const { MessageMedia } = require('whatsapp-web.js');
 const { resumePrompt, sendStickerErrors, resumeErrorMessages } = require('../utils/messages');
-const { model } = require('../model/geminiModel');
+const { geminiResponse } = require('../model/geminiModel');
 const { extractTextFromBody } = require('../utils');
 
 /**
@@ -53,7 +53,6 @@ async function makeSticker(msg, client) {
       .on('end', async () => {
         const stickerMedia = MessageMedia.fromFilePath(outputPath);
         const stats = fs.statSync(outputPath);
-        console.log(stats.size);
         if (stats.size >= 1000000) {
           await client.sendMessage(chat.id._serialized, errorMessage).then((message) => message.react('😢'));
           return;
@@ -129,13 +128,12 @@ async function sendAudios(msg, client) {
  */
 async function resumeMessages(client, msg) {
   const chat = await msg.getChat();
-  const contact = await client.getContactById(chat.id._serialized);
 
   await client.sendMessage(chat.id._serialized, 'Entendido! Vou analisar as últimas mensagens e gerar um resumo.')
     .then(async (message) => {
       await message.react('⏳');
 
-      const messages = await chat.fetchMessages({ limit: 100 });
+      const messages = await chat.fetchMessages({ limit: 500 });
       const textMessages = messages
         .filter((textMessage) => !textMessage.hasMedia && !textMessage.fromMe && !textMessage.body.startsWith('/'))
         .map((textMessage) => textMessage.body);
@@ -153,14 +151,10 @@ async function resumeMessages(client, msg) {
       }
       await message.react('⌛');
 
-      const chatName = chat.isGroup ? chat.groupMetadata.subject : contact.pushname;
-
-      const prompt = resumePrompt(chatName, textMessages, chat.isGroup);
+      const prompt = resumePrompt(textMessages);
 
       try {
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        const text = await response.text();
+        const text = await geminiResponse(prompt, 0.5, 500);
 
         await message.react('✅');
 
@@ -172,12 +166,11 @@ async function resumeMessages(client, msg) {
     });
 }
 
-async function talk(client, msg) {
+async function response(msg, temperature, maxOutputTokens) {
   try {
     const question = extractTextFromBody(msg.body);
-    const result = await model.generateContent(question);
-    const response = await result.response;
-    const text = await response.text();
+
+    const text = await geminiResponse(question, temperature, maxOutputTokens);
 
     await msg.react('✅');
 
@@ -206,5 +199,5 @@ module.exports = {
   sendAudios,
   formatDate,
   resumeMessages,
-  talk,
+  response,
 };
