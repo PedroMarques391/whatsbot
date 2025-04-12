@@ -170,7 +170,7 @@ async function response(msg, temperature, maxOutputTokens) {
   try {
     const question = extractTextFromBody(msg.body);
 
-    const text = await geminiResponse(question, temperature, maxOutputTokens);
+    const text = await geminiResponse(`responda: ${question}`, temperature, maxOutputTokens);
 
     await msg.react('✅');
 
