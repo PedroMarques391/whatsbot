@@ -18,6 +18,8 @@
         "no-new": "off",
         "indent": "off",
         "no-restricted-syntax": "off",
-        "no-underscore-dangle": "off"
+        "no-underscore-dangle": "off",
+        "no-shadow": "off",
+        "no-promise-executor-return": "off"
     }
 }
