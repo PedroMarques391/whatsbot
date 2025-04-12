@@ -21,7 +21,7 @@ const {
   usersResponded,
   sendGroupMessages,
 } = require('./utils');
-const { geminiResponse } = require('./model/geminiModel');
+const { geminiChat } = require('./model/geminiModel');
 
 const client = new Client({
   authStrategy: new LocalAuth(),
@@ -245,8 +245,7 @@ client.on('message_create', async (msg) => {
     if (quoted.id.fromMe) {
       console.log('Ada disse:', quoted.body);
       console.log('Usuário respondeu:', msg.body);
-
-      const response = await geminiResponse(msg.body);
+      const response = await geminiChat(msg.body, quoted.body);
       msg.reply(response);
     }
   } if (!msg.fromMe) {
