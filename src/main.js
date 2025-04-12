@@ -9,7 +9,8 @@ const {
   demoteParticipant,
 } = require('./functions/groupFunctions');
 const {
-  makeSticker, sendAudios, resumeMessages, talk,
+  makeSticker, sendAudios,
+  resumeMessages, response,
 } = require('./functions/generalFunctions');
 const {
   rejectCallResponses,
@@ -20,6 +21,7 @@ const {
   usersResponded,
   sendGroupMessages,
 } = require('./utils');
+const { geminiResponse } = require('./model/geminiModel');
 
 const client = new Client({
   authStrategy: new LocalAuth(),
@@ -116,7 +118,7 @@ client.on('message_create', async (message) => {
 ╰━━━◉ ^__^ ◉━━━╯
 
 `;
-    const media = MessageMedia.fromFilePath('./src/img/adaProfile.jpeg');
+    const media = MessageMedia.fromFilePath('./src/img/adaProfile.jpg');
     await client.sendMessage(chat.id._serialized, media, {
       caption: menu,
       mentions: [contact.id._serialized],
@@ -238,10 +240,14 @@ client.on('message_create', async (msg) => {
   } if (msg.body.startsWith('/resume')) {
     await resumeMessages(client, msg);
     return;
-  } if (msg.body.startsWith('/test')) {
-    if (msg.hasQuotedMsg) {
-      const a = await msg.getQuotedMessage();
-      await makeSticker(a, client);
+  } if (msg.hasQuotedMsg) {
+    const quoted = await msg.getQuotedMessage();
+    if (quoted.id.fromMe) {
+      console.log('Ada disse:', quoted.body);
+      console.log('Usuário respondeu:', msg.body);
+
+      const response = await geminiResponse(msg.body);
+      msg.reply(response);
     }
   } if (!msg.fromMe) {
     const greetingRegex = chat.isGroup
@@ -261,7 +267,7 @@ client.on('message_create', async (msg) => {
     if (msg.body.toLowerCase().startsWith('adabot')
       || msg.body.toLowerCase().startsWith('ada')
     ) {
-      await talk(client, msg);
+      await response(msg, 1.0, 200);
     }
   } if (msg.fromMe && msg.body.startsWith('/sendUpdate')) {
     const groups = chats.filter((chat) => chat.isGroup).map((chat) => chat.id._serialized);
