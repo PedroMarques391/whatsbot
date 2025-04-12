@@ -115,6 +115,36 @@ const resumeErrorMessages = [
     'Se fosse possível resumir o nada, eu faria, mas até eu tenho limites! 😂 Bora tentar de novo?',
 ];
 
+/**
+ * Mensagem de atualização da AdaBot.
+ *
+ * Esta mensagem é utilizada para notificar os usuários sobre o retorno da AdaBot
+ * com novidades e melhorias. Ela é formatada com emojis e texto amigável para
+ * criar uma experiência mais envolvente e acolhedora.
+ *
+ * @constant {string} adaUpdateMessage - Texto da mensagem de atualização da AdaBot.
+ */
+const adaUpdateMessage = `
+✨ *Oiêê! Quanto tempo, né?* ✨
+
+Desculpa o sumiço... tirei um tempinho pra me cuidar, me reinventar, e agora voltei de carinha nova! 💅✨
+
+E ó, tem novidade quentinha direto do meu coraçãozinho digital:  
+📢 *Agora a conversa comigo é real oficial!*  
+É só responder direto na *minha* mensagem e... 💥 a mágica acontece! 🪄💬
+
+E quer saber a cereja do bolo? 🎂  
+Agora você pode *criar stickers* com ainda mais facilidade:  
+🖼️ *É só responder uma imagem* com /s, sem mistério.  
+Legal, não é?
+
+Tô super animada pra voltar a falar com você.  
+Bora matar a saudade e colocar o papo em dia? 💖
+
+Com carinho sempre,  
+*AdaBot 💕*
+`;
+
 module.exports = {
     botResponses,
     sendStickerErrors,
@@ -122,4 +152,5 @@ module.exports = {
     firstInteractionMessages,
     resumeErrorMessages,
     resumePrompt,
+    adaUpdateMessage,
 };
