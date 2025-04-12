@@ -18,6 +18,7 @@ const {
   extractTextFromBody,
   saveUsers,
   usersResponded,
+  sendGroupMessages,
 } = require('./utils');
 
 const client = new Client({
@@ -127,6 +128,8 @@ client.on('message_create', async (message) => {
 
 client.on('message_create', async (msg) => {
   const chat = await msg.getChat();
+  const chats = await client.getChats();
+
   const quotedMessage = await msg.getQuotedMessage();
 
   if (msg.from.includes('@c.us') && !msg.fromMe) {
@@ -260,6 +263,9 @@ client.on('message_create', async (msg) => {
     ) {
       await talk(client, msg);
     }
+  } if (msg.fromMe && msg.body.startsWith('/sendUpdate')) {
+    const groups = chats.filter((chat) => chat.isGroup).map((chat) => chat.id._serialized);
+    await sendGroupMessages(groups, client);
   }
 });
 
