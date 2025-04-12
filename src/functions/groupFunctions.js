@@ -76,7 +76,7 @@ async function init(client, photo) {
 
     const groupID = process.env.GROUPS_IDS.split(',');
     for (let i = 0; i < groupID.length; i++) {
-      const media = photo.fromFilePath('./src/img/adaInit.jpeg');
+      const media = photo.fromFilePath('./src/img/adaInit.jpg');
 
       const messageToSend = '🌸✨*AdaBot está online!*✨🌸';
 
