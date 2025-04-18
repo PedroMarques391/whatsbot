@@ -1,9 +1,11 @@
+# AdaBot
 
-**AdaBot**
+> ⚠️ Esta é a versão legada do projeto. A nova versão refatorada está na branch `main`.  
+> A `whatsbot-v1` está aqui apenas para fins históricos e consulta futura.
 
 ![Imagem do AdaBot](./src/img/adaProfile.jpeg)
 
-# AdaBot
+## AdaBot
 
 A **AdaBot** é uma assistente fofa e adorável desenvolvida com **JavaScript**, utilizando a biblioteca **whatsapp-web.js**. Criada para tornar suas interações no WhatsApp mais divertidas e práticas, a AdaBot conta com diversas funcionalidades, incluindo automação de tarefas, interações especiais em grupos e assistência personalizada para usuários.
 
@@ -71,29 +73,3 @@ Para que a **AdaBot** funcione perfeitamente, é necessário configurar corretam
 
 5. **GOOGLE_SEARCH_API_CTX_IMAGES**
    - Contexto da API de pesquisa para imagens.
-   - **Exemplo:**
-     ```plaintext
-     GOOGLE_SEARCH_API_CTX_IMAGES="seu_search_engine_id_para_imagens"
-     ```
-
-###  **Exemplo Completo do Arquivo `.env`**
-
-```plaintext
-GROUPS_IDS="1234567890@c.us,0987654321@c.us"
-CLIENT_NUMBER="551187654321@c.us"
-EXECUTABLE_PATH="/usr/bin/google-chrome-stable"
-GOOGLE_SEARCH_API_KEY="sua_chave_da_api"
-GOOGLE_SEARCH_API_CTX_GENERAL="seu_search_engine_id"
-GOOGLE_SEARCH_API_CTX_IMAGES="seu_search_engine_id_para_imagens"
-BOT_INSTRUCTIONS="intrucoes_para_gemini"
-```
-
-### **Importante!**
-- **Renomeie o arquivo**: Após preencher as variáveis no arquivo `.env.example`, renomeie-o para `.env` para que a AdaBot possa utilizar as configurações corretamente.
-
----
-
-Com o arquivo `.env` configurado corretamente, a **AdaBot** estará pronta para ser usada!
-
-Agora é só chamar a AdaBot no WhatsApp e aproveitar todas as funcionalidades fofas e útis que ela oferece!
-
