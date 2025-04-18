@@ -1,6 +1,6 @@
 import { GroupChat, Message } from "whatsapp-web.js";
 import { CLIENT_NUMBER } from "../../config/env";
-import { isAdmin } from "../validations";
+import { groups } from "./../";
 
 
 
@@ -12,7 +12,7 @@ import { isAdmin } from "../validations";
  */
 
 export async function botIsAdmin(chat: GroupChat, message: Message): Promise<boolean> {
-    const admin = isAdmin(chat).includes(CLIENT_NUMBER);
+    const admin = groups.getGroupAdmins(chat).includes(CLIENT_NUMBER);
     if (!admin) {
         await message.reply('Oops! Para eu conseguir ajudar, preciso ser um dos administradores do grupo. 🌟');
         return false;
