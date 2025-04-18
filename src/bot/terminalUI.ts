@@ -43,7 +43,7 @@ export function formatLoadingBar(percent: number, barWidth = 40) {
 export async function printWelcomeMessage(name: string, number: string, plataform: string) {
     const { highlight, secondary, text } = theme;
 
-    printHeader("Online")
+    printHeader("Bem Vindo")
 
     printBox([
         `${highlight('✅ AdaBot está online')}`,
