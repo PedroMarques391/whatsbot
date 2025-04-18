@@ -6,3 +6,4 @@ info.txt
 src/functions/runInSpecificGroup.js
 dlMembers.json
 users.json
+dist/
