@@ -22,7 +22,6 @@ export async function onMessageCreate(client: Client, message: Message) {
     if (await validatorsHandler(command, message, chat, client)) return
 
 
-
     try {
         await command.execute({ chat, client, message: contextMessage });
     } catch (error) {

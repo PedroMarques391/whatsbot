@@ -8,9 +8,6 @@ import { validateConditions } from "./validations/validateConditions";
 import { isViewOnce } from "./interactions/onisViewOnce";
 
 
-
-
-
 async function interactionsHandler(message: Message, quotedMessage: Message, chat: Chat, client: Client): Promise<boolean> {
     if (await greeting(message, chat)) return true;
     if (await quotedReply(message, quotedMessage)) return true;
