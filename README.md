@@ -3,73 +3,8 @@
 > ⚠️ Esta é a versão legada do projeto. A nova versão refatorada está na branch `main`.  
 > A `whatsbot-v1` está aqui apenas para fins históricos e consulta futura.
 
-![Imagem do AdaBot](./src/img/adaProfile.jpeg)
+![Imagem do AdaBot](./src/img/adaProfile.jpg)
 
 ## AdaBot
 
 A **AdaBot** é uma assistente fofa e adorável desenvolvida com **JavaScript**, utilizando a biblioteca **whatsapp-web.js**. Criada para tornar suas interações no WhatsApp mais divertidas e práticas, a AdaBot conta com diversas funcionalidades, incluindo automação de tarefas, interações especiais em grupos e assistência personalizada para usuários.
-
----
-
-## Funcionalidades
-
-A **AdaBot** possui um conjunto de comandos projetados para tornar suas interações no WhatsApp mais dinâmicas e eficientes. Ela pode criar figurinhas, buscar informações, interagir com grupos e muito mais!
-
-### **Funções Gerais**
-
-- **/sticker**: Transforma uma imagem em uma figurinha. (Basta enviar o comando junto com a imagem!)
-- **/audios**: Exibe uma lista de áudios disponíveis para envio.
-- **/search + palavra**: Pesquisa no Google o que você quiser.
-- **/images + descrição detalhada**: Pesquisa e envia uma imagem baseada na descrição fornecida.
-- **/resume**: Faz um resumo das ultimas conversas.
-
-### **Funções para Grupos**
-
-- **/list**: Lista todos os participantes do grupo.
-- **/past**: Mostra os antigos membros do grupo.
-
-### **Funções para Administradores**
-
-- **/add + número**: Adiciona um participante ao grupo.
-- **/rm + número**: Remove um participante do grupo.
-- **/promote + número**: Promove um membro a administrador.
-- **/demote + número**: Rebaixa um administrador a membro comum.
-
----
-
-## Configuração do Ambiente
-
-Para que a **AdaBot** funcione perfeitamente, é necessário configurar corretamente o arquivo `.env`. Este arquivo contém informações essenciais, como os IDs dos grupos, chaves da API do Google e configurações do cliente.
-
-### **Passos para Configurar o Arquivo `.env`**
-
-1. **CLIENT_NUMBER**
-   - Número do WhatsApp que será usado pelo bot.
-   - **Exemplo:**
-     ```plaintext
-     CLIENT_NUMBER="551187654321@c.us"
-     ```
-
-2. **EXECUTABLE_PATH**
-   - Caminho do executável do Google Chrome utilizado pelo bot.
-   - **Exemplo:**
-     ```plaintext
-     EXECUTABLE_PATH="/usr/bin/google-chrome-stable"
-     ```
-
-3. **GOOGLE_SEARCH_API_KEY**
-   - Chave da API do Google para realizar pesquisas.
-   - **Exemplo:**
-     ```plaintext
-     GOOGLE_SEARCH_API_KEY="sua_chave_da_api"
-     ```
-
-4. **GOOGLE_SEARCH_API_CTX_GENERAL**
-   - Contexto da API de pesquisa do Google para buscas gerais.
-   - **Exemplo:**
-     ```plaintext
-     GOOGLE_SEARCH_API_CTX_GENERAL="seu_search_engine_id"
-     ```
-
-5. **GOOGLE_SEARCH_API_CTX_IMAGES**
-   - Contexto da API de pesquisa para imagens.
