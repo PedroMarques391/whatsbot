@@ -1,14 +1,14 @@
 {
   "name": "whatsbot",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "\"# whatsbot\"",
   "main": "dist/main.js",
   "scripts": {
     "build": "tsc",
     "start": "yarn run build && node --watch .",
     "dev": "ts-node-dev --respawn src/main.ts",
-    "start:pm2:daemon": "pm2 start src/main.js --name AdaBotDaemon --no-daemon",
-    "start:pm2": "pm2 start --name AdaBot src/main.js"
+    "start:pm2:daemon": "yarn run build && pm2 start dist/main.js --name AdaBotDaemon --no-daemon",
+    "start:pm2": "yarn run build && pm2 start --name adabot dist/main.js"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +24,7 @@
     "google-translate-api-browser": "^4.3.0",
     "gradient-string": "^3.0.0",
     "ora": "^8.2.0",
+    "pm2": "^6.0.5",
     "puppeteer": "^22.15.0",
     "puppeteer-core": "^24.3.1",
     "qrcode-terminal": "^0.12.0",
