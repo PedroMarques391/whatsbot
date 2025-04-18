@@ -59,14 +59,13 @@ export async function start(message: Message, client: Client) {
     ╭─≺ *Geral* ≻─╮  
     ┃ ➤ /sticker - Criar figurinha (envie imagem/vídeo).  
     ┃ ➤ /resume - Resumir últimas mensagens.  
-    ┃ ➤ /audios - Lista de áudios disponíveis.  
-    ┃ ➤ /search + palavra - Pesquisar no Google.  
     ┃ ➤ /images + descrição - Buscar imagens.  
     ╰─────≺∆≻─────╯  
     
     ╭─≺ *Converse Comigo* ≻─╮  
     ┃ 💬 Me chame carinhosamente:  
     ┃    Exemplo → *Ada, qual sua música favorita?* 🎶  
+    ┃ ou responda minha mensagem hihihi ❤️
     ┃ 🐾 Eu vou responder com muito amor e fofura! 💕  
     ╰────────────╯
     
