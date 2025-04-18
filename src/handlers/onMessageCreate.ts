@@ -8,11 +8,7 @@ export async function onMessageCreate(client: Client, message: Message) {
     const contextMessage = message.hasQuotedMsg ? quotedMessage : message;
     const command = await commandHandler(message.body);
 
-
     if (await interactionsHandler(message, quotedMessage, chat, client)) return
-
-    console.log(contextMessage)
-
 
     if (!command) {
         await validateCommand(message)
@@ -20,7 +16,6 @@ export async function onMessageCreate(client: Client, message: Message) {
     }
 
     if (await validatorsHandler(command, message, chat, client)) return
-
 
     try {
         await command.execute({ chat, client, message: contextMessage });
