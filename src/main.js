@@ -274,12 +274,6 @@ client.on('message_create', async (msg) => {
   }
 });
 
-client.on('message_create', async (msg) => {
-  if (msg.body.startsWith('/0')) {
-    sendAudios(msg, client);
-  }
-});
-
 client.on('message_revoke_everyone', async (message, messageRevoke) => {
   if (!message.hasMedia) {
     await messageRevoke.reply(`O usuário ${message._data.notifyName} apagou a mensagem "${messageRevoke.body}".`, process.env.CLIENT_NUMBER);
