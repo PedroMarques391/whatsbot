@@ -11,7 +11,7 @@ export async function imageSearch(message: Message, chat: Chat, client: Client) 
     const cx = GOOGLE_SEARCH_API_CTX_IMAGES;
 
     const URL = await fetch(`https://www.googleapis.com/customsearch/v1?key=${APIKEY}&cx=${cx}&q=${word}&searchType=image`);
-    const data = await URL.json();
+    const data: any = await URL.json();
 
     if (!data.items || data.items.length === 0) {
         return client.sendMessage(chat.id._serialized, 'Poxa, não achei resultados para essa pesquisa. Tente novamente.');
