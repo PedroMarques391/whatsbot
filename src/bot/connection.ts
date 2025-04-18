@@ -1,22 +1,45 @@
-import { client } from "./client";
+import { init } from '../services';
+import qrcode from 'qrcode-terminal';
+import { Client } from 'whatsapp-web.js';
+import { theme, printWelcomeMessage } from "./terminalUI";
 
-const qrcode = require('qrcode-terminal');
+export function connections(client: Client) {
+    client.on('qr', (qr: string) => {
+        console.clear();
+        console.log(theme.background(`${theme.highlight('📲 QR Code Login')}`));
+        qrcode.generate(qr, { small: true });
+    });
 
-client.on('qr', (qr: any) => {
-    qrcode.generate(qr, { small: true });
-});
+    client.on('loading_screen', async (percent: string) => {
+        console.clear()
+        const perc = Math.floor(Number(percent));
+        const barWidth = 40;
+        const filledLength = Math.floor((perc / 100) * barWidth);
+        const bar = theme.highlight('█'.repeat(filledLength)) + theme.secondary('░'.repeat(barWidth - filledLength));
 
-client.on('ready', () => {
-    console.log(`    
-    ╭•╼━━≺∆≻━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾≺∆≻━━━╾•╮ 
-    ┃｡˚⭐ ￫ Cliente Conectado                                        
-    ┃━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━━━━   
-    ┃｡˚⭐ ￫ Nome do cliente: ${client.info.pushname}              
-    ┃━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━━━━   
-    ┃｡˚⭐ ￫ Telefone do cliente: ${client.info.wid.user}       
-    ┃━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━╾━━━━━━
-    ┃｡˚⭐ ￫ Plataforma do cliente: ${client.info.platform === 'iphone' ? 'IOS' : client.info.platform}
-    ╰╼━━━━━━━━╾━━━━━━╾━━━━━━╾≺End≻━═━╾━━━╾━━━━━━╾━━━━━━━━━━━╯
-    `);
-});
+        console.clear();
+        console.log(`╭────────────────────────────────────────────╮`);
+        console.log(`${theme.secondary.bold(' Carregando sistema...')}`);
+        console.log(`${bar} ${theme.text(`${perc}%`).padStart(4)}`);
+        console.log(`╰────────────────────────────────────────────╯`);
+    });
 
+    client.on('authenticated', async () => {
+        console.clear();
+        console.log(theme.secondary.bold(`Autenticação bem sucessedida!`));
+    });
+
+    client.on('auth_failure', (msg: string) => {
+        console.clear();
+        console.error(`${theme.text('❌ Falha na autenticação:')} ${theme.highlight(msg)}`);
+    });
+
+    client.on('ready', async () => {
+        await printWelcomeMessage(client.info.pushname, client.info.wid.user, client.info.platform);
+        await init(client);
+    });
+
+    client.on('disconnected', (reason: string) => {
+        console.warn(theme.highlight('🔌 Cliente desconectado. Motivo:'), theme.secondary(reason));
+    });
+}
