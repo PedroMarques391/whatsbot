@@ -24,7 +24,6 @@
     "google-translate-api-browser": "^4.3.0",
     "gradient-string": "^3.0.0",
     "ora": "^8.2.0",
-    "pm2": "^6.0.5",
     "puppeteer": "^22.15.0",
     "puppeteer-core": "^24.3.1",
     "qrcode-terminal": "^0.12.0",
