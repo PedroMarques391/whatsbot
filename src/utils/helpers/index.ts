@@ -2,6 +2,7 @@ import { Chat, Client, GroupChat, Message, MessageMedia } from 'whatsapp-web.js'
 import fs from 'fs';
 import path from 'path';
 import ffmpeg from 'fluent-ffmpeg';
+import sharp from 'sharp';
 
 /**
  * @description Separa o texto do comando (remove o primeiro argumento).
@@ -28,29 +29,40 @@ async function staticSticker(
     chat: Chat,
     client: Client,
     authorName: string,
+    outputDir: string,
     errorMessage: string
 ): Promise<void> {
     await message.react('⏳');
+    const inputPath = path.join(outputDir, 'image.jpg');
+    const outputPath = path.join(outputDir, 'image.webp');
 
-    const buffer = Buffer.from(media.data, 'base64');
-    const size = buffer.length;
+    fs.writeFileSync(inputPath, Buffer.from(media.data, "base64"))
 
-    if (size >= 1000000) {
-        const error = await client.sendMessage(chat.id._serialized, errorMessage);
-        await error.react('😢');
-        return;
-    }
+    sharp(inputPath)
+        .resize(512, 512)
+        .toFile(outputPath)
+        .then(async () => {
+            const stats = fs.statSync(outputPath);
+            if (stats.size >= 1000000) {
+                const error = await client.sendMessage(chat.id._serialized, errorMessage);
+                await error.react('😢');
+                return;
+            }
+            const stickerMedia = MessageMedia.fromFilePath(outputPath);
 
-    const stickerMedia = new MessageMedia(media.mimetype, media.data);
+            const sent = await client.sendMessage(chat.id._serialized, stickerMedia, {
+                sendMediaAsSticker: true,
+                stickerName: `Created by ${authorName}`,
+                stickerAuthor: 'AdaBot',
+            });
+            await sent.react('❤');
+            await message.react('✅');
+        })
+        .catch(async (error) => {
+            console.error(error);
+            await client.sendMessage(chat.id._serialized, 'Erro na conversão.');
+        });
 
-    const sent = await client.sendMessage(chat.id._serialized, stickerMedia, {
-        sendMediaAsSticker: true,
-        stickerName: `🌸Created by ${authorName}`,
-        stickerAuthor: 'AdaBot🌸',
-    });
-
-    await sent.react('❤');
-    await message.react('✅');
 }
 
 /**
@@ -66,7 +78,7 @@ async function dynamicSticker(
     errorMessage: string
 ): Promise<void> {
     const inputPath = path.join(outputDir, 'video.mp4');
-    const outputPath = path.join(outputDir, 'sticker.webp');
+    const outputPath = path.join(outputDir, 'video.webp');
 
     fs.writeFileSync(inputPath, Buffer.from(media.data, 'base64'));
 
@@ -98,15 +110,16 @@ async function dynamicSticker(
                 const stickerMedia = MessageMedia.fromFilePath(outputPath);
                 const sent = await client.sendMessage(chat.id._serialized, stickerMedia, {
                     sendMediaAsSticker: true,
-                    stickerName: `🌸Created by ${authorName}`,
-                    stickerAuthor: 'AdaBot🌸',
+                    stickerName: `Created by ${authorName}`,
+                    stickerAuthor: 'AdaBot',
                 });
 
                 await sent.react('❤');
                 await message.react('✅');
                 resolve();
             })
-            .on('error', async () => {
+            .on('error', async (err) => {
+                console.error(err)
                 await client.sendMessage(chat.id._serialized, 'Erro na conversão.');
                 reject();
             })
