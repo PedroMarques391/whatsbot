@@ -82,7 +82,7 @@ async function dynamicSticker(
 
     fs.writeFileSync(inputPath, Buffer.from(media.data, 'base64'));
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         ffmpeg(inputPath)
             .setStartTime(0)
             .setDuration(6)
@@ -121,7 +121,6 @@ async function dynamicSticker(
             .on('error', async (err) => {
                 console.error(err)
                 await client.sendMessage(chat.id._serialized, 'Erro na conversão.');
-                reject();
             })
             .run();
     });
