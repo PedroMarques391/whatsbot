@@ -15,7 +15,7 @@ export async function makeSticker(message: Message, client: Client) {
         return;
     }
 
-    const outputDir: string = path.resolve(process.cwd(), 'src/assets/videos/gift');
+    const outputDir: string = path.resolve(process.cwd(), 'src/assets/stickers');
     if (!fs.existsSync(outputDir)) {
         fs.mkdirSync(outputDir, { recursive: true });
     }
@@ -25,7 +25,7 @@ export async function makeSticker(message: Message, client: Client) {
         return;
     }
     if (message.type === 'image') {
-        await helpers.staticSticker(message, media, chat, client, authorName, errorMessage)
+        await helpers.staticSticker(message, media, chat, client, authorName, outputDir, errorMessage)
         return
     }
 }
