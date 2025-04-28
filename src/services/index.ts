@@ -11,6 +11,8 @@ import { makeSticker } from "./sticker"
 import { response } from "./ai"
 import { imageSearch } from "./searchImage"
 import { init, start } from "./initialize"
+import { textFunction } from "./test"
+
 
 
 export {
@@ -26,5 +28,6 @@ export {
     sendUpdateMessages,
     imageSearch,
     init,
-    start
+    start,
+    textFunction
 };
