@@ -7,7 +7,7 @@ import {
     removeParticipant,
     sendUpdateMessages
 } from './groups';
-import { makeSticker } from "./sticker"
+import { makeSticker, renameSticker } from "./sticker"
 import { response } from "./ai"
 import { imageSearch } from "./searchImage"
 import { init, start } from "./initialize"
@@ -24,6 +24,7 @@ export {
     promoteParticipant,
     removeParticipant,
     makeSticker,
+    renameSticker,
     response,
     sendUpdateMessages,
     imageSearch,
