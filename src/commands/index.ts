@@ -6,6 +6,7 @@ import { ListCommand } from "./command.list"
 import { PastCommand } from "./command.past"
 import { PromoteCommand } from "./command.promote"
 import { RemoveCommand } from "./command.remove"
+import { RenameCommand } from "./command.rename"
 import { ResumeCommand } from "./command.resume"
 import { SendUpdateCommand } from "./command.sendUpdate"
 import { StartCommand } from "./command.start"
@@ -18,7 +19,8 @@ const commands: ICommand[] = [
     ListCommand, PastCommand, StartCommand,
     AddCommand, RemoveCommand, PromoteCommand,
     DemoteCommand, ImagesCommand, ResumeCommand,
-    StickerCommand, SendUpdateCommand, TalkCommand, TestCommand
+    StickerCommand, SendUpdateCommand, TalkCommand,
+    TestCommand, RenameCommand
 ]
 
 export async function commandHandler(body: string): Promise<ICommand | undefined> {
