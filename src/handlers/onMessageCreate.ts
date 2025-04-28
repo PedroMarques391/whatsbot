@@ -5,7 +5,6 @@ import { interactionsHandler, validateCommand, validatorsHandler } from "../midd
 export async function onMessageCreate(client: Client, message: Message) {
     const chat: Chat = await message.getChat();
     const quotedMessage = await message.getQuotedMessage();
-    const contextMessage = message.hasQuotedMsg ? quotedMessage : message;
     const command = await commandHandler(message.body);
 
     if (await interactionsHandler(message, quotedMessage, chat, client)) return
@@ -18,7 +17,7 @@ export async function onMessageCreate(client: Client, message: Message) {
     if (await validatorsHandler(command, message, chat, client)) return
 
     try {
-        await command.execute({ chat, client, message: contextMessage });
+        await command.execute({ chat, client, message });
     } catch (error) {
         console.error(`Erro ao executar ${command.name}:`, error);
         await message.reply('🌸 Opsie~ Algo deu errado! Tenta de novo ou avisa meu dev! 🐾');
