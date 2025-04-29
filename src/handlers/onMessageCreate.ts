@@ -4,10 +4,9 @@ import { interactionsHandler, validateCommand, validatorsHandler } from "../midd
 
 export async function onMessageCreate(client: Client, message: Message) {
     const chat: Chat = await message.getChat();
-    const quotedMessage = await message.getQuotedMessage();
     const command = await commandHandler(message.body);
 
-    if (await interactionsHandler(message, quotedMessage, chat, client)) return
+    if (await interactionsHandler(message, chat, client)) return
 
     if (!command) {
         await validateCommand(message)

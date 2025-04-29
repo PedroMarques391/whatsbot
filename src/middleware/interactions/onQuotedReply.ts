@@ -8,10 +8,10 @@ import { geminiChat } from "../../services/ai";
  * If the user replies to a non-media message from the bot (not using a command),
  * this function will process the conversation and generate a response using Gemini.
  * @param message - The incoming message from the user.
- * @param quotedMessage - The quoted message the user replied to.
  * @returns {boolean} A boolean indicating whether the interaction was handled.
  */
-export async function quotedReply(message: Message, quotedMessage: Message): Promise<boolean> {
+export async function quotedReply(message: Message): Promise<boolean> {
+    const quotedMessage = await message.getQuotedMessage()
 
     if (message.fromMe ||
         !message.hasQuotedMsg ||
