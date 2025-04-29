@@ -24,15 +24,17 @@ const commands: ICommand[] = [
 ]
 
 export async function commandHandler(body: string): Promise<ICommand | undefined> {
-    const normalized = body.toLowerCase().trim();
+    const normalized = body.toLowerCase().split(" ")[0]
+
+    console.log(normalized)
 
     return commands.find(command => {
         const name = command.name.toLowerCase();
-        const commandFound = normalized === name || normalized.startsWith(`${name}`);
+        const commandFound = normalized === name || normalized.startsWith(name)
 
         const aliasFound = command.aliases?.some(alias => {
             const aliasNormalized = alias.toLowerCase();
-            return normalized === aliasNormalized || normalized.startsWith(`${aliasNormalized}`);
+            return normalized === aliasNormalized
         });
 
         return commandFound || aliasFound;
