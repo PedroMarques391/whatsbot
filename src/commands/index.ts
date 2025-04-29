@@ -25,9 +25,6 @@ const commands: ICommand[] = [
 
 export async function commandHandler(body: string): Promise<ICommand | undefined> {
     const normalized = body.toLowerCase().split(" ")[0]
-
-    console.log(normalized)
-
     return commands.find(command => {
         const name = command.name.toLowerCase();
         const commandFound = normalized === name || normalized.startsWith(name)
