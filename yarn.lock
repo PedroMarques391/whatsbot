@@ -3431,9 +3431,9 @@ webidl-conversions@^3.0.0:
   resolved "https://registry.npmjs.org/webidl-conversions/-/webidl-conversions-3.0.1.tgz"
   integrity sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==
 
-whatsapp-web.js@^1.23.0:
+whatsapp-web.js@^1.27.0:
   version "1.27.0"
-  resolved "https://registry.npmjs.org/whatsapp-web.js/-/whatsapp-web.js-1.27.0.tgz"
+  resolved "https://registry.yarnpkg.com/whatsapp-web.js/-/whatsapp-web.js-1.27.0.tgz#d52c7963def9a8732a934e0e373e66413d7cf9d7"
   integrity sha512-hUhHpNXFTiQwTPfw/5WwV9MZLX+9sQXT1MoI14QYOuNxOxoJU12P2ODoqYnIWiqwIhyn++wQLpPsBC4LzcdzAQ==
   dependencies:
     "@pedroslopez/moduleraid" "^5.0.2"
