@@ -1,4 +1,4 @@
-import { removeBg } from "@services/index";
+import { removeBg } from "../services/index";
 import { ICommand } from "../../types";
 
 export const RemoveBgCommand: ICommand = {

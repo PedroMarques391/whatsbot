@@ -13,6 +13,7 @@ import { StartCommand } from "./command.start"
 import { StickerCommand } from "./command.sticker"
 import { TalkCommand } from "./command.talk"
 import { TestCommand } from "./command.test"
+import { RemoveBgCommand } from "./command.removeBg"
 
 
 const commands: ICommand[] = [
@@ -20,14 +21,14 @@ const commands: ICommand[] = [
     AddCommand, RemoveCommand, PromoteCommand,
     DemoteCommand, ImagesCommand, ResumeCommand,
     StickerCommand, SendUpdateCommand, TalkCommand,
-    TestCommand, RenameCommand
+    TestCommand, RenameCommand, RemoveBgCommand
 ]
 
 export async function commandHandler(body: string): Promise<ICommand | undefined> {
     const normalized = body.toLowerCase().split(" ")[0]
     return commands.find(command => {
         const name = command.name.toLowerCase();
-        const commandFound = normalized === name || normalized.startsWith(name)
+        const commandFound = normalized === name
 
         const aliasFound = command.aliases?.some(alias => {
             const aliasNormalized = alias.toLowerCase();
