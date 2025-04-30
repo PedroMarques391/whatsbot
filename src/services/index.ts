@@ -11,6 +11,7 @@ import { makeSticker, renameSticker } from "./sticker"
 import { response } from "./ai"
 import { imageSearch } from "./searchImage"
 import { init, start } from "./initialize"
+import { removeBg } from "./removeBg"
 import { testFunction } from "./test"
 
 
@@ -30,5 +31,6 @@ export {
     imageSearch,
     init,
     start,
-    testFunction
+    testFunction,
+    removeBg
 };
