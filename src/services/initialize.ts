@@ -59,7 +59,8 @@ export async function start(message: Message, client: Client) {
     ╭─≺ *Geral* ≻─╮  
     ┃ ➤ /sticker - Criar figurinha (envie imagem/vídeo).  
     ┃ ➤ /resume - Resumir últimas mensagens.  
-    ┃ ➤ /rename + name - Altera o nome da figurinha.  
+    ┃ ➤ /rename + nome - Altera o nome da figurinha.  
+    ┃ ➤ /removeBg - Remove o fundo da imagem marcada ou enviada.  
     ┃ ➤ /images + descrição - Buscar imagens.  
     ╰─────≺∆≻─────╯  
     

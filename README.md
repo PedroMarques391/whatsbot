@@ -73,12 +73,15 @@ npm run dev
 ### Gerais
 
 | Comando           | Descrição                                                                 |
-|------------------|---------------------------------------------------------------------------|
-| `/sticker`        | Transforma uma imagem em figurinha                                       |
-| `/audios`         | Lista áudios disponíveis                                                 |
-| `/search + termo` | Pesquisa no Google                                                       |
-| `/images + texto` | Envia imagem baseada na descrição                                        |
-| `/resume`         | Faz um resumo das últimas conversas                                      |
+|------------------|-----------------------------------------------------------------------------|
+| `/sticker`          | Transforma uma imagem em figurinha                                       |
+| `/audios`           | Lista áudios disponíveis                                                 |
+| `/search + termo`   | Pesquisa no Google                                                       |
+| `/images + texto`   | Envia imagem baseada na descrição                                        |
+| `/resume`           | Faz um resumo das últimas conversas                                      |
+| `/rename + nome`    | Altera o nome de do sticker marcado                                      |
+| `/removeBg`         | Remove o fundo da imagem marcada ou enviada                              |
+
 
 ### Grupos
 
