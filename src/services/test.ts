@@ -3,7 +3,7 @@ import { removeBackground, } from "@imgly/background-removal-node";
 import path from "path";
 import fs from "fs"
 
-export async function textFunction(message: Message, chat: Chat, client: Client) {
+export async function testFunction(message: Message, chat: Chat, client: Client) {
     // await message.reply("epaa, não estou com nenhuma função teste ativa. 😑")
     //     .then(async (message) => await message.react("🌸"))
     // await message.react("✅")
