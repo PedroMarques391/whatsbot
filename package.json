@@ -15,6 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "@google/genai": "^0.8.0",
+    "@imgly/background-removal-node": "^1.4.5",
     "@types/figlet": "^1.7.0",
     "@types/qrcode-terminal": "^0.12.2",
     "chalk": "^5.4.1",
