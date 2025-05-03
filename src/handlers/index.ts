@@ -1,7 +1,7 @@
-import { onCall } from "./onCall"
-import { onGroupJoin } from "./onGroupJoin"
-import { onRevoke } from "./onRevoke"
-import { onMessageCreate } from "./onMessageCreate"
+import { onCall } from './onCall';
+import { onGroupJoin } from './onGroupJoin';
+import { onRevoke } from './onRevoke';
+import { onMessageCreate } from './onMessageCreate';
 
 
 export {
@@ -9,4 +9,4 @@ export {
     onGroupJoin,
     onRevoke,
     onMessageCreate
-}
+};

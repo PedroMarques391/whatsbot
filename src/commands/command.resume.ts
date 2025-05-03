@@ -1,10 +1,10 @@
-import { resumeMessages } from "../services/ai";
-import { ICommand } from "../../types";
+import { resumeMessages } from '@/services';
+import { ICommand } from '../../types';
 
 export const ResumeCommand: ICommand = {
-    name: "/resume",
+    name: '/resume',
     onlyGroup: false,
     async execute({ client, message }) {
-        await resumeMessages(client, message)
+        await resumeMessages(client, message);
     }
-}
+};

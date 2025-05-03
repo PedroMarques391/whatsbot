@@ -1,7 +1,7 @@
-import { init } from '../services';
 import qrcode from 'qrcode-terminal';
 import { Client } from 'whatsapp-web.js';
-import { theme, printWelcomeMessage } from "./terminalUI";
+import { theme, printWelcomeMessage } from './terminalUI';
+import { init } from '@/services';
 
 export function connections(client: Client) {
     client.on('qr', (qr: string) => {
@@ -11,22 +11,22 @@ export function connections(client: Client) {
     });
 
     client.on('loading_screen', async (percent: string) => {
-        console.clear()
+        console.clear();
         const perc = Math.floor(Number(percent));
         const barWidth = 40;
         const filledLength = Math.floor((perc / 100) * barWidth);
         const bar = theme.highlight('█'.repeat(filledLength)) + theme.secondary('░'.repeat(barWidth - filledLength));
 
         console.clear();
-        console.log(`╭────────────────────────────────────────────╮`);
+        console.log('╭────────────────────────────────────────────╮');
         console.log(`${theme.secondary.bold(' Carregando sistema...')}`);
         console.log(`${bar} ${theme.text(`${perc}%`).padStart(4)}`);
-        console.log(`╰────────────────────────────────────────────╯`);
+        console.log('╰────────────────────────────────────────────╯');
     });
 
     client.on('authenticated', async () => {
         console.clear();
-        console.log(theme.secondary.bold(`Autenticação bem sucessedida!`));
+        console.log(theme.secondary.bold('Autenticação bem sucessedida!'));
     });
 
     client.on('auth_failure', (msg: string) => {

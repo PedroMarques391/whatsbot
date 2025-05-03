@@ -1,4 +1,4 @@
-import { ICommand } from "../../types";
+import { ICommand } from '../../types';
 
 
 export async function commandHandler(body: string, commands: ICommand[]): Promise<ICommand | undefined> {

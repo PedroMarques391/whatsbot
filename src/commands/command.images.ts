@@ -1,10 +1,10 @@
-import { imageSearch } from "../services";
-import { ICommand } from "../../types";
+import { imageSearch } from '@/services';
+import { ICommand } from '../../types';
 
 export const ImagesCommand: ICommand = {
-    name: "/images",
+    name: '/images',
     onlyGroup: false,
     async execute({ message, chat, client }) {
-        await imageSearch(message, chat, client)
+        await imageSearch(message, chat, client);
     }
-}
+};

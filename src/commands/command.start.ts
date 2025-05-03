@@ -1,5 +1,5 @@
-import { start } from "../services";
-import { ICommand } from "../../types";
+import { start } from '@/services';
+import { ICommand } from '../../types';
 
 export const StartCommand: ICommand = {
     name: '/start',

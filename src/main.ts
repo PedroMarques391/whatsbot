@@ -1,5 +1,6 @@
+import 'module-alias/register';
 import { client, connections, eventHandler } from './bot';
 
-connections(client)
+connections(client);
 eventHandler(client);
 client.initialize();

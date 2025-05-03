@@ -1,11 +1,11 @@
-import { renameSticker } from "../services/sticker";
-import { ICommand } from "../../types";
+import { renameSticker } from '@/services';
+import { ICommand } from '../../types';
 
 export const RenameCommand: ICommand = {
-    name: "/rename",
+    name: '/rename',
     onlyGroup: false,
     async execute({ client, message, chat }) {
-        await renameSticker(message, chat, client)
+        await renameSticker(message, chat, client);
     }
 
-}
+};

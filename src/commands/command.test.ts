@@ -1,10 +1,10 @@
-import { testFunction } from "../services/index";
-import { ICommand } from "../../types";
+import { testFunction } from '@/services';
+import { ICommand } from '../../types';
 
 export const TestCommand: ICommand = {
-    name: "/test",
+    name: '/test',
     onlyGroup: true,
     async execute({ message, chat, client }) {
-        return await testFunction(message, chat, client)
+        return await testFunction(message, chat, client);
     }
-} 
+}; 

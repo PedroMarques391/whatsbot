@@ -1,5 +1,5 @@
-import { Message } from "whatsapp-web.js";
-import { CLIENT_NUMBER } from "../config/env";
+import { Message } from 'whatsapp-web.js';
+import { CLIENT_NUMBER } from '../config/env';
 
 
 export async function onRevoke(message: Message, messageRevoke: any) {

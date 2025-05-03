@@ -1,19 +1,19 @@
-import { Chat, Client, Message } from "whatsapp-web.js";
-import { commandHandler } from "../commands";
-import { interactionsHandler, validateCommand, validatorsHandler } from "../middleware";
+import { Chat, Client, Message } from 'whatsapp-web.js';
+import { commandHandler } from '../commands';
+import { interactionsHandler, validateCommand, validatorsHandler } from '@/middleware';
 
 export async function onMessageCreate(client: Client, message: Message) {
     const chat: Chat = await message.getChat();
     const command = await commandHandler(message.body);
 
-    if (await interactionsHandler(message, chat, client)) return
+    if (await interactionsHandler(message, chat, client)) return;
 
     if (!command) {
-        await validateCommand(message)
-        return true
+        await validateCommand(message);
+        return true;
     }
 
-    if (await validatorsHandler(command, message, chat, client)) return
+    if (await validatorsHandler(command, message, chat, client)) return;
 
     try {
         await command.execute({ chat, client, message });

@@ -1,5 +1,5 @@
-import { listMembers } from "../services";
-import { ICommand } from "../../types/commands";
+import { listMembers } from '@/services';
+import { ICommand } from '../../types/commands';
 
 export const ListCommand: ICommand = {
     name: '/list',
