@@ -31,4 +31,4 @@ const resumeErrorMessages: string[] = [
 export {
     sendStickerErrors,
     resumeErrorMessages
-}
+};

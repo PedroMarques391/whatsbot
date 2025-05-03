@@ -11,4 +11,4 @@ export const callRejection: string[] = [
     '📞 *AdaBot*: Olá! Ligação recusada, mas se eu estiver online, já te respondo! 😉 Relaxa, já volto! 💕🌟',
     '📞 *AdaBot*: Oiê! Rejeitei a ligação, mas se eu estiver por aqui, jaja te ajudo! 😊 Espera só um pouquinho! 💖🌸',
     '📞 *AdaBot*: Oops! Ligação recusada, mas se eu estiver disponível, já te atendo! 😄 Fica de boa, já volto! 💕✨',
-]
+];

@@ -1,10 +1,10 @@
-const fs = require('fs');
+import fs from 'fs';
 
 let usersResponded = new Set();
 (function reloaduser() {
     if (fs.existsSync('users.json')) {
         const data = fs.readFileSync('users.json');
-        usersResponded = new Set(JSON.parse(data));
+        usersResponded = new Set(JSON.parse(data.toString()));
     }
 }());
 

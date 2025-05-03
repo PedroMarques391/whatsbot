@@ -9,4 +9,4 @@ const resumePrompt = (textMessages: string[]) => `
 
 export {
     resumePrompt
-}
+};
