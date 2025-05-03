@@ -1,11 +1,11 @@
-import { GroupChat } from "whatsapp-web.js";
+import { GroupChat } from 'whatsapp-web.js';
 
 export async function showPastMembers(chat: GroupChat): Promise<void> {
     const pastParticipants = await chat.pastParticipants;
 
     if (!pastParticipants || pastParticipants.length === 0) {
-        await chat.sendMessage("Ownt, não encontrei nenhum participante anterior nesse grupo. 🥺💖");
-        return
+        await chat.sendMessage('Ownt, não encontrei nenhum participante anterior nesse grupo. 🥺💖');
+        return;
     }
 
     let message = '📜 *Participantes anteriores do grupo:*\n';

@@ -1,14 +1,14 @@
-import { Client, Message, MessageMedia } from "whatsapp-web.js";
-import { GROUPS_IDS } from "../config/env";
-import path from "path"
-import { helpers } from "../utils";
+import { Client, Message, MessageMedia } from 'whatsapp-web.js';
+import { GROUPS_IDS } from '../config/env';
+import path from 'path';
+import { delay } from '@/utils';
 
 
 export async function init(client: Client) {
     try {
-        await helpers.delay(200)
+        await delay(200);
 
-        const groupID = GROUPS_IDS
+        const groupID = GROUPS_IDS;
         for (let i = 0; i < groupID.length; i++) {
             const media: MessageMedia = MessageMedia.fromFilePath(path.resolve(process.cwd(), 'src/assets/images/adaInit.jpg'));
 

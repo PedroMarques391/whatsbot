@@ -1,11 +1,11 @@
-import { Chat, Client, Message, MessageMedia } from "whatsapp-web.js";
-import { helpers } from "../utils";
-import { GOOGLE_SEARCH_API_CTX_IMAGES, GOOGLE_SEARCH_API_KEY } from "../config/env";
+import { Chat, Client, Message, MessageMedia } from 'whatsapp-web.js';
+import { GOOGLE_SEARCH_API_CTX_IMAGES, GOOGLE_SEARCH_API_KEY } from '../config/env';
+import { extractTextFromBody } from '@/utils';
 
 export async function imageSearch(message: Message, chat: Chat, client: Client) {
-    const word = helpers.extractTextFromBody(message.body);
+    const word = extractTextFromBody(message.body);
     await message.react('❤');
-    console.log("chamou", word)
+    console.log('chamou', word);
 
     const APIKEY = GOOGLE_SEARCH_API_KEY;
     const cx = GOOGLE_SEARCH_API_CTX_IMAGES;
@@ -27,6 +27,7 @@ export async function imageSearch(message: Message, chat: Chat, client: Client) 
             await client.sendMessage(chat.id._serialized, media);
             await new Promise((resolve) => { setTimeout(resolve, 1000); });
         } catch (error) {
+            console.error('Erro ao enviar imagem', error);
             continue;
         }
     }

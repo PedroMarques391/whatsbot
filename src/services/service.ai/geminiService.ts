@@ -26,7 +26,7 @@ export async function geminiResponse(
         },
     });
 
-    if (!res.text) return "Algo deu errado."
+    if (!res.text) return 'Algo deu errado.';
 
     return res.text;
 }
@@ -59,6 +59,6 @@ export async function geminiChat(
     });
 
     const response = await chat.sendMessage({ message: userMessage });
-    if (!response.text) return "Algo deu errado."
+    if (!response.text) return 'Algo deu errado.';
     return response.text;
 }

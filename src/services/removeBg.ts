@@ -1,24 +1,24 @@
-import { Chat, Client, Message, MessageMedia } from "whatsapp-web.js";
-import path from "path";
-import fs from "fs"
-import removeBackground from "@imgly/background-removal-node";
-import { helpers } from "../utils/index";
+import { Chat, Client, Message, MessageMedia } from 'whatsapp-web.js';
+import path from 'path';
+import fs from 'fs';
+import removeBackground from '@imgly/background-removal-node';
+import { delay } from '@/utils';
 
 export async function removeBg(message: Message, chat: Chat, client: Client) {
-    const quotedMessage = await message.getQuotedMessage()
-    const msg = message.hasQuotedMsg ? quotedMessage : message
-    await msg.react("⏳")
+    const quotedMessage = await message.getQuotedMessage();
+    const msg = message.hasQuotedMsg ? quotedMessage : message;
+    await msg.react('⏳');
 
-    if (msg.type !== "image") {
+    if (msg.type !== 'image') {
         await msg.reply(
-            "😑 Sério mesmo? Esse comando é só pra imagens. Não tá claro? 🙃"
+            '😑 Sério mesmo? Esse comando é só pra imagens. Não tá claro? 🙃'
         )
-            .then(async (message) => await message.react("🙄"))
-        await msg.react("❌")
+            .then(async (message) => await message.react('🙄'));
+        await msg.react('❌');
         return;
     }
 
-    const media = await msg.downloadMedia()
+    const media = await msg.downloadMedia();
 
     const outputDir: string = path.resolve(process.cwd(), 'src/assets/images/imageWithoutBg');
     if (!fs.existsSync(outputDir)) {
@@ -28,7 +28,7 @@ export async function removeBg(message: Message, chat: Chat, client: Client) {
     const imagePath = path.join(outputDir, 'image.jpg');
     const imageOutput = path.join(outputDir, `${message._data.notifyName}.png`);
 
-    fs.writeFileSync(imagePath, Buffer.from(media.data, "base64"))
+    fs.writeFileSync(imagePath, Buffer.from(media.data, 'base64'));
 
     removeBackground(imagePath).then(async (blob: Blob) => {
         const arrayBuffer = await blob.arrayBuffer();
@@ -38,21 +38,21 @@ export async function removeBg(message: Message, chat: Chat, client: Client) {
 
         await client.sendMessage(chat.id._serialized, media, {
             sendMediaAsDocument: true,
-            caption: "Aqui está sua imagem com o fundo removido! "
-        }).then(async (message) => await message.react("❤️"))
-        await msg.react("⌛")
-        await helpers.delay(2000)
+            caption: 'Aqui está sua imagem com o fundo removido! '
+        }).then(async (message) => await message.react('❤️'));
+        await msg.react('⌛');
+        await delay(2000);
 
         fs.unlinkSync(imagePath);
         fs.unlinkSync(imageOutput);
     })
         .catch(async (error) => {
-            console.error("Erro ao remover o fundo da imagem:", error);
-            await msg.reply("Desculpe, ocorreu um erro ao tentar remover o fundo da imagem. Por favor, tente novamente mais tarde. 😔")
-                .then(async (message) => await message.react("😥"));
-            await msg.react("😥")
+            console.error('Erro ao remover o fundo da imagem:', error);
+            await msg.reply('Desculpe, ocorreu um erro ao tentar remover o fundo da imagem. Por favor, tente novamente mais tarde. 😔')
+                .then(async (message) => await message.react('😥'));
+            await msg.react('😥');
         })
         .finally(async () => {
-            await msg.react("✅");
-        })
+            await msg.react('✅');
+        });
 }
