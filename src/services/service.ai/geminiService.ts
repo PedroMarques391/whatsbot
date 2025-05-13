@@ -1,8 +1,8 @@
-// src/integrations/gemini/GeminiService.ts
 import { GoogleGenAI } from '@google/genai';
 import { getSystemInstructions } from './instructions';
 
 const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+
 
 export async function geminiResponse(
     userMessage: string,

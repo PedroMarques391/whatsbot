@@ -26,7 +26,7 @@ export async function removeBg(message: Message, chat: Chat, client: Client) {
     }
 
     const imagePath = path.join(outputDir, 'image.jpg');
-    const imageOutput = path.join(outputDir, `${message._data.notifyName}.png`);
+    const imageOutput = path.join(outputDir, `${message._data.notifyName.split(' ')[0]}.png`);
 
     fs.writeFileSync(imagePath, Buffer.from(media.data, 'base64'));
 
@@ -43,8 +43,10 @@ export async function removeBg(message: Message, chat: Chat, client: Client) {
         await msg.react('⌛');
         await delay(2000);
 
-        fs.unlinkSync(imagePath);
-        fs.unlinkSync(imageOutput);
+        // fs.unlinkSync(imagePath);
+        // await delay(2000);
+
+        // fs.unlinkSync(imageOutput);
     })
         .catch(async (error) => {
             console.error('Erro ao remover o fundo da imagem:', error);
