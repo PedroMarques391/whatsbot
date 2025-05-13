@@ -2,16 +2,16 @@
   "name": "whatsbot",
   "version": "2.0.0",
   "description": "\"# whatsbot\"",
-  "main": "dist/main.js",
+  "main": "main.js",
   "scripts": {
     "build": "tsc",
-    "start": "yarn run build && node --watch .",
-    "dev": "ts-node-dev --respawn --transpile-only -r tsconfig-paths/register src/main.ts",
+    "start": "yarn run build && node dist/main.js",
+    "dev": "tsc-watch --onsuccess \"node dist/main.js\"",
     "start:pm2:daemon": "yarn run build && pm2 start dist/main.js --name AdaBotDaemon --no-daemon",
     "start:pm2": "yarn run build && pm2 start --name adabot dist/main.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Pedro Marques",
   "license": "ISC",
   "dependencies": {
     "@google/genai": "^0.8.0",
@@ -40,10 +40,9 @@
     "chalk": "^5.4.1",
     "eslint": "^9.26.0",
     "globals": "^16.0.0",
-    "tsconfig-paths": "^4.2.0",
-    "ts-node-dev": "^2.0.0",
-    "typescript-eslint": "^8.31.1",
-    "tsc": "^2.0.4"
+    "tsc": "^2.0.4",
+    "tsc-watch": "^6.2.1",
+    "typescript-eslint": "^8.31.1"
   },
   "_moduleAliases": {
     "@": "dist"

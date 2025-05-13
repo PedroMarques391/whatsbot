@@ -9,6 +9,8 @@ export async function removeBg(message: Message, chat: Chat, client: Client) {
     const msg = message.hasQuotedMsg ? quotedMessage : message;
     await msg.react('⏳');
 
+
+
     if (msg.type !== 'image') {
         await msg.reply(
             '😑 Sério mesmo? Esse comando é só pra imagens. Não tá claro? 🙃'
@@ -30,24 +32,26 @@ export async function removeBg(message: Message, chat: Chat, client: Client) {
 
     fs.writeFileSync(imagePath, Buffer.from(media.data, 'base64'));
 
-    removeBackground(imagePath).then(async (blob: Blob) => {
-        const arrayBuffer = await blob.arrayBuffer();
-        fs.writeFileSync(imageOutput, Buffer.from(arrayBuffer));
+    removeBackground(imagePath)
+        .then(async (blob: Blob) => {
+            const arrayBuffer = await blob.arrayBuffer();
 
-        const media = MessageMedia.fromFilePath(imageOutput);
+            fs.writeFileSync(imageOutput, Buffer.from(arrayBuffer));
 
-        await client.sendMessage(chat.id._serialized, media, {
-            sendMediaAsDocument: true,
-            caption: 'Aqui está sua imagem com o fundo removido! '
-        }).then(async (message) => await message.react('❤️'));
-        await msg.react('⌛');
-        await delay(2000);
+            const media = MessageMedia.fromFilePath(imageOutput);
 
-        // fs.unlinkSync(imagePath);
-        // await delay(2000);
+            await client.sendMessage(chat.id._serialized, media, {
+                sendMediaAsDocument: true,
+                caption: 'Aqui está sua imagem com o fundo removido! '
+            }).then(async (message) => await message.react('❤️'));
+            await msg.react('⌛');
+            await delay(1000);
 
-        // fs.unlinkSync(imageOutput);
-    })
+            fs.unlinkSync(imagePath);
+            await delay(2000);
+
+            fs.unlinkSync(imageOutput);
+        })
         .catch(async (error) => {
             console.error('Erro ao remover o fundo da imagem:', error);
             await msg.reply('Desculpe, ocorreu um erro ao tentar remover o fundo da imagem. Por favor, tente novamente mais tarde. 😔')
