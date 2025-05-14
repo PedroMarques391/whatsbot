@@ -55,7 +55,11 @@ export async function dynamicSticker(
             })
             .on('error', async (err) => {
                 console.error(err);
-                await client.sendMessage(chat.id._serialized, 'Erro na conversão.');
+                const error = await client.sendMessage(
+                    chat.id._serialized,
+                    '🌸 Oops! Não consegui transformar esse vídeo em figurinha agora...\nTente de novo mais tarde, por favor! (｡•́︿•̀｡)'
+                );
+                await error.react('🥺');
             })
             .run();
     });

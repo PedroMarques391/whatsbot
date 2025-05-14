@@ -2,6 +2,7 @@ import path from 'path';
 import fs from 'fs';
 import { Chat, Client, Message, MessageMedia } from 'whatsapp-web.js';
 import sharp from 'sharp';
+import { delay } from '@/utils';
 
 export async function staticSticker(
     message: Message,
@@ -41,6 +42,11 @@ export async function staticSticker(
         .catch(async (error) => {
             console.error(error);
             await client.sendMessage(chat.id._serialized, 'Erro na conversão.');
+        })
+        .finally(async () => {
+            await message.react('✅');
+            fs.unlinkSync(inputPath);
+            await delay(2000);
+            fs.unlinkSync(outputPath);
         });
-
 }
