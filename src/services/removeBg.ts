@@ -51,7 +51,6 @@ export async function removeBg(message: Message, chat: Chat, client: Client) {
                 return;
             }
 
-            console.log(media);
 
             if (msg.type === 'sticker') {
                 await staticSticker(message, media, chat, client, message._data.notifyName, outputDir, errorMessage);
@@ -70,7 +69,6 @@ export async function removeBg(message: Message, chat: Chat, client: Client) {
             await msg.react('✅');
             fs.unlinkSync(imagePath);
             await delay(2000);
-
             fs.unlinkSync(imageOutput);
         });
 }

@@ -14,8 +14,8 @@ export async function staticSticker(
     errorMessage: string
 ): Promise<void> {
     await message.react('⏳');
-    const inputPath = path.join(outputDir, 'image.jpg');
-    const outputPath = path.join(outputDir, 'image.webp');
+    const inputPath = path.join(outputDir, 'sticker.jpg');
+    const outputPath = path.join(outputDir, 'sticker.webp');
 
     fs.writeFileSync(inputPath, Buffer.from(media.data, 'base64'));
 
@@ -44,7 +44,6 @@ export async function staticSticker(
             await client.sendMessage(chat.id._serialized, 'Erro na conversão.');
         })
         .finally(async () => {
-            await message.react('✅');
             fs.unlinkSync(inputPath);
             await delay(2000);
             fs.unlinkSync(outputPath);
