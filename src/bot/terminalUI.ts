@@ -51,6 +51,6 @@ export async function printWelcomeMessage(name: string, number: string, platafor
         '',
         `${highlight('⭐ ￫ Nome do cliente:')} ${text(name)}`,
         `${highlight('⭐ ￫ Telefone do cliente:')} ${text(number)}`,
-        `${highlight('⭐ ￫ Plataforma:')} ${text(plataform)}`,
+        `${highlight('⭐ ￫ Plataforma:')} ${text(`${plataform === 'smbi' ? 'Whatsapp business' : plataform}`)}`,
     ]);
 }
