@@ -8,13 +8,14 @@ export async function downloadTikTok(message: Message, client: Client) {
     const timeout = setTimeout(() => controller.abort(), 10000);
 
     await message.react('⏳');
-    await delay(2000);
-    await message.react('⌛');
+
 
     if (!url) {
         await client.sendMessage(message.from, '❌ Opa! Você esqueceu de colocar o link do vídeo. Tenta de novo aí!');
         return;
     }
+    await delay(2000);
+    await message.react('⌛');
     //TODO
     //Transformar 'isValidTikTokUrl' em um validator para ser reaproveitado posteriomente.
     const isValidTikTokUrl = /^https?:\/\/(vm\.)?tiktok\.com\/.+$/.test(url);
@@ -59,5 +60,6 @@ export async function downloadTikTok(message: Message, client: Client) {
         console.error('[AdaBot] Erro ao baixar ou enviar o vídeo:', error);
         await client.sendMessage(message.from, 'Tive um problema ao tentar baixar ou enviar o vídeo. Me perdoa 😥')
             .then(async (message) => await message.react('❌'));
+        await message.react('');
     }
 }
