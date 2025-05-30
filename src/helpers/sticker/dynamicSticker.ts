@@ -20,7 +20,7 @@ export async function dynamicSticker(
     return new Promise((resolve) => {
         ffmpeg(inputPath)
             .setStartTime(0)
-            .setDuration(6)
+            .setDuration(10)
             .output(outputPath)
             .outputFormat('webp')
             .videoCodec('libwebp')
