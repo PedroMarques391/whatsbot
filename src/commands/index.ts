@@ -14,6 +14,8 @@ import { StickerCommand } from './command.sticker';
 import { TalkCommand } from './command.talk';
 import { TestCommand } from './command.test';
 import { RemoveBgCommand } from './command.removeBg';
+import { TikTokCommand } from './command.tiktok';
+
 
 
 const commands: ICommand[] = [
@@ -21,7 +23,7 @@ const commands: ICommand[] = [
     AddCommand, RemoveCommand, PromoteCommand,
     DemoteCommand, ImagesCommand, ResumeCommand,
     StickerCommand, SendUpdateCommand, TalkCommand,
-    TestCommand, RenameCommand, RemoveBgCommand
+    TestCommand, RenameCommand, RemoveBgCommand, TikTokCommand
 ];
 
 export async function commandHandler(body: string): Promise<ICommand | undefined> {
