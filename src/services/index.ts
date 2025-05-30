@@ -12,6 +12,7 @@ import { resumeMessages } from './service.ai/resume';
 import { geminiChat } from './service.ai/geminiService';
 import { imageSearch } from './searchImage';
 import { init, start } from './initialize';
+import { downloadTikTok } from './service.download/tiktok';
 import { removeBg } from './removeBg';
 import { testFunction } from './test';
 
@@ -35,5 +36,6 @@ export {
     init,
     start,
     testFunction,
-    removeBg
+    removeBg,
+    downloadTikTok
 };
