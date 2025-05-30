@@ -25,6 +25,7 @@ export async function removeBg(message: Message, chat: Chat, client: Client) {
     const media = await msg.downloadMedia();
 
     const outputDir: string = path.resolve(process.cwd(), 'src/assets/images/imageWithoutBg');
+
     if (!fs.existsSync(outputDir)) {
         fs.mkdirSync(outputDir, { recursive: true });
     }
@@ -34,7 +35,7 @@ export async function removeBg(message: Message, chat: Chat, client: Client) {
 
     fs.writeFileSync(imagePath, Buffer.from(media.data, 'base64'));
 
-    removeBackground(imagePath)
+    await removeBackground(imagePath)
         .then(async (blob: Blob) => {
             const arrayBuffer = await blob.arrayBuffer();
 
