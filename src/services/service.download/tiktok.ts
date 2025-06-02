@@ -2,30 +2,31 @@ import { delay, extractTextFromBody } from '@/utils';
 import { Client, Message, MessageMedia } from 'whatsapp-web.js';
 
 export async function downloadTikTok(message: Message, client: Client) {
-    const url = extractTextFromBody(message.body);
+    const quotedMessage = await message.getQuotedMessage();
+    const url = message.hasQuotedMsg ? quotedMessage.body : extractTextFromBody(message.body);
     const apiUrl = 'https://www.tikwm.com/api/';
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 10000);
-
-    await message.react('⏳');
-
 
     if (!url) {
         await client.sendMessage(message.from, '❌ Opa! Você esqueceu de colocar o link do vídeo. Tenta de novo aí!');
         return;
     }
-    await delay(2000);
-    await message.react('⌛');
+
     //TODO
     //Transformar 'isValidTikTokUrl' em um validator para ser reaproveitado posteriomente.
     const isValidTikTokUrl = /^https?:\/\/(vm\.)?tiktok\.com\/.+$/.test(url);
+
+    if (!isValidTikTokUrl && message.body.includes('baixar')) return;
 
     if (!isValidTikTokUrl) {
         await client.sendMessage(message.from, 'Esse link não parece ser do TikTok. Manda um link válido, por favor!')
             .then(async (message) => await message.react('❌'));
         return;
     }
-
+    await message.react('⏳');
+    await delay(2000);
+    await message.react('⌛');
     await client.sendMessage(message.from, 'Baixando o vídeo pra você...').then(async (message) => await message.react('🫶🏻'));
 
     try {
