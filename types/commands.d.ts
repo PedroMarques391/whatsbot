@@ -1,7 +1,7 @@
-import { Message, Chat, Client, GroupChat } from "whatsapp-web.js";
+import { Chat, Client, GroupChat, Message } from "whatsapp-web.js";
 
 export interface BotContext {
-    chat: Chat
+    chat: Chat | GroupChat  
     client: Client
     message: Message
 }

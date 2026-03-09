@@ -1,6 +1,6 @@
+import { extractTextFromBody } from '@/utils';
 import { GroupChat, Message } from 'whatsapp-web.js';
 import { groupParticipants } from '../group/groupParticipants';
-import { extractTextFromBody } from '@/utils';
 
 
 /**
@@ -11,7 +11,7 @@ import { extractTextFromBody } from '@/utils';
  */
 export async function isNotInGroup(chat: GroupChat, message: Message): Promise<boolean> {
     if (!groupParticipants(chat).includes(`${extractTextFromBody(message.body)}@c.us`)) {
-        await message.reply(`O número "${extractTextFromBody(message.body)}" não está presente no grupo.`);
+        await message.reply(`Acho que você se confundiu. O número "${extractTextFromBody(message.body)}" não consta na nossa lista de participantes deste grupo.`);
         return true;
     }
     return false;

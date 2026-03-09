@@ -3,23 +3,26 @@ import { Client, GroupNotification } from 'whatsapp-web.js';
 
 export async function join(notification: GroupNotification, client: Client) {
     const { recipientIds, chatId } = notification;
+
     try {
         const newMemberId = recipientIds[recipientIds.length - 1];
         const mention = newMemberId.split('@')[0];
 
-        if (newMemberId === client.info.wid._serialized) {
+
+
+        if (newMemberId === process.env.RECIPIENT_ID) {
             await client.sendMessage(
                 chatId,
-                '🌸✨ Olá, pessoal! Eu sou a *AdaBot*, estou aqui para ajudar e deixar tudo mais divertido! 💖 Digite "/start" para ver o que posso fazer. 😊',
+                'Olá a todos. Sou Ada, e a partir de agora auxiliarei na organização e dinâmicas deste grupo. Para conhecer meus recursos, enviem /start. ✨',
             );
+            return;
         }
-        if (newMemberId !== client.info.wid._serialized) {
-            await client.sendMessage(
-                chatId,
-                `🌸✨ Olá, @${mention}! Seja muito bem-vindo(a) ao grupo! ✨🌸 Eu sou a *AdaBot*, estou aqui para ajudar e deixar tudo mais divertido! 💖 Digite "/start" para ver todos os comandos disponíveis e aproveitar ao máximo! 😊`,
-                { mentions: [newMemberId] },
-            );
-        }
+        await client.sendMessage(
+            chatId,
+            `Seja bem-vindo(a) ao grupo, @${mention}. Eu me chamo Ada, e estou à disposição para facilitar nossas interações. Sinta-se à vontade para explorar minhas funcionalidades com o comando /start. ☕`,
+            { mentions: [newMemberId] },
+        );
+        return;
     } catch (error) {
         console.error('Erro ao enviar mensagem de boas-vindas:', error);
     }

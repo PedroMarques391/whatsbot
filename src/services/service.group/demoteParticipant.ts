@@ -23,16 +23,11 @@ export async function demoteParticipant(message: Message, chat: GroupChat | any,
     }
 
     if (!getGroupAdmins(chat).includes(`${extractTextFromBody(message.body)}@c.us`)) {
-        return message.reply('O membro que você deseja rebaixar já está no menor nível. 🙁');
+        return message.reply('Este participante já está sem os privilégios de administração. Que tal focarmos em quem realmente está no comando? ✨');
     }
     if (isAuthorOrBot(message)) {
-        return message.reply('Você não pode se rebaixar ou tentar rebaixar o Bot.');
-    } if (!getGroupAdmins(chat).includes(`${extractTextFromBody(message.body)}@c.us`)) {
-        return message.reply('O membro que você deseja rebaixar já está no menor nível. 🙁');
-    }
-    if (isAuthorOrBot(message)) {
-        return message.reply('Você não pode se rebaixar ou tentar rebaixar o Bot.');
+        return message.reply('Admiro a iniciativa, mas não podemos alterar a nossa própria hierarquia — muito menos a minha. Vamos manter as coisas como estão. ☕');
     }
     await chat.demoteParticipants([`${extractTextFromBody(message.body)}@c.us`]);
-    await client.sendMessage(chat.id._serialized, `Poxa @${extractTextFromBody(message.body)}, você foi rebaixado a membro comum do grupo. Parece que suas atitudes deixaram a desejar. ☹`, { mentions: [`${extractTextFromBody(message.body)}@c.us`] });
+    await client.sendMessage(chat.id._serialized, `Tudo resolvido. @${extractTextFromBody(message.body)} teve seus privilégios revogados com sucesso. Gosto de tudo bem organizado. ✨`, { mentions: [`${extractTextFromBody(message.body)}@c.us`] });
 }

@@ -21,8 +21,8 @@ export async function promoteParticipant(message: Message, chat: GroupChat | any
         return;
     }
     if (getGroupAdmins(chat).includes(`${extractTextFromBody(message.body)}@c.us`)) {
-        return message.reply('O membro que você deseja promover já é um administrador. 🙁');
+        return message.reply('Verifiquei, e este participante já ocupa um lugar na administração. Excelente escolha, por sinal. ☕');
     }
     await chat.promoteParticipants([`${extractTextFromBody(message.body)}@c.us`]);
-    await client.sendMessage(chat.id._serialized, `Parabéns @${extractTextFromBody(message.body)}, você foi promovido a administrador do grupo. Contamos com você! 😄🥳🎉`, { mentions: [`${extractTextFromBody(message.body)}@c.us`] });
+    await client.sendMessage(chat.id._serialized, `Temos um novo nome na liderança. @${extractTextFromBody(message.body)}, espero que conduza o grupo com a mesma elegância de sempre. ✨`, { mentions: [`${extractTextFromBody(message.body)}@c.us`] });
 }

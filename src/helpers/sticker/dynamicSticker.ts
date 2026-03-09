@@ -1,7 +1,7 @@
+import ffmpeg from 'fluent-ffmpeg';
 import fs from 'fs';
 import path from 'path';
-import { Client, Message, MessageMedia, Chat } from 'whatsapp-web.js';
-import ffmpeg from 'fluent-ffmpeg';
+import { Chat, Client, Message, MessageMedia } from 'whatsapp-web.js';
 
 export async function dynamicSticker(
     message: Message,
@@ -57,7 +57,7 @@ export async function dynamicSticker(
                 console.error(err);
                 const error = await client.sendMessage(
                     chat.id._serialized,
-                    '🌸 Oops! Não consegui transformar esse vídeo em figurinha agora...\nTente de novo mais tarde, por favor! (｡•́︿•̀｡)'
+                    'Tivemos um contratempo técnico ao processar esse vídeo. Que tal tentarmos com outro arquivo mais tarde? ✨'
                 );
                 await error.react('🥺');
             })

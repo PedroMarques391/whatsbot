@@ -2,8 +2,14 @@ import { Message } from 'whatsapp-web.js';
 import { CLIENT_NUMBER } from '../config/env';
 
 
-export async function onRevoke(message: Message, messageRevoke: any) {
+export async function onRevoke(message: Message, messageRevoke: Message | null | undefined) {
+    const contact = await message.getContact()
+
+    if (!messageRevoke) return;
+    
     if (!message.hasMedia && messageRevoke) {
-        await messageRevoke.reply(`O usuário ${message.author || 'Desconhecido'} apagou a mensagem "${messageRevoke.body}".`, CLIENT_NUMBER);
+        await messageRevoke.reply(`O usuário ${contact.pushname || 'Desconhecido'} / ${contact.number} apagou a mensagem "${messageRevoke.body}".`, CLIENT_NUMBER);
+        return;
     }
+    await messageRevoke.reply(`O usuário ${contact.pushname || 'Desconhecido'} / ${contact.number} apagou a mensagem "${messageRevoke.body}".`, CLIENT_NUMBER);
 }

@@ -9,7 +9,7 @@ import { getGroupAdmins } from '../group/groupAdmins';
  */
 export async function authorIsAdmin(chat: GroupChat, message: Message): Promise<boolean> {
     if (!message.author || !getGroupAdmins(chat).includes(message.author)) {
-        await message.reply('Poxa 🙁, você precisa ser um administrador para executar esse comando.');
+        await message.reply('Sinto muito, mas essa ação requer privilégios de administração. Se desejar, fale com quem está no comando. ☕');
         return false;
     }
     return true;

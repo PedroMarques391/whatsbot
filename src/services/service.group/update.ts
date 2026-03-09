@@ -1,8 +1,8 @@
-import { Client, Message, MessageMedia } from 'whatsapp-web.js';
-import path from 'path';
-import { CLIENT_NUMBER } from '../../config/env';
 import { delay, extractTextFromBody } from '@/utils';
-import { geminiResponse } from '../service.ai/geminiService';
+import path from 'path';
+import { Client, Message, MessageMedia } from 'whatsapp-web.js';
+import { CLIENT_NUMBER } from '../../config/env';
+import { openRouterResponse } from '../service.ai/openRouterService';
 
 export const sendUpdateMessages = async (client: Client, message: Message) => {
     const body: string = extractTextFromBody(message.body);
@@ -10,13 +10,13 @@ export const sendUpdateMessages = async (client: Client, message: Message) => {
     const groups = chats.filter((chat) => chat.isGroup).map((chat) => chat.id._serialized);
 
     if (!body) {
-        await client.sendMessage(CLIENT_NUMBER, 'Ops! Parece que a mensagem está vazia. Por favor, me envie as atualizações para que eu possa compartilhá-las, tá bom? 😊');
+        await client.sendMessage(CLIENT_NUMBER, 'Percebo que a instrução de atualização está vazia. Por favor, forneça o texto para que eu possa conduzir os anúncios. ☕');
         return;
     }
 
-    const instruction: string = 'Create a detailed and engaging update message tailored for group announcements. Ensure it is clear, concise, and maintains a friendly tone';
+    const instruction: string = 'Create a sophisticated, polite, and mature update message tailored for group announcements in Portuguese. Ensure it sounds knowledgeable, elegant, and uses minimal emojis like a brilliant female assistant named Ada.';
 
-    const text: string = await geminiResponse(`${instruction}: ${body}`, 0.7, 200);
+    const text: string = await openRouterResponse(`${instruction}: ${body}`, 0.7, 200);
 
 
     const media = MessageMedia.fromFilePath(path.resolve(process.cwd(), 'src/assets/images/adaUpdate.jpg'));

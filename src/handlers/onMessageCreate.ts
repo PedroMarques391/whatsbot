@@ -1,24 +1,30 @@
-import { Chat, Client, Message } from 'whatsapp-web.js';
-import { commandHandler } from '../commands';
-import { interactionsHandler, validateCommand, validatorsHandler } from '@/middleware';
+import {
+  interactionsHandler,
+  validateCommand,
+  validatorsHandler,
+} from "@/middleware";
+import { Chat, Client, Message } from "whatsapp-web.js";
+import { commandHandler } from "../commands";
 
 export async function onMessageCreate(client: Client, message: Message) {
-    const chat: Chat = await message.getChat();
-    const command = await commandHandler(message.body);
+  const chat: Chat = await message.getChat();
+  const command = await commandHandler(message.body);
 
-    if (await interactionsHandler(message, chat, client)) return;
+  if (await interactionsHandler(message, chat, client)) return;
 
-    if (!command) {
-        await validateCommand(message);
-        return true;
-    }
+  if (!command) {
+    await validateCommand(message);
+    return true;
+  }
 
-    if (await validatorsHandler(command, message, chat, client)) return;
+  if (await validatorsHandler(command, message, chat, client)) return;
 
-    try {
-        await command.execute({ chat, client, message });
-    } catch (error) {
-        console.error(`Erro ao executar ${command.name}:`, error);
-        await message.reply('🌸 Opsie~ Algo deu errado! Tenta de novo ou avisa meu dev! 🐾');
-    }
+  try {
+    await command.execute({ chat, client, message });
+  } catch (error) {
+    console.error(`Erro ao executar ${command.name}:`, error);
+    await message.reply(
+      "Tivemos um pequeno imprevisto interno. Seja gentil e avise meu desenvolvedor enquanto tento me recompor. ✨",
+    );
+  } 
 }

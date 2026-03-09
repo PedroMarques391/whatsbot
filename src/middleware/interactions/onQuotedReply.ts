@@ -1,7 +1,5 @@
-import { geminiChat } from '@/services';
-import { Message } from 'whatsapp-web.js';
-
-
+import { openRouterChat } from "@/services";
+import { Message } from "whatsapp-web.js";
 
 /**
  * Handles user replies to messages previously sent by the bot.
@@ -11,22 +9,26 @@ import { Message } from 'whatsapp-web.js';
  * @returns {boolean} A boolean indicating whether the interaction was handled.
  */
 export async function quotedReply(message: Message): Promise<boolean> {
-    const quotedMessage = await message.getQuotedMessage();
+  const quotedMessage = await message.getQuotedMessage();
 
-    if (message.fromMe ||
-        !message.hasQuotedMsg ||
-        message.body.trim().startsWith('/')) return false;
-
-    if (quotedMessage.id.fromMe && !quotedMessage.hasMedia) {
-        console.log('Ada disse:', quotedMessage.body);
-        console.log('Usuário respondeu:', message.body);
-        const response = await geminiChat(message.body, quotedMessage.body);
-        await message.reply(response);
-        return true;
-    }
+  if (
+    message.fromMe ||
+    !message.hasQuotedMsg ||
+    message.body.trim().startsWith("/")
+  )
     return false;
+
+  if (quotedMessage.id.fromMe && !quotedMessage.hasMedia) {
+    try {
+      const response = await openRouterChat(message.body, quotedMessage.body);
+      await message.reply(response);
+    } catch (error) {
+      console.error("Erro ao processar resposta citada:", error);
+      await message.reply(
+        "Encontrei uma barreira técnica temporária e não consegui processar o contexto dessa resposta. Retorno em breve. 🌱",
+      );
+    }
+    return true;
+  }
+  return false;
 }
-
-
-
-

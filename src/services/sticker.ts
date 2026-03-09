@@ -1,8 +1,8 @@
-import { Chat, Client, Message } from 'whatsapp-web.js';
-import path from 'path';
-import fs from 'fs';
-import { extractTextFromBody, sendStickerErrors } from '@/utils';
 import { dynamicSticker, staticSticker } from '@/helpers';
+import { extractTextFromBody, sendStickerErrors } from '@/utils';
+import fs from 'fs';
+import path from 'path';
+import { Chat, Client, Message } from 'whatsapp-web.js';
 
 export async function makeSticker(message: Message, client: Client) {
     const quotedMessage = await message.getQuotedMessage();
@@ -14,7 +14,7 @@ export async function makeSticker(message: Message, client: Client) {
     const authorName = message._data.notifyName || 'Ada Ada';
     const errorMessage: string = sendStickerErrors[Math.floor(Math.random() * sendStickerErrors.length)];
     if (!media || !media.data) {
-        await msg.reply('UwU~ Não consigo fazer mágica! ✨ Por favor, envie uma imagem ou vídeo para criar o sticker! 💖').then((message: Message) => {
+        await msg.reply('A magia precisa de um pouco de matéria-prima. Envie uma imagem ou um vídeo para que eu possa criar sua figurinha. ✨').then((message: Message) => {
             message.react('🌸');
         });
         return;
@@ -42,16 +42,16 @@ export async function renameSticker(message: Message, chat: Chat, client: Client
     await message.react('⏳');
 
     if (!message.hasQuotedMsg || quotedMessage.type !== 'sticker') {
-        await message.reply('Eii, preciso de uma figurinha para ser renomeada! 🌸✨')
-            .then(async (message) => await message.react('🌸'));
+        await message.reply('Eu preciso de uma figurinha como referência para poder renomeá-acredite, facilita muito o meu trabalho. ☕')
+            .then(async (message) => await message.react('👀'));
         await message.react('❌');
 
         return;
     }
     if (name.length > 20 || name.length === 0) {
-        const reply = name.length > 10
-            ? 'Não acha esse nome muito grande? aprende a ser gente.'
-            : 'Que criativo, um nome vazio. Não vou fazer isso.';
+        const reply = name.length > 20
+            ? 'Um nome tão longo perde o charme, não acha? Tente ser um pouco mais breve.'
+            : 'Mudar para um nome vazio não me parece muito útil. Me dê algum texto para trabalhar. ✨';
         await message.reply(reply)
             .then(async (message) => await message.react('🙄'));
         await message.react('❌');

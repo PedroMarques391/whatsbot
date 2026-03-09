@@ -1,13 +1,13 @@
-import { Message } from 'whatsapp-web.js';
-import { geminiResponse } from './geminiService';
 import { extractTextFromBody } from '@/utils';
+import { Message } from 'whatsapp-web.js';
+import { openRouterResponse } from './openRouterService';
 
 export async function response(message: Message, temperature: number, maxOutputTokens: number) {
     if (message.fromMe) return;
     try {
         const question = extractTextFromBody(message.body);
 
-        const text = await geminiResponse(`responda: ${question}`, temperature, maxOutputTokens);
+        const text = await openRouterResponse(`responda: ${question}`, temperature, maxOutputTokens);
 
         await message.react('✅');
 

@@ -4,7 +4,7 @@ export async function showPastMembers(chat: GroupChat): Promise<void> {
     const pastParticipants = await chat.pastParticipants;
 
     if (!pastParticipants || pastParticipants.length === 0) {
-        await chat.sendMessage('Ownt, não encontrei nenhum participante anterior nesse grupo. 🥺💖');
+        await chat.sendMessage('Fiz uma varredura cuidadosa, mas não encontrei registros de membros antigos. Parece que todos decidiram ficar. ✨');
         return;
     }
 

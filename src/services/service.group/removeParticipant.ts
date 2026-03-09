@@ -4,7 +4,7 @@ import { GroupChat, Message } from 'whatsapp-web.js';
 
 
 
-export async function removeParticipant(message: Message, chat: GroupChat | any) {
+export async function removeParticipant(message: Message, chat: GroupChat) {
     const isBotAdmin = await botIsAdmin(chat, message);
     if (!isBotAdmin) {
         return;
@@ -22,7 +22,7 @@ export async function removeParticipant(message: Message, chat: GroupChat | any)
         return;
     }
     const canRemove = isAuthorOrBot(message)
-        ? await message.reply('Você não pode se remover ou tentar remover o Bot. 😡')
+        ? await message.reply('Sua intenção é curiosa, mas não permito que remova a si mesmo ou a mim. Vamos focar os esforços onde realmente importa. ☕')
         : await chat.removeParticipants([`${extractTextFromBody(message.body)}@c.us`]);
     return canRemove;
 }

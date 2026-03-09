@@ -9,7 +9,7 @@ export async function downloadTikTok(message: Message, client: Client) {
     const timeout = setTimeout(() => controller.abort(), 10000);
 
     if (!url) {
-        await client.sendMessage(message.from, '❌ Opa! Você esqueceu de colocar o link do vídeo. Tenta de novo aí!');
+        await client.sendMessage(message.from, 'Parece que faltou o link do vídeo. Coloque o link junto ao comando para eu conseguir baixar. ✨');
         return;
     }
 
@@ -20,14 +20,14 @@ export async function downloadTikTok(message: Message, client: Client) {
     if (!isValidTikTokUrl && message.body.includes('baixar')) return;
 
     if (!isValidTikTokUrl) {
-        await client.sendMessage(message.from, 'Esse link não parece ser do TikTok. Manda um link válido, por favor!')
+        await client.sendMessage(message.from, 'O link fornecido não parece ser do TikTok. Podemos tentar novamente com a URL correta? ☕')
             .then(async (message) => await message.react('❌'));
         return;
     }
     await message.react('⏳');
     await delay(2000);
     await message.react('⌛');
-    await client.sendMessage(message.from, 'Baixando o vídeo pra você...').then(async (message) => await message.react('🫶🏻'));
+    await client.sendMessage(message.from, 'Iniciando o download do vídeo. Isso levará apenas um momento...').then(async (message) => await message.react('☕'));
 
     try {
         const response = await fetch(`${apiUrl}?url=${encodeURIComponent(url)}&count=1&version=1`, {
@@ -38,7 +38,7 @@ export async function downloadTikTok(message: Message, client: Client) {
         const data: any = await response.json();
 
         if (!data || !data.data || !data.data.play) {
-            await client.sendMessage(message.from, '😢 Não consegui baixar o vídeo... Será que você consegue tentar com outro link?');
+            await client.sendMessage(message.from, 'Ocorreu uma falha ao acessar esse vídeo. Tem certeza de que ele está disponível? ✨');
             return;
         }
 
@@ -49,7 +49,7 @@ export async function downloadTikTok(message: Message, client: Client) {
         await delay(1000);
 
         await client.sendMessage(message.from, media, {
-            caption: ' Prontinho! Nem demorou, viu?',
+            caption: 'Aqui está seu vídeo. ✨',
             sendMediaAsDocument: false,
         }).then(async (message) => await message.react('✅'));
 
@@ -59,7 +59,7 @@ export async function downloadTikTok(message: Message, client: Client) {
 
     } catch (error) {
         console.error('[AdaBot] Erro ao baixar ou enviar o vídeo:', error);
-        await client.sendMessage(message.from, 'Tive um problema ao tentar baixar ou enviar o vídeo. Me perdoa 😥')
+        await client.sendMessage(message.from, 'Tive um contratempo interno ao processar e enviar esse arquivo. Tente novamente mais tarde. ☕')
             .then(async (message) => await message.react('❌'));
         await message.react('');
     }

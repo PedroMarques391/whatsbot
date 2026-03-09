@@ -14,7 +14,7 @@ import { getGroupAdmins } from '../group/groupAdmins';
 export async function botIsAdmin(chat: GroupChat, message: Message): Promise<boolean> {
     const admin = getGroupAdmins(chat).includes(CLIENT_NUMBER);
     if (!admin) {
-        await message.reply('Oops! Para eu conseguir ajudar, preciso ser um dos administradores do grupo. 🌟');
+        await message.reply('Adoraria te ajudar com isso, mas preciso ser nomeada administradora do grupo antes. ✨');
         return false;
     }
     return true;

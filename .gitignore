@@ -7,3 +7,4 @@ src/functions/runInSpecificGroup.js
 dlMembers.json
 users.json
 dist/
+src/assets/*

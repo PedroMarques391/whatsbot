@@ -1,5 +1,5 @@
 import { botResponses } from '@/utils';
-import { Message, Chat } from 'whatsapp-web.js';
+import { Chat, Message } from 'whatsapp-web.js';
 
 const greetingRegexGroup = /\b(o{1,}i+|ol+[áa]+|o{2,}p+a+|e+\s*a+[íi]+|f+a+l+a+|s+a+l+v+e+|b+o+m+\s*d+i+a+|b+o+a+\s*t+a+r+d+e+|b+o+a+\s*n+o+i+t+e+|h+e+y+|h+i+|h+e+l+l+o+|y+o+|e+a+e+|e+a+i+|o+i+e+|o+e{2,})\s*(ada|adabot)\b/i;
 
@@ -9,10 +9,12 @@ const botMentions = ['ada', 'adabot'];
 
 export async function greeting(message: Message, chat: Chat): Promise<boolean> {
     const body = message.body.toLowerCase().trim();
+    const mention = await message.getMentions();
+    const botMentioned = mention.find((bot) => bot.number === process.env.CLIENT_NUMBER?.split('@')[0]);
 
     if (message.fromMe) return false;
 
-    const isMentionedDirectly = botMentions.includes(body) || body.startsWith(`@${process.env.CLIENT_NUMBER?.split('@')[0]}`);
+    const isMentionedDirectly = botMentions.includes(body) || botMentioned;
 
     const matchedGreeting = chat.isGroup
         ? greetingRegexGroup.test(body)

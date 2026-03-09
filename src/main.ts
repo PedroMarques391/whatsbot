@@ -1,6 +1,11 @@
-import 'module-alias/register';
-import { client, connections, eventHandler } from './bot';
+import "module-alias/register";
+import { client, connections, eventHandler } from "./bot";
 
-connections(client);
+
+function bootstrap() {
+    connections(client);
 eventHandler(client);
 client.initialize();
+}
+
+bootstrap();

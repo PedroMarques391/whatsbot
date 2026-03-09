@@ -1,6 +1,6 @@
+import { extractTextFromBody } from '@/utils';
 import { Chat, Client, Message, MessageMedia } from 'whatsapp-web.js';
 import { GOOGLE_SEARCH_API_CTX_IMAGES, GOOGLE_SEARCH_API_KEY } from '../config/env';
-import { extractTextFromBody } from '@/utils';
 
 export async function imageSearch(message: Message, chat: Chat, client: Client) {
     const word = extractTextFromBody(message.body);
@@ -13,11 +13,9 @@ export async function imageSearch(message: Message, chat: Chat, client: Client) 
     const URL = await fetch(`https://www.googleapis.com/customsearch/v1?key=${APIKEY}&cx=${cx}&q=${word}&searchType=image`);
     const data: any = await URL.json();
 
-    if (!data.items || data.items.length === 0) {
-        return client.sendMessage(chat.id._serialized, 'Poxa, não achei resultados para essa pesquisa. Tente novamente.');
-    }
-    await message.reply('Opa, achei umas imagens legais aqui. ☺ ☺');
-    await client.sendMessage(chat.id._serialized, 'Aguarde um instante...').then((message) => message.react('⏳'));
+        await client.sendMessage(chat.id._serialized, 'Infelizmente essa busca não retornou nenhum resultado satisfatório. Quer tentar com outras palavras? ✨');
+    await message.reply('Selecionei algumas imagens interessantes para você. ☕');
+    await client.sendMessage(chat.id._serialized, 'Só um momento enquanto eu as envio...').then((message) => message.react('⏳'));
     console.log(data.items);
     for (let i = 0; i < 5; i++) {
         const item = data.items[i];
@@ -31,5 +29,5 @@ export async function imageSearch(message: Message, chat: Chat, client: Client) 
             continue;
         }
     }
-    await client.sendMessage(chat.id._serialized, 'Prontinho, espero que tenha ajudado!!');
+    await client.sendMessage(chat.id._serialized, 'Aqui estão. Espero que seja útil. ✨');
 }

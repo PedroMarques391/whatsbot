@@ -1,9 +1,9 @@
-import { Chat, Client, Message, MessageMedia } from 'whatsapp-web.js';
-import path from 'path';
-import fs from 'fs';
-import removeBackground from '@imgly/background-removal-node';
-import { delay, sendStickerErrors } from '@/utils';
 import { staticSticker } from '@/helpers';
+import { delay, sendStickerErrors } from '@/utils';
+import removeBackground from '@imgly/background-removal-node';
+import fs from 'fs';
+import path from 'path';
+import { Chat, Client, Message, MessageMedia } from 'whatsapp-web.js';
 
 export async function removeBg(message: Message, chat: Chat, client: Client) {
     const quotedMessage = await message.getQuotedMessage();
@@ -15,7 +15,7 @@ export async function removeBg(message: Message, chat: Chat, client: Client) {
 
     if (msg.type !== 'image' && msg.type !== 'sticker') {
         await msg.reply(
-            '😑 Sério mesmo? Esse comando é só pra imagens. Não tá claro? 🙃'
+            'Esse comando foi feito exclusivamente para imagens ou figurinhas. Tente novamente quando tiver a mídia certa. ✨'
         )
             .then(async (message) => await message.react('🙄'));
         await msg.react('❌');
@@ -62,7 +62,7 @@ export async function removeBg(message: Message, chat: Chat, client: Client) {
         })
         .catch(async (error) => {
             console.error('Erro ao remover o fundo:', error);
-            await msg.reply('Desculpe, ocorreu um erro ao tentar remover o fundo do arquivo. Por favor, tente novamente mais tarde. 😔')
+            await msg.reply('Tivemos um problema processando o arquivo. Tente novamente em alguns instantes, por favor. ☕')
                 .then(async (message) => await message.react('😥'));
             await msg.react('😥');
         })
