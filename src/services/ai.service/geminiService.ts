@@ -33,7 +33,6 @@ export async function geminiResponse(
 
     return res.text;
   } catch (error: any) {
-    // Tratamento específico para erro 429 (rate limiting)
     if (error.message?.includes("429") || error.message?.includes("quota")) {
       console.error("⚠️ Limite de requisições da API Gemini excedido");
       return "Desculpe, estou com muitas requisições no momento. Por favor, tente novamente em alguns segundos! 🙏";
@@ -80,7 +79,6 @@ export async function geminiChat(
 
     return response.text;
   } catch (error: any) {
-    // Tratamento específico para erro 429 (rate limiting)
     if (error.message?.includes("429") || error.message?.includes("quota")) {
       console.error("⚠️ Limite de requisições da API Gemini excedido");
       return "Desculpe, estou com muitas requisições no momento. Por favor, tente novamente em alguns segundos! 🙏";
