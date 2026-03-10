@@ -1,15 +1,15 @@
-import { dynamicSticker } from './sticker/dynamicSticker';
-import { staticSticker } from './sticker/staticSticker';
-import { addParticipant } from '../services/service.group/addParticipant';
-import { demoteParticipant } from '../services/service.group/demoteParticipant';
+import { addParticipant } from '../services/group.service/addParticipant';
+import { demoteParticipant } from '../services/group.service/demoteParticipant';
+import { listMembers } from '../services/group.service/listMembers';
+import { join } from '../services/group.service/newMember';
+import { promoteParticipant } from '../services/group.service/promoteParticipant';
+import { removeParticipant } from '../services/group.service/removeParticipant';
+import { showPastMembers } from '../services/group.service/showPastMembers';
+import { sendUpdateMessages } from '../services/group.service/update';
 import { getGroupAdmins } from './group/groupAdmins';
 import { groupParticipants } from './group/groupParticipants';
-import { listMembers } from '../services/service.group/listMembers';
-import { join } from '../services/service.group/newMember';
-import { sendUpdateMessages } from '../services/service.group/update';
-import { removeParticipant } from '../services/service.group/removeParticipant';
-import { showPastMembers } from '../services/service.group/showPastMembers';
-import { promoteParticipant } from '../services/service.group/promoteParticipant';
+import { dynamicSticker } from './sticker/dynamicSticker';
+import { staticSticker } from './sticker/staticSticker';
 import { authorIsAdmin } from './validation/authorIsAdmin';
 import { botIsAdmin } from './validation/botIsAdmin';
 import { isAuthorOrBot } from './validation/isAuthorOrBot';
@@ -22,22 +22,12 @@ import { isNotInGroup } from './validation/isNotInGroup';
 
 
 export {
-    dynamicSticker,
-    staticSticker,
-    addParticipant,
-    demoteParticipant,
-    getGroupAdmins,
-    groupParticipants,
-    join,
-    listMembers,
-    promoteParticipant,
+    addParticipant, authorIsAdmin,
+    botIsAdmin, demoteParticipant, dynamicSticker, getGroupAdmins,
+    groupParticipants, isAuthorOrBot,
+    isNotInGroup, join,
+    listMembers, notAValidNumber, promoteParticipant,
     removeParticipant,
     sendUpdateMessages,
-    showPastMembers,
-    authorIsAdmin,
-    botIsAdmin,
-    isAuthorOrBot,
-    isNotInGroup,
-    notAValidNumber
-
+    showPastMembers, staticSticker
 };

@@ -2,7 +2,7 @@ import { delay, extractTextFromBody } from '@/utils';
 import path from 'path';
 import { Client, Message, MessageMedia } from 'whatsapp-web.js';
 import { CLIENT_NUMBER } from '../../config/env';
-import { openRouterResponse } from '../service.ai/openRouterService';
+import { openRouterResponse } from '../ai.service/openRouterService';
 
 export const sendUpdateMessages = async (client: Client, message: Message) => {
     const body: string = extractTextFromBody(message.body);
