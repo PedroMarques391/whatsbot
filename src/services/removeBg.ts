@@ -15,7 +15,7 @@ export async function removeBg(message: Message, chat: Chat, client: Client) {
 
     if (msg.type !== 'image' && msg.type !== 'sticker') {
         await msg.reply(
-            'Esse comando foi feito exclusivamente para imagens ou figurinhas. Tente novamente quando tiver a mídia certa. ✨'
+            '😑 Sério mesmo? Esse comando é só pra imagens. Não tá claro? 🙃'
         )
             .then(async (message) => await message.react('🙄'));
         await msg.react('❌');

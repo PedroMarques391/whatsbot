@@ -13,7 +13,7 @@ export async function imageSearch(message: Message, chat: Chat, client: Client) 
     const URL = await fetch(`https://www.googleapis.com/customsearch/v1?key=${APIKEY}&cx=${cx}&q=${word}&searchType=image`);
     const data: any = await URL.json();
 
-        await client.sendMessage(chat.id._serialized, 'Infelizmente essa busca não retornou nenhum resultado satisfatório. Quer tentar com outras palavras? ✨');
+    await client.sendMessage(chat.id._serialized, 'Infelizmente essa busca não retornou nenhum resultado satisfatório. Quer tentar com outras palavras? ✨');
     await message.reply('Selecionei algumas imagens interessantes para você. ☕');
     await client.sendMessage(chat.id._serialized, 'Só um momento enquanto eu as envio...').then((message) => message.react('⏳'));
     console.log(data.items);

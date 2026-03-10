@@ -15,12 +15,12 @@ export async function downloadTikTok(message: Message, client: Client) {
 
     //TODO
     //Transformar 'isValidTikTokUrl' em um validator para ser reaproveitado posteriomente.
-    const isValidTikTokUrl = /^https?:\/\/(vm\.)?tiktok\.com\/.+$/.test(url);
+    const isValidTikTokUrl = /^https?:\/\/([a-z0-9-]+\.)?tiktok\.com\/.+$/i.test(url);
 
     if (!isValidTikTokUrl && message.body.includes('baixar')) return;
 
     if (!isValidTikTokUrl) {
-        await client.sendMessage(message.from, 'O link fornecido não parece ser do TikTok. Podemos tentar novamente com a URL correta? ☕')
+        await client.sendMessage(message.from, 'Parece que tem algo errado com a URL fornecida. Podemos tentar novamente com a URL correta? ☕')
             .then(async (message) => await message.react('❌'));
         return;
     }
