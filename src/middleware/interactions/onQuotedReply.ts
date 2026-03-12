@@ -18,7 +18,7 @@ export async function quotedReply(message: Message): Promise<boolean> {
   )
     return false;
 
-  if (quotedMessage.id.fromMe && !quotedMessage.hasMedia) {
+  if (quotedMessage.id.fromMe && !quotedMessage.hasMedia && !message.hasMedia) {
     try {
       const response = await openRouterChat(message.body, quotedMessage.body);
       await message.reply(response);
