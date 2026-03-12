@@ -1,33 +1,51 @@
-import { authorIsAdmin, botIsAdmin, getGroupAdmins, isAuthorOrBot, isNotInGroup, notAValidNumber } from '@/helpers';
-import { extractTextFromBody } from '@/utils';
-import { Client, GroupChat, Message } from 'whatsapp-web.js';
+import {
+  authorIsAdmin,
+  botIsAdmin,
+  getGroupAdmins,
+  isAuthorOrBot,
+  isNotInGroup,
+  notAValidNumber,
+} from "@/helpers";
+import { extractTextFromBody } from "@/utils";
+import { Client, GroupChat, Message } from "whatsapp-web.js";
 
+export async function demoteParticipant(
+  message: Message,
+  chat: GroupChat | any,
+  client: Client,
+) {
+  try {
+    await Promise.all([
+      botIsAdmin(chat),
+      notAValidNumber(message, "/demote"),
+      authorIsAdmin(chat, message),
+      isNotInGroup(chat, message),
+    ]);
 
+    const groupAdmins = getGroupAdmins(chat).includes(
+      `${extractTextFromBody(message.body)}@c.us`,
+    );
 
-export async function demoteParticipant(message: Message, chat: GroupChat | any, client: Client) {
-    const isBotAdmin = await botIsAdmin(chat, message);
-    if (!isBotAdmin) {
-        return;
-    }
-    const notValid = await notAValidNumber(message, '/demote');
-    if (notValid) {
-        return;
-    }
-    const messageAuthorIsAdmin = await authorIsAdmin(chat, message);
-    if (!messageAuthorIsAdmin) {
-        return;
-    }
-    const userToDemote = await isNotInGroup(chat, message);
-    if (userToDemote) {
-        return;
-    }
-
-    if (!getGroupAdmins(chat).includes(`${extractTextFromBody(message.body)}@c.us`)) {
-        return message.reply('Este participante já está sem os privilégios de administração. Que tal focarmos em quem realmente está no comando? ✨');
+    if (!groupAdmins) {
+      return message.reply(
+        "Este participante já está sem os privilégios de administração. Não tem como rebaixar alguém que já é um membro comum, né?",
+      );
     }
     if (isAuthorOrBot(message)) {
-        return message.reply('Admiro a iniciativa, mas não podemos alterar a nossa própria hierarquia — muito menos a minha. Vamos manter as coisas como estão. ☕');
+      return message.reply(
+        "Bela tentativa, mas não podemos alterar a nossa própria hierarquia e claramente não pode alterar a minha. Tenta ser mais esperto na próxima vez.",
+      );
     }
-    await chat.demoteParticipants([`${extractTextFromBody(message.body)}@c.us`]);
-    await client.sendMessage(chat.id._serialized, `Tudo resolvido. @${extractTextFromBody(message.body)} teve seus privilégios revogados com sucesso. Gosto de tudo bem organizado. ✨`, { mentions: [`${extractTextFromBody(message.body)}@c.us`] });
+
+    await chat.demoteParticipants([
+      `${extractTextFromBody(message.body)}@c.us`,
+    ]);
+    await client.sendMessage(
+      chat.id._serialized,
+      `Tudo resolvido. @${extractTextFromBody(message.body)} teve seus privilégios revogados com sucesso. Quem faz besteira precisa ser penalizado.`,
+      { mentions: [`${extractTextFromBody(message.body)}@c.us`] },
+    );
+  } catch (error: any) {
+    return message.reply(error.message);
+  }
 }

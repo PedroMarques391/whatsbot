@@ -42,7 +42,7 @@ export async function resumeMessages(client: Client, msg: Message) {
   const prompt = resumePrompt(textMessages);
 
   try {
-    const summary = await openRouterResponse(prompt, 0.5, 500);
+    const summary = await openRouterResponse(prompt, 0.7, 500);
 
     await msg.react("✅");
     await client.sendMessage(chat.id._serialized, summary);

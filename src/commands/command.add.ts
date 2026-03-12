@@ -1,10 +1,11 @@
-import { addParticipant } from '@/services';
-import { ICommand } from '../../types';
+import { addParticipant } from "@/services";
+import { GroupChat } from "whatsapp-web.js";
+import { ICommand } from "../../types";
 
 export const AddCommand: ICommand = {
-    name: '/add',
-    onlyGroup: true,
-    async execute({ message, chat }) {
-        return await addParticipant(message, chat);
-    }
-}; 
+  name: "/add",
+  onlyGroup: true,
+  async execute({ message, chat }) {
+    await addParticipant(message, chat as GroupChat);
+  },
+};
