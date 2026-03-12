@@ -20,6 +20,7 @@ export async function onMessageCreate(client: Client, message: Message) {
   if (await validatorsHandler(command, message, chat, client)) return;
 
   try {
+    await chat.sendStateTyping();
     await command.execute({ chat, client, message });
   } catch (error) {
     console.error(`Erro ao executar ${command.name}:`, error);
