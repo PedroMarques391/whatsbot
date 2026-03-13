@@ -14,9 +14,6 @@ export async function authorIsAdmin(
 ): Promise<boolean> {
   const contact = await message.getContact();
 
-  console.log(contact);
-  console.log(getGroupAdmins(chat).includes(contact.id._serialized));
-
   if (
     !contact.id._serialized ||
     !getGroupAdmins(chat).includes(contact.id._serialized)
