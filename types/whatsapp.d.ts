@@ -8,27 +8,15 @@ declare module "whatsapp-web.js" {
       leaveReason?: string;
     }[];
     groupMetadata: {
-      id: {
-        server: string;
-        user: string;
-        _serialized: string;
-      };
+      id: ChatId;
       creation: number;
-      owner: {
-        server: string;
-        user: string;
-        _serialized: string;
-      };
+      owner: ChatId;
       subject: string;
       subjectTime: number;
       desc: string;
       descId: string;
       descTime: number;
-      descOwner: {
-        server: string;
-        user: string;
-        _serialized: string;
-      };
+      descOwner: ChatId;
       restrict: boolean;
       announce: boolean;
       noFrequentlyForwarded: boolean;
@@ -59,15 +47,7 @@ declare module "whatsapp-web.js" {
       lastActivityTimestamp: number;
       lastSeenActivityTimestamp: number;
       hasCapi: boolean;
-      participants: {
-        id: {
-          server: string;
-          user: string;
-          _serialized: string;
-        };
-        isAdmin: boolean;
-        isSuperAdmin: boolean;
-      }[];
+      participants: GroupParticipant[];
       pendingParticipants: any[];
       pastParticipants: any[];
       membershipApprovalRequests: any[];
