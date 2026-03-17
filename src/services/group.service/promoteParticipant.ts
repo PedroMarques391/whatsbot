@@ -2,10 +2,10 @@ import {
   authorIsAdmin,
   botIsAdmin,
   getGroupAdmins,
-  isNotInGroup,
+  isUserNotInGroup,
   notAValidNumber,
 } from "@/helpers";
-import { extractTextFromBody } from "@/utils";
+import { serializeMention } from "@/utils";
 import { Client, GroupChat, Message } from "whatsapp-web.js";
 
 export async function promoteParticipant(
@@ -18,24 +18,26 @@ export async function promoteParticipant(
       botIsAdmin(chat),
       notAValidNumber(message, "/promote"),
       authorIsAdmin(chat, message),
-      isNotInGroup(chat, message),
+      isUserNotInGroup(chat, message),
     ]);
-    if (
-      getGroupAdmins(chat).includes(`${extractTextFromBody(message.body)}@c.us`)
-    ) {
+
+    const { serializedNumber, user } = await serializeMention(message);
+
+    if (getGroupAdmins(chat).includes(serializedNumber)) {
       return message.reply(
         "Verifiquei, e este participante já ocupa um lugar na administração. Excelente escolha, por sinal. ☕",
       );
     }
-    await chat.promoteParticipants([
-      `${extractTextFromBody(message.body)}@c.us`,
-    ]);
+
+    await chat.promoteParticipants([serializedNumber]);
+
     await client.sendMessage(
       chat.id._serialized,
-      `Temos um novo nome na liderança. @${extractTextFromBody(message.body)}, espero que conduza o grupo com a mesma elegância de sempre. ✨`,
-      { mentions: [`${extractTextFromBody(message.body)}@c.us`] },
+      `Temos um novo nome na liderança. @${user}, espero que conduza o grupo com a mesma elegância de sempre. ✨`,
+      { mentions: [serializedNumber] },
     );
   } catch (error: any) {
+    console.error(error);
     return message.reply(error.message);
   }
 }

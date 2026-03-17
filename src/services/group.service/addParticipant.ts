@@ -25,11 +25,9 @@ export async function addParticipant(message: Message, chat: GroupChat) {
       .split(" ")
       .map((num) => `${num}@c.us`);
 
-    console.log(newMenbers);
     await chat.addParticipants([...newMenbers]).then((participants) => {
       Object.entries(participants).forEach(
         ([number, data]: [string, ParticipantResponse]) => {
-          console.log(number, data);
           if (data.isInviteV4Sent) {
             message.reply(
               `Convite enviado com sucesso para ${number.replace("@c.us", "")}!`,
