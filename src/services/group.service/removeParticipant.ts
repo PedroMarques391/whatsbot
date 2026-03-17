@@ -2,19 +2,23 @@ import {
   authorIsAdmin,
   botIsAdmin,
   isAuthorOrBot,
-  isNotInGroup,
   notAValidNumber,
 } from "@/helpers";
+import { isUserNotInGroup } from "@/helpers/validation/isUserNotInGroup";
 import { extractTextFromBody } from "@/utils";
-import { GroupChat, Message } from "whatsapp-web.js";
+import { Client, GroupChat, Message } from "whatsapp-web.js";
 
-export async function removeParticipant(message: Message, chat: GroupChat) {
+export async function removeParticipant(
+  message: Message,
+  chat: GroupChat,
+  client: Client,
+) {
   try {
     await Promise.all([
       botIsAdmin(chat),
       notAValidNumber(message, "/rm"),
       authorIsAdmin(chat, message),
-      isNotInGroup(chat, message),
+      isUserNotInGroup(chat, message, client),
     ]);
     if (isAuthorOrBot(message)) {
       return message.reply(

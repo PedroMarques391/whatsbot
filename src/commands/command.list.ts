@@ -1,11 +1,11 @@
-import { listMembers } from '@/services';
-import { ICommand } from '../../types/commands';
+import { listMembers } from "@/services";
+import { GroupChat } from "whatsapp-web.js";
+import { ICommand } from "../../types/commands";
 
 export const ListCommand: ICommand = {
-    name: '/list',
-    onlyGroup: true,
-    async execute({ chat }) {
-        return listMembers(chat);
-    }
+  name: "/list",
+  onlyGroup: true,
+  async execute({ chat }) {
+    return listMembers(chat as GroupChat);
+  },
 };
-
