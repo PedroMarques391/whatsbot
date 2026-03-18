@@ -16,7 +16,7 @@ export async function promoteParticipant(
   try {
     await Promise.all([
       botIsAdmin(chat),
-      notAValidNumber(message, "/promote"),
+      notAValidNumber(message, "/upgrade"),
       authorIsAdmin(chat, message),
       isUserNotInGroup(chat, message),
     ]);

@@ -17,7 +17,7 @@ export async function demoteParticipant(
   try {
     await Promise.all([
       botIsAdmin(chat),
-      notAValidNumber(message, "/demote"),
+      notAValidNumber(message, "/downgrade"),
       authorIsAdmin(chat, message),
       isUserNotInGroup(chat, message),
     ]);

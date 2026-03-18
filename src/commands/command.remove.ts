@@ -3,9 +3,9 @@ import { GroupChat } from "whatsapp-web.js";
 import { ICommand } from "../../types";
 
 export const RemoveCommand: ICommand = {
-  name: "/rm",
+  name: "/ban",
   onlyGroup: true,
-  aliases: ["/remove", "/rmv", "/ban"],
+  aliases: ["/remove", "/rmv", "/rm"],
   async execute({ message, chat }) {
     await removeParticipant(message, chat as GroupChat);
   },

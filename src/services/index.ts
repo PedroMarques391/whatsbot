@@ -5,6 +5,7 @@ import { downloadTikTok } from './download.service/tiktok';
 import { addParticipant } from './group.service/addParticipant';
 import { demoteParticipant } from './group.service/demoteParticipant';
 import { listMembers } from './group.service/listMembers';
+import { leave } from './group.service/memberLeft';
 import { join } from './group.service/newMember';
 import { promoteParticipant } from './group.service/promoteParticipant';
 import { removeParticipant } from './group.service/removeParticipant';
@@ -20,7 +21,7 @@ import { testFunction } from './test';
 
 export {
     addParticipant, demoteParticipant, downloadTikTok, imageSearch,
-    init, join,
+    init, join, leave,
     listMembers, makeSticker, openRouterChat, promoteParticipant, removeBg, removeParticipant, renameSticker,
     response, resumeMessages,
     sendUpdateMessages, showPastMembers, start,

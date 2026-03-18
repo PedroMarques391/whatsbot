@@ -12,7 +12,7 @@ export async function removeParticipant(message: Message, chat: GroupChat) {
   try {
     await Promise.all([
       botIsAdmin(chat),
-      notAValidNumber(message, "/rm"),
+      notAValidNumber(message, "/ban"),
       authorIsAdmin(chat, message),
       isUserNotInGroup(chat, message),
     ]);
