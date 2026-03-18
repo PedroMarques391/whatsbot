@@ -27,5 +27,5 @@ export async function onMessageCreate(client: Client, message: Message) {
     await message.reply(
       "Tivemos um pequeno imprevisto interno. Seja gentil e avise meu desenvolvedor enquanto tento me recompor. ✨",
     );
-  } 
+  }
 }
