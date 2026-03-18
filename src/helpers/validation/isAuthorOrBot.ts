@@ -1,9 +1,9 @@
-import { extractTextFromBody } from "@/utils";
 import { Message } from "whatsapp-web.js";
 
 export function isAuthorOrBot(message: Message): boolean {
+  const metionedNumber = message.mentionedIds[0];
   return (
-    `${extractTextFromBody(message.body)}@c.us` === message.author ||
-    `${extractTextFromBody(message.body)}@c.us` === message.to
+    metionedNumber === message.author ||
+    metionedNumber === process.env.RECIPIENT_ID
   );
 }

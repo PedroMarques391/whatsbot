@@ -1,6 +1,5 @@
-import { extractTextFromBody } from "@/utils";
-import { Client, GroupChat, Message } from "whatsapp-web.js";
-import { groupParticipants } from "../group/groupParticipants";
+import { serializeMention } from "@/utils";
+import { GroupChat, Message } from "whatsapp-web.js";
 
 /**
  * Determines whether a user is not part of the group participants list.
@@ -13,18 +12,16 @@ import { groupParticipants } from "../group/groupParticipants";
 export async function isUserNotInGroup(
   chat: GroupChat,
   message: Message,
-  client: Client,
 ): Promise<boolean> {
-  const getNumberOrId = extractTextFromBody(message.body);
-  const contactId = getNumberOrId.includes("@")
-    ? getNumberOrId.split("@")[1] + "@lid"
-    : `${getNumberOrId}@c.us`;
+  const { serializedNumber } = await serializeMention(message);
 
-  const getContactById = await client.getContactById(contactId);
+  const isParticipant = chat.participants.some(
+    (participant) => participant.id._serialized === serializedNumber,
+  );
 
-  if (!groupParticipants(chat).includes(getContactById.id._serialized)) {
+  if (!isParticipant) {
     throw new Error(
-      `Acho que você se confundiu. O número "${getContactById.id.user}" não consta na nossa lista de participantes deste grupo.`,
+      `Acho que você se confundiu. O usuário mencionado não consta na nossa lista de participantes.`,
     );
   }
   return false;
