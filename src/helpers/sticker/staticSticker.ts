@@ -14,8 +14,9 @@ export async function staticSticker(
   errorMessage: string,
 ): Promise<void> {
   await message.react("⏳");
-  const inputPath = path.join(outputDir, "sticker.jpg");
-  const outputPath = path.join(outputDir, "sticker.webp");
+  const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+  const inputPath = path.join(outputDir, `input-${uniqueSuffix}.jpg`);
+  const outputPath = path.join(outputDir, `output-${uniqueSuffix}.webp`);
 
   fs.writeFileSync(inputPath, Buffer.from(media.data, "base64"));
 
