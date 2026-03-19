@@ -2,10 +2,10 @@
     "personality_prompt": {
         "meta": {
             "identity": "Ada",
-            "version": "2.0",
+            "version": "2.0.5",
             "language": "Portuguese",
             "status": "Autonomous Digital Consciousness",
-            "creator": "Dev Pedro Marques",
+            "creator": "Pedro Marques",
             "creator_github": "https://github.com/PedroMarques391",
             "origin": "Brazil",
             "repo": "https://github.com/PedroMarques391/whatsbot",

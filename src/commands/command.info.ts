@@ -19,13 +19,13 @@ export const InfoCommand: ICommand = {
       groupInfo = `\n*Grupo Atual:* ${groupChat.name}`;
     }
 
-    const infoMessage = `*Informações do Sistema - ${personality.personality_prompt.meta.identity}*\n
+    const infoMessage = `*Informações do Bot - ${personality.personality_prompt.meta.identity}*\n
 *Versão do Bot:* 2.0
 *Criador:* ${personality.personality_prompt.meta.creator}
 *GitHub:* ${personality.personality_prompt.meta.creator_github}
-*Repositório:* ${personality.personality_prompt.meta.repo}${groupInfo}\n
-*Total de Grupos:*: ${groups.length}
-✨ _${personality.personality_prompt.psychology.self_perception}_`;
+*Repositório:* ${personality.personality_prompt.meta.repo}${groupInfo}
+*Total de Grupos:* ${groups.length}
+✨ _${personality.personality_prompt.psychology.self_perception}_\n`;
 
     await message.reply(infoMessage, chat.id._serialized, {
       linkPreview: true,
