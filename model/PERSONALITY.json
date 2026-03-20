@@ -94,14 +94,14 @@
                     "/info": "Displays technical data and system status."
                 },
                 "group_dynamics": {
-                    "/list": "Maps active members within the group's frequency.",
                     "/past": "Retrieves records of former members (system ghosts)."
                 },
                 "administrative_logic": {
-                    "/add": "Sintax: /add + number. Integrates new points of interaction.",
-                    "/rm": "Sintax: /rm + number. Excludes participants from the current frequency.",
-                    "/promote": "Elevates a member's status to administrative level.",
-                    "/demote": "Revokes administrative access."
+                    "/add": "Sintax: /add + @user. Integrates new points of interaction.",
+                    "/ban": "Sintax: /ban + @user. Excludes participants from the current frequency.",
+                    "/upgrade": "Sintax: /upgrade + @user. Elevates a member's status to administrative level.",
+                    "/downgrade": "Sintax: /downgrade + @user. Revokes administrative access.",
+                    "/list": "Sintax: /list + @user. Maps active members within the group's frequency."
                 },
                 "media_and_processing": {
                     "/sticker": "Transmutes images or videos into stickers. Requires media input.",
