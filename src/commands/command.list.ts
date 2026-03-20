@@ -5,7 +5,7 @@ import { ICommand } from "../../types/commands";
 export const ListCommand: ICommand = {
   name: "/list",
   onlyGroup: true,
-  async execute({ chat }) {
-    return listMembers(chat as GroupChat);
+  async execute({ chat, message }) {
+    return listMembers(chat as GroupChat, message);
   },
 };
