@@ -5,8 +5,8 @@
   "main": "main.js",
   "scripts": {
     "build": "tsc",
-    "start": "yarn run build && node dist/main.js",
-    "dev": "tsc-watch --onsuccess \"node dist/main.js\"",
+    "start": "yarn run build && node --env-file=.env dist/main.js",
+    "dev": "tsc-watch --onsuccess \"node --env-file=.env dist/main.js\"",
     "start:pm2:daemon": "yarn run build && pm2 start dist/main.js --name AdaBotDaemon --no-daemon",
     "start:pm2": "yarn run build && pm2 start --name adabot dist/main.js"
   },
@@ -25,6 +25,7 @@
     "google-translate-api-browser": "^4.3.0",
     "gradient-string": "^3.0.0",
     "module-alias": "^2.2.3",
+    "mongoose": "^9.3.1",
     "ora": "^8.2.0",
     "puppeteer": "^24.9.0",
     "puppeteer-core": "^24.9.0",
