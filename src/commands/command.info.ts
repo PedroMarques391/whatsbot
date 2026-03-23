@@ -1,5 +1,5 @@
 import { GroupChat } from "whatsapp-web.js";
-import personality from "../../model/PERSONALITY.json";
+import personality from "../../identity/PERSONALITY.json";
 import { ICommand } from "../../types";
 
 export const InfoCommand: ICommand = {
@@ -11,7 +11,6 @@ export const InfoCommand: ICommand = {
     const groups: GroupChat[] = allChats.filter(
       (c) => c.isGroup && !(c as GroupChat).groupMetadata.isParentGroup,
     );
-
     let groupInfo = "";
 
     if (isGroup) {

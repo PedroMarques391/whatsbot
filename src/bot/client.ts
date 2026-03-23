@@ -1,10 +1,9 @@
-import { Client, LocalAuth } from 'whatsapp-web.js';
-import { CHROME_PATH } from '../config/env';
+import { Client, LocalAuth } from "whatsapp-web.js";
 
 export const client = new Client({
-    authStrategy: new LocalAuth(),
-    puppeteer: {
-        headless: true,
-        executablePath: CHROME_PATH,
-    },
+  authStrategy: new LocalAuth(),
+  puppeteer: {
+    headless: true,
+    executablePath: process.env.CHROME_PATH,
+  },
 });
