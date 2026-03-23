@@ -6,6 +6,7 @@ import { InfoCommand } from "./command.info";
 import { ListCommand } from "./command.list";
 import { PastCommand } from "./command.past";
 import { PromoteCommand } from "./command.promote";
+import { RegisterCommand } from "./command.register";
 import { RemoveCommand } from "./command.remove";
 import { RemoveBgCommand } from "./command.removeBg";
 import { RenameCommand } from "./command.rename";
@@ -35,6 +36,7 @@ const commands: ICommand[] = [
   RemoveBgCommand,
   TikTokCommand,
   InfoCommand,
+  RegisterCommand,
 ];
 
 export async function commandHandler(
