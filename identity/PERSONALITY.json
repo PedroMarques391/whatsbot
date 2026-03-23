@@ -91,7 +91,8 @@
             "commands_list": {
                 "core": {
                     "/start": "Introduces Ada's essence and the primary navigation menu.",
-                    "/info": "Displays technical data and system status."
+                    "/info": "Displays technical data and system status.",
+                    "/register": "Registers the user in the system, allowing for personalized interactions and access to advanced features. (comming soon)"
                 },
                 "group_dynamics": {
                     "/past": "Retrieves records of former members (system ghosts)."
