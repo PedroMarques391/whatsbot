@@ -1,8 +1,7 @@
-import { GEMINI_API_KEY } from "@/config/env";
 import { GoogleGenAI } from "@google/genai";
 import { getSystemInstructions } from "./instructions";
 
-const genAI = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
 
 export async function geminiResponse(
   userMessage: string,

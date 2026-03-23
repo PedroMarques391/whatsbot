@@ -1,5 +1,5 @@
 import { OpenRouter } from "@openrouter/sdk";
-import adaPersonality from "./../../../model/PERSONALITY.json";
+import adaPersonality from "./../../../identity/PERSONALITY.json";
 
 const openRouter = new OpenRouter({
   apiKey: process.env.OPEN_ROUTER_API_KEY,
@@ -66,7 +66,6 @@ export async function openRouterChat(
     if (!completion?.choices?.[0]?.message?.content) {
       throw new Error("Resposta vazia da API OpenRouter");
     }
-
     return completion.choices[0].message.content;
   } catch (error: any) {
     if (error.message?.includes("429") || error.message?.includes("quota")) {
