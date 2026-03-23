@@ -7,6 +7,7 @@ import {
 import { firstInteraction } from "./message/firstInteraction";
 import { botResponses } from "./message/mentions";
 import { resumePrompt } from "./message/promptsAI";
+import { safeShutdown } from "./safeShutdown";
 import { saveUsers } from "./saveUsers";
 import { serializeMention } from "./serializeMention";
 import { extractTextFromBody } from "./strings";
@@ -21,6 +22,7 @@ export {
   formatDate,
   resumeErrorMessages,
   resumePrompt,
+  safeShutdown,
   saveUsers,
   sendStickerErrors,
   serializeMention,
