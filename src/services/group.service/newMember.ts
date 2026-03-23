@@ -10,25 +10,30 @@ export async function join(notification: GroupNotification, client: Client) {
     const group = (await notification.getChat()) as GroupChat;
 
     if (newMemberId === process.env.RECIPIENT_ID) {
-      const isRegistered = await GroupModel.findOne({
-        groupId: group.id._serialized,
-      });
+      const groupId = group.id._serialized;
 
-      if (!isRegistered) {
-        await GroupModel.create({
-          groupId: group.id._serialized,
-          name: group.name,
-          description: group.description || "",
-          members: group.groupMetadata.participants.map(
-            (p) => p.id._serialized,
-          ),
-          blockedCommands: [],
-        });
-        await client.sendMessage(
-          chatId,
-          "As informações do grupo foram registradas com sucesso no banco de dados!.",
-        );
-        return;
+      const result = await GroupModel.findOneAndUpdate(
+        { groupId: groupId },
+        {
+          $setOnInsert: {
+            name: group.name,
+            description: group.description || "",
+            members: group.groupMetadata.participants.map(
+              (p) => p.id._serialized,
+            ),
+            blockedCommands: [],
+          },
+        },
+        {
+          upsert: true,
+          returnDocument: "before",
+          includeResultMetadata: true,
+        },
+      );
+
+      if (!result?.lastErrorObject?.updatedExisting) {
+        console.log(`Grupo ${group.name} adicionado ao banco de dados.`);
+        await client.sendMessage(chatId, "Grupo registrado com sucesso!");
       }
 
       await client.sendMessage(
