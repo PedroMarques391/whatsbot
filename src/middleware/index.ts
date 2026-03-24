@@ -5,6 +5,7 @@ import { ICommand } from '../../types';
 import { validateCommand } from './validations/validateCommand';
 import { validateOnlyGroup } from './validations/validateOnlyGroup';
 import { validateConditions } from './validations/validateConditions';
+import { validateBlockedCommand } from './validations/validateBlockedCommand';
 import { isViewOnce } from './interactions/onisViewOnce';
 
 
@@ -17,6 +18,7 @@ async function interactionsHandler(message: Message, chat: Chat, client: Client)
 
 async function validatorsHandler(command: ICommand, message: Message, chat: Chat, client: Client): Promise<boolean> {
     if (await validateOnlyGroup(command, chat, message)) return true;
+    if (await validateBlockedCommand(command, chat, message)) return true;
     if (validateConditions(command, message, chat, client)) return true;
 
     return false;
