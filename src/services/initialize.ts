@@ -59,6 +59,7 @@ export async function start(message: Message, client: Client) {
     ┃ ➤ /ban + @user - Remover participante.  
     ┃ ➤ /upgrade + @user - Promover a admin.  
     ┃ ➤ /downgrade + @user - Rebaixar admin.  
+    ┃ ➤ /block + /command - Bloquear comando.  
     ╰──────≺∆≻──────╯  
     
     ╭─≺ *Geral* ≻─╮  
