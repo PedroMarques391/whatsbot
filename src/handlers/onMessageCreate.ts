@@ -14,7 +14,7 @@ export async function onMessageCreate(client: Client, message: Message) {
 
   if (!command) {
     await validateCommand(message);
-    return true;
+    return;
   }
 
   if (await validatorsHandler(command, message, chat, client)) return;

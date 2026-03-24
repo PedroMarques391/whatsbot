@@ -1,5 +1,6 @@
 import { ICommand } from "../../types";
 import { AddCommand } from "./command.add";
+import { BlockCommand } from "./command.block";
 import { DemoteCommand } from "./command.demote";
 import { ImagesCommand } from "./command.images";
 import { InfoCommand } from "./command.info";
@@ -37,6 +38,7 @@ const commands: ICommand[] = [
   TikTokCommand,
   InfoCommand,
   RegisterCommand,
+  BlockCommand,
 ];
 
 export async function commandHandler(
