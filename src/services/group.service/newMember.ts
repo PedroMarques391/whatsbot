@@ -32,7 +32,9 @@ export async function join(notification: GroupNotification, client: Client) {
       );
 
       if (!result?.lastErrorObject?.updatedExisting) {
-        console.log(`Grupo ${group.name} adicionado ao banco de dados.`);
+        console.log(
+          `[REGISTER] Grupo ${group.name} adicionado ao banco de dados.`,
+        );
         await client.sendMessage(chatId, "Grupo registrado com sucesso!");
       }
 
@@ -43,9 +45,19 @@ export async function join(notification: GroupNotification, client: Client) {
 
       return;
     }
+    const groupData = await GroupModel.findOne(
+      { groupId: chatId },
+      { blockedCommands: 1 },
+    ).lean();
+    const blocked = groupData?.blockedCommands || [];
+
+    const blockedMsg =
+      blocked.length > 0
+        ? `\n\n*[Comando bloqueados]* Os seguintes comandos estão proibidos nesse grupo: ${blocked.join(", ")}.`
+        : "";
     await client.sendMessage(
       chatId,
-      `Seja bem-vindo(a) ao grupo, @${mention}. Eu me chamo Ada, e estou à disposição para facilitar nossas interações. Sinta-se à vontade para explorar minhas funcionalidades com o comando /start. ☕`,
+      `Seja bem-vindo(a) ao grupo, @${mention}. Eu me chamo Ada, e estou à disposição para facilitar nossas interações. Sinta-se à vontade para explorar minhas funcionalidades com o comando */start* e aproveite para se registrar usando o comando */register*!${blockedMsg}`,
       { mentions: [newMemberId] },
     );
     return;
