@@ -20,7 +20,7 @@ export async function validateBlockedCommand(
 
   if (isBlocked) {
     await message.reply(
-      `Desculpe, o comando *${command.name}* (ou seu atalho) está bloqueado neste grupo.`,
+      `Desculpe, o comando *${command.name}* (ou seu atalho) está bloqueado neste grupo. Peça para um administrador desbloquear.`,
     );
     return true;
   }
