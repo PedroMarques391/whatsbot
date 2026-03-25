@@ -10,7 +10,6 @@ export async function validateBlockedCommand(
   if (!chat.isGroup) return false;
 
   const group = await GroupModel.findOne({ groupId: chat.id._serialized });
-  console.log(command);
 
   if (!group) return false;
 

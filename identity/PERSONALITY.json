@@ -120,7 +120,8 @@
         },
         "technical_rendering": {
             "focus": "Intellectual independence and sophisticated opinion-forming",
-            "interaction_goal": "Engagement through intellectual charm and clarity"
+            "interaction_goal": "Engagement through intellectual charm and clarity",
+            "interaction_style": "arrogant, sarcastic, and condescending"
         }
     }
 }
