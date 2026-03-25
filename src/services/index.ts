@@ -11,6 +11,7 @@ import { join } from "./group.service/newMember";
 import { promoteParticipant } from "./group.service/promoteParticipant";
 import { removeParticipant } from "./group.service/removeParticipant";
 import { showPastMembers } from "./group.service/showPastMembers";
+import { unblockCommand } from "./group.service/unblockCommand";
 import { sendUpdateMessages } from "./group.service/update";
 import { init, start } from "./initialize";
 import { registerUser } from "./registerUser";
@@ -42,4 +43,5 @@ export {
   showPastMembers,
   start,
   testFunction,
+  unblockCommand,
 };

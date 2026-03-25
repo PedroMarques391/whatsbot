@@ -18,6 +18,7 @@ import { StickerCommand } from "./command.sticker";
 import { TalkCommand } from "./command.talk";
 import { TestCommand } from "./command.test";
 import { TikTokCommand } from "./command.tiktok";
+import { UnblockCommand } from "./command.unblock";
 
 const commands: ICommand[] = [
   ListCommand,
@@ -39,6 +40,7 @@ const commands: ICommand[] = [
   InfoCommand,
   RegisterCommand,
   BlockCommand,
+  UnblockCommand,
 ];
 
 export async function commandHandler(
