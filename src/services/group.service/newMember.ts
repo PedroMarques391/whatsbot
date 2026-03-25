@@ -58,6 +58,7 @@ export async function join(notification: GroupNotification, client: Client) {
       console.warn(
         `[warn] Grupo ${chatId} não encontrado no banco de dados ao adicionar novo membro.`,
       );
+      return;
     }
 
     const blocked = result?.blockedCommands || [];
