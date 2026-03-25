@@ -4,16 +4,18 @@ import { Contact, GroupNotification } from "whatsapp-web.js";
 
 export async function leave(notification: GroupNotification) {
   const { chatId, recipientIds, type } = notification;
-  const recipentsIds = await notification.getRecipients();
-  const contact = recipentsIds[recipentsIds.length - 1] as Contact;
-  const whoRemoved = await notification.getContact();
 
-  console.log(whoRemoved);
   try {
+    const getRecipients = await notification.getRecipients();
+    const contact = getRecipients[getRecipients.length - 1] as Contact;
+    const actor = await notification.getContact();
     const participantId = recipientIds[recipientIds.length - 1];
     const updateUsersList = await GroupModel.findOneAndUpdate(
       { groupId: chatId },
-      { $pull: { members: contact.id._serialized } },
+      {
+        $pull: { members: contact.id._serialized },
+        $set: { updatedAt: new Date() },
+      },
       {
         projection: { members: 1 },
         returnDocument: "after",
@@ -26,7 +28,7 @@ export async function leave(notification: GroupNotification) {
     const name = contact.pushname || contact.name || "Alguém";
     const response =
       type === "remove"
-        ? `${name} foi expulso do grupo por ${whoRemoved.pushname}. Acho que mexeu com quem não devia.`
+        ? `${name} foi expulso do grupo por ${actor.pushname}. Acho que mexeu com quem não devia.`
         : `${name} saiu do grupo, provavelmente vocês são odiados.`;
 
     await notification.reply(response);
