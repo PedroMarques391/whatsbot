@@ -45,7 +45,7 @@ export async function staticSticker(
         stickerAuthor: "AdaBot",
       });
       await sent.react("❤");
-      await message.react("✅");
+      await message.react("✅").catch(() => null);
     })
     .catch(async (error) => {
       console.error(error);
