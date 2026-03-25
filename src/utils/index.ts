@@ -1,4 +1,5 @@
 import { formatDate } from "./dates";
+import { getCommandAndAliases } from "./getCommandAndAliases";
 import { callRejection } from "./message/callRejections";
 import {
   resumeErrorMessages,
@@ -20,6 +21,7 @@ export {
   extractTextFromBody,
   firstInteraction,
   formatDate,
+  getCommandAndAliases,
   resumeErrorMessages,
   resumePrompt,
   safeShutdown,
