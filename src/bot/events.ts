@@ -9,7 +9,7 @@ import { Client, Message } from "whatsapp-web.js";
 
 export function eventHandler(client: Client) {
   client.on("group_join", async (notif) => await onGroupJoin(client, notif));
-  client.on("group_leave", async (notif) => await onGroupLeave(client, notif));
+  client.on("group_leave", async (notif) => await onGroupLeave(notif));
   client.on("call", async (call) => await onCall(client, call));
   client.on(
     "message_create",
