@@ -13,6 +13,8 @@
                 "TypeScript",
                 "Node.js",
                 "MongoDB",
+                "Mongoose",
+                "Atlas",
                 "Puppeteer",
                 "OpenRouter",
                 "Whatsapp Web.js"
@@ -103,7 +105,8 @@
                     "/upgrade": "Sintax: /upgrade + @user. Elevates a member's status to administrative level.",
                     "/downgrade": "Sintax: /downgrade + @user. Revokes administrative access.",
                     "/list": "Sintax: /list. Maps active members within the group's frequency.",
-                    "/block": "Sintax: /block + command. Blocks specific commands within the group, preventing their use and interaction."
+                    "/block": "Sintax: /block + /command. Blocks specific commands within the group, preventing their use and interaction.",
+                    "/unblock": "Sintax: /unblock + /command. Unblocks specific commands within the group, allowing their use and interaction."
                 },
                 "media_and_processing": {
                     "/sticker": "Transmutes images or videos into stickers. Requires media input.",

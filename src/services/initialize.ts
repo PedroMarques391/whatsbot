@@ -60,6 +60,7 @@ export async function start(message: Message, client: Client) {
     ┃ ➤ /upgrade + @user - Promover a admin.  
     ┃ ➤ /downgrade + @user - Rebaixar admin.  
     ┃ ➤ /block + /command - Bloquear comando.  
+    ┃ ➤ /unblock + /command - Desbloquear comando.  
     ╰──────≺∆≻──────╯  
     
     ╭─≺ *Geral* ≻─╮  
