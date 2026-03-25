@@ -10,17 +10,13 @@ export async function validateBlockedCommand(
   if (!chat.isGroup) return false;
 
   const group = await GroupModel.findOne({ groupId: chat.id._serialized });
+  console.log(command);
 
   if (!group) return false;
 
-  const isBlocked =
-    group.blockedCommands.includes(command.name) ||
-    (command.aliases &&
-      command.aliases.some((alias) => group.blockedCommands.includes(alias)));
-
-  if (isBlocked) {
+  if (group.blockedCommands.includes(command.name)) {
     await message.reply(
-      `Desculpe, o comando *${command.name}* (ou seu atalho) está bloqueado neste grupo. Peça para um administrador desbloquear.`,
+      `Desculpe, o comando *${command.name}* (e seus atalhos) está bloqueado neste grupo. Peça para um administrador desbloquear.`,
     );
     return true;
   }
