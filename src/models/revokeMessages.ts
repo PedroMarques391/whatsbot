@@ -1,6 +1,6 @@
 import { Document, model, Schema } from "mongoose";
 
-export interface IRevokeMessage extends Document {
+export interface IRevokedMessage extends Document {
   groupId: string;
   userId: string;
   userName: string;
@@ -9,7 +9,7 @@ export interface IRevokeMessage extends Document {
   revokedAt: Date;
 }
 
-const RevokedMessageSchema = new Schema<IRevokeMessage>(
+const RevokedMessageSchema = new Schema<IRevokedMessage>(
   {
     groupId: { type: String, required: true, index: true },
     userId: { type: String, required: true, index: true },
@@ -26,7 +26,7 @@ const RevokedMessageSchema = new Schema<IRevokeMessage>(
 
 RevokedMessageSchema.index({ createdAt: 1 }, { expireAfterSeconds: 1296000 });
 
-const RevokedMessageModel = model<IRevokeMessage>(
+const RevokedMessageModel = model<IRevokedMessage>(
   "RevokedMessage",
   RevokedMessageSchema,
 );
