@@ -16,23 +16,26 @@ export async function blockCommand(message: Message, chat: Chat) {
       const response = !commandToBlock
         ? "Será que vou precisar mandar um tutorial? \ntente: */block /nome_do_comando*"
         : `> O comando *${commandToBlock}* não existe. Não preciso me preocupar com ele, né?`;
-
       return await message.reply(response);
     }
 
     const updatedGroup = await GroupModel.findOneAndUpdate(
       { groupId: chatId },
       {
-        $addToSet: { blockedCommands: commandToBlock },
+        $addToSet: { blockedCommands: command.name },
         $set: { updatedAt: new Date() },
       },
-      { returnDocument: "after" },
+      { returnDocument: "before", includeResultMetadata: true },
     );
 
-    if (!updatedGroup) {
-      return await message.reply(
-        "> Poxa, ainda não tenho esse grupo na minha base de dados.",
-      );
+    if (
+      !updatedGroup.lastErrorObject?.updatedExisting ||
+      updatedGroup.value?.blockedCommands.includes(command.name)
+    ) {
+      const response = !updatedGroup.lastErrorObject?.updatedExisting
+        ? "> Poxa, ainda não tenho esse grupo na minha base de dados."
+        : `> O comando *${commandToBlock}* já estava bloqueado nesse grupo. Não se preocupe, ele já não pode mais ser usado por aqui.`;
+      return await message.reply(response);
     }
 
     await message.reply(
