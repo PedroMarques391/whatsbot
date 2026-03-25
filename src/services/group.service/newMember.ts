@@ -8,12 +8,11 @@ export async function join(notification: GroupNotification, client: Client) {
     const newMemberId = recipientIds[recipientIds.length - 1];
     const mention = newMemberId.split("@")[0];
     const group = (await notification.getChat()) as GroupChat;
+    const contact = await client.getContactById(newMemberId);
 
     if (newMemberId === process.env.RECIPIENT_ID) {
-      const groupId = group.id._serialized;
-
       const result = await GroupModel.findOneAndUpdate(
-        { groupId: groupId },
+        { groupId: chatId },
         {
           $setOnInsert: {
             name: group.name,
@@ -45,11 +44,17 @@ export async function join(notification: GroupNotification, client: Client) {
 
       return;
     }
-    const groupData = await GroupModel.findOne(
+    const result = await GroupModel.findOneAndUpdate(
       { groupId: chatId },
-      { blockedCommands: 1 },
-    ).lean();
-    const blocked = groupData?.blockedCommands || [];
+      { $addToSet: { members: contact.id._serialized } },
+      {
+        projection: { blockedCommands: 1 },
+        returnDocument: "before",
+        lean: true,
+      },
+    );
+
+    const blocked = result?.blockedCommands || [];
 
     const blockedMsg =
       blocked.length > 0
