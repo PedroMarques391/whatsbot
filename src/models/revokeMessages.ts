@@ -3,16 +3,18 @@ import { Document, model, Schema } from "mongoose";
 export interface IRevokedMessage extends Document {
   groupId: string;
   userId: string;
+  userLid: string;
   userName: string;
   message: string;
   sendAt: number;
-  revokedAt: Date;
+  revokedAt?: Date;
 }
 
 const RevokedMessageSchema = new Schema<IRevokedMessage>(
   {
     groupId: { type: String, required: true, index: true },
     userId: { type: String, required: true, index: true },
+    userLid: { type: String, required: true, index: true },
     userName: { type: String, required: true, default: "Desconhecido" },
     message: { type: String, required: true },
     sendAt: { type: Number, required: true },
