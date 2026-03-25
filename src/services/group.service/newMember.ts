@@ -7,10 +7,10 @@ export async function join(notification: GroupNotification, client: Client) {
   try {
     const newMemberId = recipientIds[recipientIds.length - 1];
     const mention = newMemberId.split("@")[0];
-    const group = (await notification.getChat()) as GroupChat;
     const contact = await client.getContactById(newMemberId);
 
     if (newMemberId === process.env.RECIPIENT_ID) {
+      const group = (await notification.getChat()) as GroupChat;
       const result = await GroupModel.findOneAndUpdate(
         { groupId: chatId },
         {
