@@ -1,6 +1,6 @@
-import { Client, GroupNotification } from 'whatsapp-web.js';
-import { join } from '@/services';
+import { join } from "@/services";
+import { GroupNotification } from "whatsapp-web.js";
 
-export async function onGroupJoin(client: Client, notification: GroupNotification) {
-    await join(notification, client);
+export async function onGroupJoin(notification: GroupNotification) {
+  await join(notification);
 }
