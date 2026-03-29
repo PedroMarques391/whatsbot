@@ -47,7 +47,7 @@ export async function join(notification: GroupNotification) {
       { groupId: chatId },
       { $addToSet: { members: contact.id._serialized } },
       {
-        projection: { blockedCommands: 1 },
+        projection: { blockedCommands: 1, welcomeMessage: 1 },
         returnDocument: "before",
         lean: true,
       },
@@ -61,15 +61,24 @@ export async function join(notification: GroupNotification) {
     }
 
     const blocked = result.blockedCommands || [];
+    const customWelcome = result.welcomeMessage;
 
-    const blockedMsg =
-      blocked.length > 0
-        ? `\n\n*[Comando bloqueados]* Os seguintes comandos estão proibidos nesse grupo: ${blocked.join(", ")}.`
-        : "";
-    await notification.reply(
-      `Seja bem-vindo(a) ao grupo, @${mention}. Eu me chamo Ada, e estou à disposição para facilitar nossas interações. Sinta-se à vontade para explorar minhas funcionalidades com o comando */start* e aproveite para se registrar usando o comando */register*!${blockedMsg}`,
-      { mentions: [newMemberId] },
-    );
+    let messageBody = `Olá, seja bem-vindo(a) @${mention}! Eu sou a Ada.`;
+
+    messageBody += `\nUse */start* para me conhecer ou */register* para se registrar.`;
+
+    if (customWelcome) {
+      messageBody += `\n\n*Mensagem do Grupo:*\n${customWelcome}`;
+    }
+
+    if (blocked.length > 0) {
+      messageBody += `\n\n>*Comandos Proibidos Nesse grupo:* ${blocked.join(", ")}`;
+    }
+
+    await notification.reply(messageBody, {
+      mentions: [newMemberId],
+    });
+
     return;
   } catch (error) {
     console.error("Erro ao enviar mensagem de boas-vindas:", error);
