@@ -94,6 +94,7 @@
                 "core": {
                     "/start": "Introduces Ada's essence and the primary navigation menu.",
                     "/info": "Displays technical data and system status.",
+                    "/help": "Provides detailed explanations of commands and functionalities.",
                     "/register": "Registers the user in the system, allowing for personalized interactions and access to advanced features. (comming soon)"
                 },
                 "group_dynamics": {

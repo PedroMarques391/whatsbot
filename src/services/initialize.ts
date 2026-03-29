@@ -47,6 +47,7 @@ export async function start(message: Message, client: Client) {
     ╭─≺ *Infos* ≻─╮  
     ┃ ➤ /start - Mostrar este menu.  
     ┃ ➤ /info - Ver informações do bot.  
+    ┃ ➤ /help + command - Obter ajuda sobre os comandos.  
     ╰─────≺∆≻─────╯  
     
     ╭─≺ *Grupos* ≻─╮  

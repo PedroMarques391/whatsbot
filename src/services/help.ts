@@ -8,7 +8,7 @@ export async function help(message: Message) {
 
   if (!commandToGetHelp || !command) {
     const response = !commandToGetHelp
-      ? "Será que vou precisar mandar um tutorial? \ntente: */help /nome_do_comando*"
+      ? `> Mostra o jeito correto de usar os comandos, use a sintaxe correta: \`/help <comando>\`.`
       : `> O comando *${commandToGetHelp}* não existe. Não preciso me preocupar com ele, né?`;
 
     await message.reply(response);
