@@ -3,7 +3,7 @@ import GroupModel from "@/models/group";
 import { extractTextFromBody } from "@/utils";
 import { GroupChat, Message } from "whatsapp-web.js";
 
-export async function setWelcomeMessage(chat: GroupChat, message: Message) {
+export async function setExitMessage(chat: GroupChat, message: Message) {
   try {
     const idAdmin = await authorIsAdmin(chat as GroupChat, message);
     const exitMessage = extractTextFromBody(message.body);
