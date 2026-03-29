@@ -10,6 +10,7 @@ import { leave } from "./group.service/memberLeft";
 import { join } from "./group.service/newMember";
 import { promoteParticipant } from "./group.service/promoteParticipant";
 import { removeParticipant } from "./group.service/removeParticipant";
+import { setWelcomeMessage } from "./group.service/setWelcomeMessage";
 import { showPastMembers } from "./group.service/showPastMembers";
 import { unblockCommand } from "./group.service/unblockCommand";
 import { sendUpdateMessages } from "./group.service/update";
@@ -42,6 +43,7 @@ export {
   response,
   resumeMessages,
   sendUpdateMessages,
+  setWelcomeMessage,
   showPastMembers,
   start,
   testFunction,

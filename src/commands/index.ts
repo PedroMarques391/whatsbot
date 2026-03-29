@@ -14,6 +14,7 @@ import { RemoveBgCommand } from "./command.removeBg";
 import { RenameCommand } from "./command.rename";
 import { ResumeCommand } from "./command.resume";
 import { SendUpdateCommand } from "./command.sendUpdate";
+import { SetWelcomeCommand } from "./command.setWelcome";
 import { StartCommand } from "./command.start";
 import { StickerCommand } from "./command.sticker";
 import { TalkCommand } from "./command.talk";
@@ -43,6 +44,7 @@ const commands: ICommand[] = [
   BlockCommand,
   UnblockCommand,
   HelpCommand,
+  SetWelcomeCommand,
 ];
 
 export async function commandHandler(
