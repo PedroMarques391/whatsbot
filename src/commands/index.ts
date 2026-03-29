@@ -2,6 +2,7 @@ import { ICommand } from "../../types";
 import { AddCommand } from "./command.add";
 import { BlockCommand } from "./command.block";
 import { DemoteCommand } from "./command.demote";
+import { HelpCommand } from "./command.help";
 import { ImagesCommand } from "./command.images";
 import { InfoCommand } from "./command.info";
 import { ListCommand } from "./command.list";
@@ -41,6 +42,7 @@ const commands: ICommand[] = [
   RegisterCommand,
   BlockCommand,
   UnblockCommand,
+  HelpCommand,
 ];
 
 export async function commandHandler(

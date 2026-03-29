@@ -13,6 +13,7 @@ import { removeParticipant } from "./group.service/removeParticipant";
 import { showPastMembers } from "./group.service/showPastMembers";
 import { unblockCommand } from "./group.service/unblockCommand";
 import { sendUpdateMessages } from "./group.service/update";
+import { help } from "./help";
 import { init, start } from "./initialize";
 import { registerUser } from "./registerUser";
 import { removeBg } from "./removeBg";
@@ -25,6 +26,7 @@ export {
   blockCommand,
   demoteParticipant,
   downloadTikTok,
+  help,
   imageSearch,
   init,
   join,

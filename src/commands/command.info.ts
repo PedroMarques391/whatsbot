@@ -4,6 +4,7 @@ import { ICommand } from "../../types";
 
 export const InfoCommand: ICommand = {
   name: "/info",
+  description: "Exibe informações sobre o bot e seu criador",
   onlyGroup: false,
   async execute({ message, chat, client }) {
     const isGroup = chat.isGroup;

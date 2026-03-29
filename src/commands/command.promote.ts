@@ -4,6 +4,8 @@ import { ICommand } from "../../types";
 
 export const PromoteCommand: ICommand = {
   name: "/upgrade",
+  description: "Dá poder de administrador a um participante",
+  sintaxe: "/upgrade <numero>",
   onlyGroup: true,
   aliases: ["/promote", "/elevate"],
   async execute({ message, chat, client }) {

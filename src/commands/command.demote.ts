@@ -3,6 +3,8 @@ import { ICommand } from "../../types";
 
 export const DemoteCommand: ICommand = {
   name: "/downgrade",
+  description: "Remove poder de administrador de um participante",
+  sintaxe: "/downgrade <numero>",
   onlyGroup: true,
   aliases: ["/demote", "/degrade"],
   async execute({ message, chat, client }) {

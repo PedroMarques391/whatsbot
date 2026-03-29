@@ -3,6 +3,7 @@ import { ICommand } from '../../types';
 
 export const TestCommand: ICommand = {
     name: '/test',
+    description: 'Comando de teste do bot',
     onlyGroup: true,
     async execute({ message, chat, client }) {
         return await testFunction(message, chat, client);

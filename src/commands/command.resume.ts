@@ -1,10 +1,12 @@
-import { resumeMessages } from '@/services';
-import { ICommand } from '../../types';
+import { resumeMessages } from "@/services";
+import { ICommand } from "../../types";
 
 export const ResumeCommand: ICommand = {
-    name: '/resume',
-    onlyGroup: false,
-    async execute({ client, message }) {
-        await resumeMessages(client, message);
-    }
+  name: "/resume",
+  description: "Retorna o resumo das últimas 500 mensagens do chat.",
+  onlyGroup: false,
+  aliases: ["/rsm", "/rs"],
+  async execute({ client, message }) {
+    await resumeMessages(client, message);
+  },
 };
