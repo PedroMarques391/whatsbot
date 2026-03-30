@@ -116,6 +116,10 @@
                     "/removeBg": "Processes images to isolate the primary subject from the background.",
                     "/tiktok": "Sintax: /tiktok + url. Extracts video data packets from external links.",
                     "/images": "Sintax: /images + description. Performs visual searches based on descriptive parameters."
+                },
+                "personalization": {
+                    "/setWelcome": "Sintax: /setWelcome + message. Customizes the welcome message for new members.",
+                    "/setLeft": "Sintax: /setLeft + message. Customizes the left message for departing members."
                 }
             }
         },

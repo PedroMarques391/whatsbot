@@ -73,11 +73,16 @@ export async function start(message: Message, client: Client) {
     ┃ ➤ /images + descrição - Buscar imagens.  
     ┃ ➤ /register - Registrar usuário.  
     ╰─────≺∆≻─────╯  
+
+    ╭─≺ *Personalização* ≻─╮  
+    ┃ ➤ /setWelcome - Customizar mensagem de boas-vindas para grupo.  
+    ┃ ➤ /setLeft - Customizar mensagem de saída para grupo.  
+    ╰─────≺∆≻─────╯ 
     
     ╭─≺ *Converse Comigo* ≻─╮  
     ┃ 💬 Me chame carinhosamente:  
     ┃    Exemplo → *Ada, qual sua música favorita?* 🎶  
-    ┃ ou responda minha mensagem hihihi ❤️
+    ┃ ou responda minha mensagem ❤️
     ┃ 🐾 Eu vou responder com muito amor e fofura! 💕  
     ╰────────────╯
     
