@@ -17,7 +17,7 @@ export async function leave(notification: GroupNotification) {
         $set: { updatedAt: new Date() },
       },
       {
-        projection: { members: 1 },
+        projection: { members: 1, leftMessage: 1 },
         returnDocument: "after",
         lean: true,
       },
@@ -26,12 +26,14 @@ export async function leave(notification: GroupNotification) {
     if (participantId === process.env.RECIPIENT_ID || !updateUsersList) return;
 
     const name = contact.pushname || contact.name || "Alguém";
-    const response =
+    const defaultResponse =
       type === "remove"
         ? `${name} foi expulso do grupo por ${actor.pushname}. Acho que mexeu com quem não devia.`
         : `${name} saiu do grupo, provavelmente vocês são odiados.`;
 
-    await notification.reply(response);
+    const customExitMessage = updateUsersList.leftMessage ?? defaultResponse;
+
+    await notification.reply(customExitMessage);
   } catch (error) {
     console.error("Erro ao enviar mensagem de saída:", error);
   }

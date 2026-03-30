@@ -11,7 +11,7 @@ export async function setExitMessage(chat: GroupChat, message: Message) {
 
     const updateGroup = await GroupModel.findOneAndUpdate(
       { groupId: chat.id._serialized },
-      { $set: { exitMessage: exitMessage } },
+      { $set: { leftMessage: exitMessage } },
       { lean: true },
     );
     if (!updateGroup) {
