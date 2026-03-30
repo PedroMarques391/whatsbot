@@ -1,7 +1,7 @@
 import { delay, extractTextFromBody } from "@/utils";
 import path from "path";
 import { Client, Message, MessageMedia } from "whatsapp-web.js";
-import { openRouterResponse } from "../ai.service/openRouterService";
+import { openRouterProvider } from "../ai.service/openRouterService";
 
 export const sendUpdateMessages = async (client: Client, message: Message) => {
   const body: string = extractTextFromBody(message.body);
@@ -21,7 +21,7 @@ export const sendUpdateMessages = async (client: Client, message: Message) => {
   const instruction: string =
     "Create a sophisticated, polite, and mature update message tailored for group announcements in Portuguese. Ensure it sounds knowledgeable, elegant, and uses minimal emojis like a brilliant female assistant named Ada.";
 
-  const text: string = await openRouterResponse(
+  const text: string = await openRouterProvider.response(
     `${instruction}: ${body}`,
     0.7,
     200,

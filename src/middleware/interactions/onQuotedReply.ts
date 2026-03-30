@@ -1,4 +1,4 @@
-import { openRouterChat } from "@/services";
+import { openRouterProvider } from "@/services";
 import { Message } from "whatsapp-web.js";
 
 /**
@@ -20,7 +20,10 @@ export async function quotedReply(message: Message): Promise<boolean> {
 
   if (quotedMessage.id.fromMe && !quotedMessage.hasMedia && !message.hasMedia) {
     try {
-      const response = await openRouterChat(message.body, quotedMessage.body);
+      const response = await openRouterProvider.chat(
+        message.body,
+        quotedMessage.body,
+      );
       await message.reply(response);
     } catch (error) {
       console.error("Erro ao processar resposta citada:", error);

@@ -1,4 +1,4 @@
-import { openRouterChat } from "./ai.service/openRouterService";
+import { openRouterProvider } from "./ai.service/openRouterService";
 import { response } from "./ai.service/response";
 import { resumeMessages } from "./ai.service/resume";
 import { downloadTikTok } from "./download.service/tiktok";
@@ -35,7 +35,7 @@ export {
   leave,
   listMembers,
   makeSticker,
-  openRouterChat,
+  openRouterProvider,
   promoteParticipant,
   registerUser,
   removeBg,

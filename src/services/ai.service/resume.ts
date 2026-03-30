@@ -1,6 +1,6 @@
 import { resumeErrorMessages, resumePrompt } from "@/utils";
 import { Client, Message } from "whatsapp-web.js";
-import { openRouterResponse } from "./openRouterService";
+import { openRouterProvider } from "./openRouterService";
 
 export async function resumeMessages(client: Client, msg: Message) {
   const chat = await msg.getChat();
@@ -42,7 +42,7 @@ export async function resumeMessages(client: Client, msg: Message) {
   const prompt = resumePrompt(textMessages);
 
   try {
-    const summary = await openRouterResponse(prompt, 0.7, 500);
+    const summary = await openRouterProvider.response(prompt, 0.7, 500);
 
     await msg.react("✅");
     await client.sendMessage(chat.id._serialized, summary);
