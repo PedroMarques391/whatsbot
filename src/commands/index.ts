@@ -53,15 +53,17 @@ export async function commandHandler(
   body: string,
 ): Promise<ICommand | undefined> {
   const normalized = body.toLowerCase().split(" ")[0];
-  return commands.find((command) => {
-    const name = command.name.toLowerCase();
-    const commandFound = normalized === name;
 
-    const aliasFound = command.aliases?.some((alias) => {
-      const aliasNormalized = alias.toLowerCase();
-      return normalized === aliasNormalized;
-    });
+  for (const command of commands) {
+    const commandAndAliases = [command.name, ...(command.aliases || [])].map(
+      (cmd) => cmd.toLowerCase(),
+    );
 
-    return commandFound || aliasFound;
-  });
+    const matches = commandAndAliases.some((cmd) => normalized === cmd);
+
+    if (matches) {
+      return command;
+    }
+  }
+  return undefined;
 }
