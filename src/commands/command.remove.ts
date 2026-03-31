@@ -5,7 +5,7 @@ import { ICommand } from "../../types";
 export const RemoveCommand: ICommand = {
   name: "/ban",
   description: "Remove um participante do grupo",
-  sintaxe: "/ban <numero>",
+  sintaxe: "/ban @user",
   onlyGroup: true,
   aliases: ["/remove", "/rmv", "/rm"],
   async execute({ message, chat }) {
