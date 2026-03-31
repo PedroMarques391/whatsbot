@@ -6,7 +6,7 @@ export const RegisterCommand: ICommand = {
   description: "Registra o usuário no banco de dados do bot",
   onlyGroup: false,
   aliases: ["/reg", "/registrar"],
-  async execute({ client, message, chat }) {
-    await registerUser(message, client, chat);
+  async execute({ message, chat }) {
+    await registerUser(message, chat);
   },
 };

@@ -1,12 +1,8 @@
 import UserModel from "@/models/user";
-import { Chat, Client, Message } from "whatsapp-web.js";
+import { Chat, Message } from "whatsapp-web.js";
 
-export async function registerUser(
-  message: Message,
-  client: Client,
-  chat: Chat,
-) {
-  const contact = await client.getContactById(message.author as string);
+export async function registerUser(message: Message, chat: Chat) {
+  const contact = await message.getContact();
 
   const hasUser = await UserModel.findOne({ userId: contact.id._serialized });
   if (hasUser) {

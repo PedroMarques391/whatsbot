@@ -4105,7 +4105,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"whatsapp-web.js@npm:^1.34.6":
+"whatsapp-web.js@npm:1.34.6":
   version: 1.34.6
   resolution: "whatsapp-web.js@npm:1.34.6"
   dependencies:
@@ -4161,7 +4161,7 @@ __metadata:
     tsc-watch: "npm:^6.2.1"
     typescript: "npm:^5.8.3"
     typescript-eslint: "npm:^8.31.1"
-    whatsapp-web.js: "npm:^1.34.6"
+    whatsapp-web.js: "npm:1.34.6"
   languageName: unknown
   linkType: soft
 
