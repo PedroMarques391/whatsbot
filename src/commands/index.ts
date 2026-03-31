@@ -2,6 +2,7 @@ import { ICommand } from "../../types";
 import { AddCommand } from "./command.add";
 import { BlockCommand } from "./command.block";
 import { DemoteCommand } from "./command.demote";
+import { GetRevokedMessagesCommand } from "./command.getRevokedMessages";
 import { HelpCommand } from "./command.help";
 import { ImagesCommand } from "./command.images";
 import { InfoCommand } from "./command.info";
@@ -47,12 +48,13 @@ const commands: ICommand[] = [
   HelpCommand,
   SetWelcomeCommand,
   SetExitMessageCommand,
+  GetRevokedMessagesCommand,
 ];
 
-export async function commandHandler(
-  body: string,
-): Promise<ICommand | undefined> {
+export async function commandHandler(body: string): Promise<ICommand | null> {
   const normalized = body.toLowerCase().split(" ")[0];
+
+  const [commandName, ...args] = body.trim().split(/\s+/);
 
   for (const command of commands) {
     const commandAndAliases = [command.name, ...(command.aliases || [])].map(
@@ -65,5 +67,5 @@ export async function commandHandler(
       return command;
     }
   }
-  return undefined;
+  return null;
 }

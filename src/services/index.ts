@@ -5,6 +5,7 @@ import { downloadTikTok } from "./download.service/tiktok";
 import { addParticipant } from "./group.service/addParticipant";
 import { blockCommand } from "./group.service/blockCommand";
 import { demoteParticipant } from "./group.service/demoteParticipant";
+import { getRevokedMessages } from "./group.service/getRevokedMessages";
 import { listMembers } from "./group.service/listMembers";
 import { leave } from "./group.service/memberLeft";
 import { join } from "./group.service/newMember";
@@ -28,6 +29,7 @@ export {
   blockCommand,
   demoteParticipant,
   downloadTikTok,
+  getRevokedMessages,
   help,
   imageSearch,
   init,
