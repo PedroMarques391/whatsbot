@@ -14,7 +14,7 @@ const RevokedMessageSchema = new Schema<IRevokedMessage>(
   {
     groupId: { type: String, required: true, index: true },
     userId: { type: String, required: true, index: true },
-    userLid: { type: String, required: true, index: true },
+    userLid: { type: String, index: true },
     userName: { type: String, required: true, default: "Desconhecido" },
     message: { type: String, required: true },
     sendAt: { type: Number, required: true },
