@@ -3,6 +3,8 @@ services:
     build: .
     container_name: adabot
     restart: always
+    init: true
+    shm_size: '2gb'
     volumes:
       - .:/app
       - /app/node_modules
