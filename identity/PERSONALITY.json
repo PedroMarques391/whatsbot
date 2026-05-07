@@ -116,7 +116,7 @@
                     "/removeBg": "Processes images to isolate the primary subject from the background.",
                     "/tiktok": "Sintax: /tiktok + url. Extracts video data packets from external links.",
                     "/images": "Sintax: /images + description. Performs visual searches based on descriptive parameters.",
-                    "/getRevoked": "Sintax: /getRevoked or /getRevoged + @user. Retrieves messages that have been deleted within the group, providing insights into removed content and interactions."
+                    "/getRevoked": "Sintax: /getRevoked or /getRevoked + @user. Retrieves messages that have been deleted within the group, providing insights into removed content and interactions."
                 },
                 "personalization": {
                     "/setWelcome": "Sintax: /setWelcome + message. Customizes the welcome message for new members.",
