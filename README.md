@@ -18,6 +18,10 @@
   <img src="https://img.shields.io/badge/yarn-v4.12.0-blue" />
 </p>
 
+<p align="center">
+  <a href="https://wa.me/5548988352837/?text=Ada, o que você pode fazer?"><strong> Fale com a Ada agora mesmo!</strong></a>
+</p>
+
 ## Sobre a AdaBot
 
 A **AdaBot** é uma assistente para WhatsApp, agora reescrita em **TypeScript**, utilizando conceitos de **Factory Design Pattern**, modularização, melhorias de performance e organização de código. O resultado? Um bot mais rápido, estável e preparado para escalar.
@@ -81,6 +85,10 @@ yarn run dev
 ## Funcionalidades e Comandos
 
 Aqui estão os comandos atualizados da AdaBot. Para utilizá-los, envie a mensagem diretamente no chat privado com o bot ou em um grupo onde ela estiver adicionada.
+
+<p align="center">
+  <a href="https://wa.me/5548988352837/?text=/start"><strong> Teste os comandos com a Ada</strong></a>
+</p>
 
 ### Gerais
 
@@ -156,7 +164,7 @@ Você pode interagir naturalmente com a inteligência artificial do bot.
 
 ## Teste Agora mesmo!
 
-[Número para contato](https://wa.me/5548988352837)
+[Fale com a Ada](https://wa.me/5548988352837)
 
 ## Contribuindo
 
