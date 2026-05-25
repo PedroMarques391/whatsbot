@@ -13,7 +13,9 @@ export async function staticSticker(
   outputDir: string,
   errorMessage: string,
 ): Promise<void> {
-  await message.react("⏳");
+  await message
+    .react("⏳")
+    .catch(() => console.log("Não consegui reagir com ⏳"));
   const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
   const inputPath = path.join(outputDir, `input-${uniqueSuffix}.jpg`);
   const outputPath = path.join(outputDir, `output-${uniqueSuffix}.webp`);
@@ -45,7 +47,9 @@ export async function staticSticker(
         stickerAuthor: "AdaBot",
       });
       await sent.react("❤");
-      await message.react("✅").catch(() => null);
+      await message
+        .react("✅")
+        .catch(() => console.log("Não consegui reagir com ✅"));
     })
     .catch(async (error) => {
       console.error(error);
