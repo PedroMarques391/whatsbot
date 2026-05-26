@@ -1,4 +1,5 @@
 import { Message } from "whatsapp-web.js";
+import { BotError } from "@/errors/BotErrors";
 
 export async function notAValidNumber(
   message: Message,
@@ -7,7 +8,7 @@ export async function notAValidNumber(
   const mentions = await message.getMentions();
 
   if (mentions.length === 0) {
-    throw new Error(
+    throw BotError.validation(
       `Faltou um pequeno detalhe. Indique o usuário usando '@' logo após o comando '${command}'. ☕`,
     );
   }

@@ -1,3 +1,4 @@
+import { BotError, ErrorType } from "@/errors/BotErrors";
 import {
   interactionsHandler,
   validateCommand,
@@ -22,8 +23,25 @@ export async function onMessageCreate(client: Client, message: Message) {
   try {
     await chat.sendStateTyping();
     await command.execute({ chat, client, message });
-  } catch (error) {
-    console.error(`Erro ao executar ${command.name}:`, error);
+  } catch (error: any) {
+    if (error instanceof BotError) {
+      if (
+        error.errorType === ErrorType.INTERNAL ||
+        error.errorType === ErrorType.EXTERNAL_API
+      ) {
+        console.error(
+          `🔴 [${error.errorType}] ${command.name} | ${error.message}`,
+          error.originalError || error,
+        );
+      } else {
+        console.warn(
+          `🟡 [${error.errorType}] ${command.name} | Rejeitado: ${error.message}`,
+        );
+      }
+      await message.reply(error.userMessage);
+      return;
+    }
+    console.error(`🔴 [UNHANDLED CRASH] ${command.name}`, error);
     await message.reply(
       "Tivemos um pequeno imprevisto interno. Seja gentil e avise meu desenvolvedor enquanto tento me recompor. ✨",
     );

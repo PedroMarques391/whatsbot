@@ -1,6 +1,7 @@
 import { commandHandler } from "@/commands";
 import { extractTextFromBody } from "@/utils";
 import { Message } from "whatsapp-web.js";
+import { BotError } from "@/errors/BotErrors";
 
 export async function help(message: Message) {
   const commandToGetHelp = extractTextFromBody(message.body);
@@ -11,8 +12,7 @@ export async function help(message: Message) {
       ? `> Mostra o jeito correto de usar os comandos, use a sintaxe correta: \`/help <comando>\`.`
       : `> O comando *${commandToGetHelp}* não existe. Não preciso me preocupar com ele, né?`;
 
-    await message.reply(response);
-    return;
+    throw BotError.validation(response);
   }
 
   const { aliases, description, sintaxe } = command;

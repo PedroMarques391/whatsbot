@@ -1,5 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import { getSystemInstructions } from "./instructions";
+import { BotError } from "@/errors/BotErrors";
 
 const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
 
@@ -34,11 +35,18 @@ export async function geminiResponse(
   } catch (error: any) {
     if (error.message?.includes("429") || error.message?.includes("quota")) {
       console.error("⚠️ Limite de requisições da API Gemini excedido");
-      return "Desculpe, estou com muitas requisições no momento. Por favor, tente novamente em alguns segundos! 🙏";
+      throw BotError.externalApi(
+        "Limite de requisições da API Gemini excedido",
+        error,
+        "Desculpe, estou com muitas requisições no momento. Por favor, tente novamente em alguns segundos! 🙏"
+      );
     }
 
-    console.error("Erro ao gerar resposta do Gemini:", error.message || error);
-    throw error;
+    throw BotError.externalApi(
+      "Erro ao gerar resposta do Gemini",
+      error,
+      "Tivemos uma instabilidade com a inteligência artificial. Tente novamente mais tarde."
+    );
   }
 }
 
@@ -80,13 +88,17 @@ export async function geminiChat(
   } catch (error: any) {
     if (error.message?.includes("429") || error.message?.includes("quota")) {
       console.error("⚠️ Limite de requisições da API Gemini excedido");
-      return "Desculpe, estou com muitas requisições no momento. Por favor, tente novamente em alguns segundos! 🙏";
+      throw BotError.externalApi(
+        "Limite de requisições da API Gemini excedido",
+        error,
+        "Desculpe, estou com muitas requisições no momento. Por favor, tente novamente em alguns segundos! 🙏"
+      );
     }
 
-    console.error(
-      "Erro ao gerar resposta do Gemini (chat):",
-      error.message || error,
+    throw BotError.externalApi(
+      "Erro ao gerar resposta do Gemini (chat)",
+      error,
+      "Tivemos uma instabilidade com a inteligência artificial. Tente novamente mais tarde."
     );
-    throw error;
   }
 }

@@ -1,10 +1,11 @@
+import { BotError } from "@/errors/BotErrors";
 import { OpenRouter } from "@openrouter/sdk";
 import adaPersonality from "./../../identity/PERSONALITY.json";
 
 export class AIProvider {
   private client: OpenRouter;
   private readonly systemPrompt: string;
-  private readonly model = "meta-llama/llama-3.2-3b-instruct";
+  private readonly model = "openai/gpt-oss-120b";
   constructor(client: OpenRouter) {
     this.client = client;
     this.systemPrompt = JSON.stringify(adaPersonality);
@@ -30,13 +31,15 @@ export class AIProvider {
       });
 
       if (!completion?.choices?.[0]?.message?.content) {
-        throw new Error("Resposta vazia da API OpenRouter");
+        throw BotError.externalApi(
+          "Resposta vazia da API OpenRouter",
+          new Error("OpenRouter return empty choices or content"),
+        );
       }
 
       return completion.choices[0].message.content;
     } catch (error: any) {
-      const errorMessage = this.errorHandler(error);
-      throw errorMessage;
+      this.errorHandler(error);
     }
   }
 
@@ -57,20 +60,30 @@ export class AIProvider {
       });
 
       if (!completion?.choices?.[0]?.message?.content) {
-        throw new Error("Resposta vazia da API OpenRouter");
+        throw BotError.externalApi(
+          "Resposta vazia da API OpenRouter",
+          new Error("OpenRouter return empty choices or content"),
+        );
       }
       return completion.choices[0].message.content;
     } catch (error: any) {
-      const errorMessage = this.errorHandler(error);
-      throw errorMessage;
+      this.errorHandler(error);
     }
   }
 
-  private errorHandler(error: Error) {
+  private errorHandler(error: Error): never {
     if (error.message?.includes("429") || error.message?.includes("quota")) {
       console.error("Limite de requisições da API OpenRouter excedido");
-      return "Estou analisando muitas coisas ao mesmo tempo. Pode me chamar de novo em alguns instantes? 🌱";
+      throw BotError.externalApi(
+        "Limite de requisições da API OpenRouter excedido",
+        error,
+        "Estou analisando muitas coisas ao mesmo tempo. Pode me chamar de novo em alguns instantes? 🌱",
+      );
     }
-    return "Ocorreu um erro ao processar sua solicitação. Por favor, tente novamente mais tarde. 🌱";
+    throw BotError.externalApi(
+      "Ocorreu um erro ao processar sua solicitação na API OpenRouter",
+      error,
+      "Ocorreu um erro ao processar sua solicitação. Por favor, tente novamente mais tarde. 🌱",
+    );
   }
 }

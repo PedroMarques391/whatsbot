@@ -7,37 +7,33 @@ import {
 } from "@/helpers";
 import { serializeMention } from "@/utils";
 import { Client, GroupChat, Message } from "whatsapp-web.js";
+import { BotError } from "@/errors/BotErrors";
 
 export async function promoteParticipant(
   message: Message,
   chat: GroupChat,
   client: Client,
 ) {
-  try {
-    await Promise.all([
-      botIsAdmin(chat),
-      notAValidNumber(message, "/upgrade"),
-      authorIsAdmin(chat, message),
-      isUserNotInGroup(chat, message),
-    ]);
+  await Promise.all([
+    botIsAdmin(chat),
+    notAValidNumber(message, "/upgrade"),
+    authorIsAdmin(chat, message),
+    isUserNotInGroup(chat, message),
+  ]);
 
-    const { serializedNumber, user } = await serializeMention(message);
+  const { serializedNumber, user } = await serializeMention(message);
 
-    if (getGroupAdmins(chat).includes(serializedNumber)) {
-      return message.reply(
-        "Verifiquei, e este participante já ocupa um lugar na administração. Excelente escolha, por sinal. ☕",
-      );
-    }
-
-    await chat.promoteParticipants([serializedNumber]);
-
-    await client.sendMessage(
-      chat.id._serialized,
-      `Temos um novo nome na liderança. @${user}, espero que conduza o grupo com a mesma elegância de sempre. ✨`,
-      { mentions: [serializedNumber] },
+  if (getGroupAdmins(chat).includes(serializedNumber)) {
+    throw BotError.validation(
+      "Verifiquei, e este participante já ocupa um lugar na administração. Excelente escolha, por sinal. ☕",
     );
-  } catch (error: any) {
-    console.error(error);
-    return message.reply(error.message);
   }
+
+  await chat.promoteParticipants([serializedNumber]);
+
+  await client.sendMessage(
+    chat.id._serialized,
+    `Temos um novo nome na liderança. @${user}, espero que conduza o grupo com a mesma elegância de sempre. ✨`,
+    { mentions: [serializedNumber] },
+  );
 }

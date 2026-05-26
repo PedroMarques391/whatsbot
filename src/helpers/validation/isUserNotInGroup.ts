@@ -1,5 +1,6 @@
 import { serializeMention } from "@/utils";
 import { GroupChat, Message } from "whatsapp-web.js";
+import { BotError } from "@/errors/BotErrors";
 
 /**
  * Determines whether a user is not part of the group participants list.
@@ -20,7 +21,7 @@ export async function isUserNotInGroup(
   );
 
   if (!isParticipant) {
-    throw new Error(
+    throw BotError.validation(
       `Acho que você se confundiu. O usuário mencionado não consta na nossa lista de participantes.`,
     );
   }

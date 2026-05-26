@@ -1,5 +1,6 @@
 import { GroupChat, Message } from "whatsapp-web.js";
 import { getGroupAdmins } from "../group/groupAdmins";
+import { BotError } from "@/errors/BotErrors";
 
 /**
  * Checks whether the author of the message is an administrator in the group.
@@ -18,7 +19,7 @@ export async function authorIsAdmin(
     !contact.id._serialized ||
     !getGroupAdmins(chat).includes(contact.id._serialized)
   ) {
-    throw new Error(
+    throw BotError.validation(
       "Sinto muito, mas essa ação requer privilégios de administração. Se desejar, fale com quem está no comando. ☕",
     );
   }

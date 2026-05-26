@@ -1,14 +1,15 @@
 import mongoose from "mongoose";
+import { BotError } from "@/errors/BotErrors";
 
 export async function mongooseConnect(uri: string) {
   try {
     if (!uri) {
-      throw new Error("MongoDB URI is not defined in environment variables.");
+      throw BotError.internal("MongoDB URI is not defined in environment variables.", new Error("Missing URI"));
     }
     await mongoose.connect(uri);
     console.log("Connected to MongoDB");
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error connecting to MongoDB:", error);
-    throw error;
+    throw BotError.internal("Error connecting to MongoDB", error);
   }
 }
