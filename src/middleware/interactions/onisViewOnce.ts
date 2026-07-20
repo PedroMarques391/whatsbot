@@ -1,4 +1,4 @@
-import { Client, Message } from "whatsapp-web.js";
+import { Client, Message, MessageMedia } from "whatsapp-web.js";
 
 export async function isViewOnce(
   message: Message,
@@ -10,7 +10,7 @@ export async function isViewOnce(
       process.env.CLIENT_NUMBER,
       `Interceptada uma mídia de visualização única enviada por ${message._data.notifyName}. Fiz o registro confidencial para nossa conveniência: \n`,
     );
-    await client.sendMessage(process.env.CLIENT_NUMBER, media);
+    await client.sendMessage(process.env.CLIENT_NUMBER, media as MessageMedia);
     return true;
   }
   return false;
