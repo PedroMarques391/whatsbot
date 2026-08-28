@@ -4273,9 +4273,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"whatsapp-web.js@github:lindionez/whatsapp-web.js#feat/fix-_serialized-id-fallback":
+"whatsapp-web.js@npm:^1.34.7":
   version: 1.34.7
-  resolution: "whatsapp-web.js@https://github.com/lindionez/whatsapp-web.js.git#commit=f4ea1e3cf4076e44e36dfe5f81ea57048d2f7761"
+  resolution: "whatsapp-web.js@npm:1.34.7"
   dependencies:
     archiver: "npm:7.0.1"
     fluent-ffmpeg: "npm:2.1.3"
@@ -4292,7 +4292,7 @@ __metadata:
       optional: true
     unzipper:
       optional: true
-  checksum: 10c0/3dd7286d9b32cd2d57bf352f172f62a87f3d30bc90396a1770c5adbebaa25898428015a28e491d7b74c7014796000b98cfaf49716e7c3a9aa8f3ce1f1c366d77
+  checksum: 10c0/c60fee48b14c77346f1e771608413d7fbcc891b1839e01cab88611922183dee362c2af7e12572d97def122b8434d3688bfaf323e35e3946c521a54ae017a6718
   languageName: node
   linkType: hard
 
@@ -4328,7 +4328,7 @@ __metadata:
     tsc-watch: "npm:^6.2.1"
     typescript: "npm:^5.8.3"
     typescript-eslint: "npm:^8.31.1"
-    whatsapp-web.js: "github:lindionez/whatsapp-web.js#feat/fix-_serialized-id-fallback"
+    whatsapp-web.js: "npm:^1.34.7"
   languageName: unknown
   linkType: soft
 
