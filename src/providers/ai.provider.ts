@@ -5,7 +5,7 @@ import adaPersonality from "./../../identity/PERSONALITY.json";
 export class AIProvider {
   private client: OpenRouter;
   private readonly systemPrompt: string;
-  private readonly model = "openai/gpt-oss-120b";
+  private readonly model = "openai/gpt-4o-mini";
   constructor(client: OpenRouter) {
     this.client = client;
     this.systemPrompt = JSON.stringify(adaPersonality);
