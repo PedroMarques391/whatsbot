@@ -11,5 +11,7 @@ declare namespace NodeJS {
     BOT_INSTRUCTION: string;
     OPEN_ROUTER_API_KEY: string;
     MONGO_URL: string;
+    RAPIDAPI_KEY: string;
+    RAPIDAPI_HOST_INSTAGRAM: string;
   }
 }

@@ -1,6 +1,7 @@
 import { openRouterProvider } from "./ai.service/openRouterService";
 import { response } from "./ai.service/response";
 import { resumeMessages } from "./ai.service/resume";
+import { downloadInstagram } from "./download.service/instagram";
 import { downloadTikTok } from "./download.service/tiktok";
 import { addParticipant } from "./group.service/addParticipant";
 import { blockCommand } from "./group.service/blockCommand";
@@ -28,6 +29,7 @@ export {
   addParticipant,
   blockCommand,
   demoteParticipant,
+  downloadInstagram,
   downloadTikTok,
   getRevokedMessages,
   help,

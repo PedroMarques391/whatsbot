@@ -6,6 +6,7 @@ import { GetRevokedMessagesCommand } from "./command.getRevokedMessages";
 import { HelpCommand } from "./command.help";
 import { ImagesCommand } from "./command.images";
 import { InfoCommand } from "./command.info";
+import { InstagramCommand } from "./command.instagram";
 import { ListCommand } from "./command.list";
 import { PastCommand } from "./command.past";
 import { PromoteCommand } from "./command.promote";
@@ -41,6 +42,7 @@ const commands: ICommand[] = [
   RenameCommand,
   RemoveBgCommand,
   TikTokCommand,
+  InstagramCommand,
   InfoCommand,
   RegisterCommand,
   BlockCommand,

@@ -103,6 +103,7 @@ Aqui estão os comandos atualizados da AdaBot. Para utilizá-los, envie a mensag
 | `/removeBg`       | Remove o fundo de uma imagem (envie ou marque a imagem)                  |
 | `/images + texto` | Busca imagens no Google com base no texto fornecido                      |
 | `/tiktok + link`  | Baixa um vídeo do TikTok sem marca d'água                                |
+| `/instagram + link` | Baixa um vídeo ou reels do Instagram                                   |
 | `/resume`         | IA gera um resumo das últimas mensagens do chat                          |
 | `/test`           | Comando de teste do bot                                                  |
 
