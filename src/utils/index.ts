@@ -13,15 +13,18 @@ import { saveUsers } from "./saveUsers";
 import { serializeMention } from "./serializeMention";
 import { extractTextFromBody } from "./strings";
 import { delay } from "./timers";
+import { createUrlRegex, isValidUrl } from "./urls";
 
 export {
   botResponses,
   callRejection,
+  createUrlRegex,
   delay,
   extractTextFromBody,
   firstInteraction,
   formatDate,
   getCommandAndAliases,
+  isValidUrl,
   resumeErrorMessages,
   resumePrompt,
   safeShutdown,

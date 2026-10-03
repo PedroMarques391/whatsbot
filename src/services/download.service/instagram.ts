@@ -1,4 +1,4 @@
-import { delay, extractTextFromBody } from "@/utils";
+import { delay, extractTextFromBody, isValidUrl } from "@/utils";
 import { Client, Message, MessageMedia } from "whatsapp-web.js";
 import { IInstagramResponse } from "../../../types";
 
@@ -21,8 +21,7 @@ export async function downloadInstagram(message: Message, client: Client) {
     return;
   }
 
-  const isValidInstagramUrl =
-    /^https?:\/\/([a-z0-9-]+\.)?instagram\.com\/.+$/i.test(url);
+  const isValidInstagramUrl = isValidUrl(url, "instagram");
 
   if (!isValidInstagramUrl && message.body.includes("baixar")) return;
 

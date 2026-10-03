@@ -1,4 +1,4 @@
-import { delay, extractTextFromBody } from '@/utils';
+import { delay, extractTextFromBody, isValidUrl } from '@/utils';
 import { Client, Message, MessageMedia } from 'whatsapp-web.js';
 
 export async function downloadTikTok(message: Message, client: Client) {
@@ -13,9 +13,7 @@ export async function downloadTikTok(message: Message, client: Client) {
         return;
     }
 
-    //TODO
-    //Transformar 'isValidTikTokUrl' em um validator para ser reaproveitado posteriomente.
-    const isValidTikTokUrl = /^https?:\/\/([a-z0-9-]+\.)?tiktok\.com\/.+$/i.test(url);
+    const isValidTikTokUrl = isValidUrl(url, 'tiktok');
 
     if (!isValidTikTokUrl && message.body.includes('baixar')) return;
 

@@ -4,7 +4,4 @@
 import { ICommand } from "./commands";
 import { IInstagramResponse } from "./instagram";
 
-export type {
-    ICommand,
-    IInstagramResponse
-};
+export type { ICommand, IInstagramResponse };
