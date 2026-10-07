@@ -1,9 +1,10 @@
+import { getAIService } from "@/factories";
 import { delay, extractTextFromBody } from "@/utils";
 import path from "path";
 import { Client, Message, MessageMedia } from "whatsapp-web.js";
-import { openRouterProvider } from "../ai.service/openRouterService";
 
 export const sendUpdateMessages = async (client: Client, message: Message) => {
+  const aiService = getAIService();
   const body: string = extractTextFromBody(message.body);
   const chats = await client.getChats();
   const groups = chats
@@ -21,11 +22,9 @@ export const sendUpdateMessages = async (client: Client, message: Message) => {
   const instruction: string =
     "Create a sophisticated, polite, and mature update message tailored for group announcements in Portuguese. Ensure it sounds knowledgeable, elegant, and uses minimal emojis like a brilliant female assistant named Ada.";
 
-  const text: string = await openRouterProvider.response(
-    `${instruction}: ${body}`,
-    0.7,
-    200,
-  );
+  const text: string =
+    (await aiService.provider.response(`${instruction}: ${body}`, 0.7, 200)) ||
+    "";
 
   const media = MessageMedia.fromFilePath(
     path.resolve(process.cwd(), "src/assets/images/adaUpdate.jpg"),
