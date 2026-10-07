@@ -1,6 +1,4 @@
-import { openRouterProvider } from "./ai.service/openRouterService";
-import { response } from "./ai.service/response";
-import { resumeMessages } from "./ai.service/resume";
+import { AIService } from "./ai.service";
 import { downloadInstagram } from "./download.service/instagram";
 import { downloadTikTok } from "./download.service/tiktok";
 import { addParticipant } from "./group.service/addParticipant";
@@ -26,6 +24,7 @@ import { makeSticker, renameSticker } from "./sticker";
 import { testFunction } from "./test";
 
 export {
+  AIService,
   addParticipant,
   blockCommand,
   demoteParticipant,
@@ -39,14 +38,11 @@ export {
   leave,
   listMembers,
   makeSticker,
-  openRouterProvider,
   promoteParticipant,
   registerUser,
   removeBg,
   removeParticipant,
   renameSticker,
-  response,
-  resumeMessages,
   sendUpdateMessages,
   setExitMessage,
   setWelcomeMessage,
