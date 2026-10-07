@@ -1,5 +1,7 @@
-import { resumeMessages } from "@/services";
+import { getAIService } from "@/factories";
 import { ICommand } from "../../types";
+
+const aiService = getAIService();
 
 export const ResumeCommand: ICommand = {
   name: "/resume",
@@ -7,6 +9,6 @@ export const ResumeCommand: ICommand = {
   onlyGroup: false,
   aliases: ["/rsm", "/rs"],
   async execute({ client, message }) {
-    await resumeMessages(client, message);
+    await aiService.resumeMessages(client, message);
   },
 };
