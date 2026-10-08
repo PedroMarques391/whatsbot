@@ -1,10 +1,10 @@
-import { getAIService } from "@/factories";
+import { AIFactory } from "@/factories";
 import { delay, extractTextFromBody } from "@/utils";
 import path from "path";
 import { Client, Message, MessageMedia } from "whatsapp-web.js";
 
 export const sendUpdateMessages = async (client: Client, message: Message) => {
-  const aiService = getAIService();
+  const aiService = AIFactory.getAiService();
   const body: string = extractTextFromBody(message.body);
   const chats = await client.getChats();
   const groups = chats

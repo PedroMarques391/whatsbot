@@ -1,7 +1,5 @@
-import { getAIService } from "@/factories";
+import { AIFactory } from "@/factories";
 import { Message } from "whatsapp-web.js";
-
-const aiService = getAIService();
 
 /**
  * Handles user replies to messages previously sent by the bot.
@@ -22,6 +20,7 @@ export async function quotedReply(message: Message): Promise<boolean> {
 
   if (quotedMessage.id.fromMe && !quotedMessage.hasMedia && !message.hasMedia) {
     try {
+      const aiService = AIFactory.getAiService();
       const response = await aiService.chat(message.body, quotedMessage.body);
       if (response) {
         await message.reply(response);

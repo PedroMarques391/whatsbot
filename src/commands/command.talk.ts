@@ -1,7 +1,5 @@
-import { getAIService } from "@/factories";
+import { AIFactory } from "@/factories";
 import { ICommand } from "../../types";
-
-const aiService = getAIService();
 
 export const TalkCommand: ICommand = {
   name: "ada",
@@ -10,6 +8,7 @@ export const TalkCommand: ICommand = {
   onlyGroup: false,
   aliases: ["ada,", "adabot,"],
   async execute({ message }) {
+    const aiService = AIFactory.getAiService();
     await aiService.response(message, 1, 200);
   },
 };

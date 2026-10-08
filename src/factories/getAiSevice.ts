@@ -13,5 +13,3 @@ export class AIFactory {
     return new AIService(provider);
   }
 }
-
-export const getAIService = AIFactory.getAiService;
