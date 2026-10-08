@@ -11,7 +11,7 @@ export class DownloadService {
   private readonly RAPIDAPI_KEY = process.env.RAPIDAPI_KEY;
   private readonly RAPIDAPI_HOST_INSTAGRAM =
     process.env.RAPIDAPI_HOST_INSTAGRAM;
-  private readonly MAX_YOUTUBE_SIZE_MB = 60;
+  private readonly MAX_DOWNLOAD_SIZE_MB = 60;
 
   constructor(
     private readonly client: Client,
@@ -89,8 +89,36 @@ export class DownloadService {
   }
 
   async youtube(): Promise<void> {
+    return this.downloadWithYtDlp(
+      "youtube",
+      "YouTube",
+      "bestvideo[height<=720][vcodec^=avc]+bestaudio[ext=m4a]/best[height<=720][vcodec^=avc]/best",
+    );
+  }
+
+  async twitter(): Promise<void> {
+    return this.downloadWithYtDlp(
+      "twitter",
+      "Twitter / X",
+      "best[ext=mp4]/bestvideo[height<=720]+bestaudio/best",
+    );
+  }
+
+  async pinterest(): Promise<void> {
+    return this.downloadWithYtDlp(
+      "pinterest",
+      "Pinterest",
+      "best[ext=mp4]/best",
+    );
+  }
+
+  private async downloadWithYtDlp(
+    platform: PlatformType,
+    displayName: string,
+    format: string,
+  ): Promise<void> {
     const url = await this.extractTargetUrl();
-    const isValid = await this.validateUrl(url, "youtube");
+    const isValid = await this.validateUrl(url, platform);
     if (!isValid || !url) return;
 
     await this.notifyStart();
@@ -102,8 +130,7 @@ export class DownloadService {
 
       await youtubedl(url, {
         output: path.join(jobDir, "%(title).80s.%(ext)s"),
-        format:
-          "bestvideo[height<=720][vcodec^=avc]+bestaudio[ext=m4a]/best[height<=720][vcodec^=avc]/best",
+        format,
         mergeOutputFormat: "mp4",
         noCheckCertificates: true,
         noWarnings: true,
@@ -113,19 +140,21 @@ export class DownloadService {
       const videoFile = files.find((f) => f.endsWith(".mp4"));
 
       if (!videoFile) {
-        throw new Error("Vídeo não encontrado após o download.");
+        throw new Error(
+          `Vídeo do ${displayName} não encontrado após o download.`,
+        );
       }
 
       const filePath = path.join(jobDir, videoFile);
 
       const stats = await fs.stat(filePath);
-      const maxBytes = this.MAX_YOUTUBE_SIZE_MB * 1024 * 1024;
+      const maxBytes = this.MAX_DOWNLOAD_SIZE_MB * 1024 * 1024;
 
       if (stats.size > maxBytes) {
         const sizeMb = (stats.size / (1024 * 1024)).toFixed(1);
         await this.client.sendMessage(
           this.message.from,
-          `O vídeo é muito pesado (${sizeMb} MB)! Tá achando que eu tenho memória infinita seu ignóbil?! O limite é de ${this.MAX_YOUTUBE_SIZE_MB} MB. `,
+          `O vídeo é muito pesado (${sizeMb} MB)! Tá achando que eu tenho memória infinita seu ignóbil?! O limite é de ${this.MAX_DOWNLOAD_SIZE_MB} MB. `,
         );
         await this.message.react("❌");
         return;
@@ -133,7 +162,7 @@ export class DownloadService {
 
       const media = MessageMedia.fromFilePath(filePath);
       const title = path.parse(videoFile).name;
-      const caption = this.formatCaption("YouTube", title);
+      const caption = this.formatCaption(displayName, title);
 
       const sendMediaAsDocument = stats.size > 16 * 1024 * 1024;
 

@@ -117,6 +117,8 @@
                     "/tiktok": "Sintax: /tiktok + url. Extracts video data packets from external links.",
                     "/instagram": "Sintax: /instagram + url. Extracts video or reels data packets from Instagram links.",
                     "/youtube": "Sintax: /youtube + url. Extracts video or shorts data packets from YouTube links.",
+                    "/twitter": "Sintax: /twitter + url. Extracts video data packets from Twitter / X links.",
+                    "/pinterest": "Sintax: /pinterest + url. Extracts video or media data packets from Pinterest links.",
                     "/images": "Sintax: /images + description. Performs visual searches based on descriptive parameters.",
                     "/getRevoked": "Sintax: /getRevoked or /getRevoked + @user. Retrieves messages that have been deleted within the group, providing insights into removed content and interactions."
                 },

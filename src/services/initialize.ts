@@ -72,6 +72,8 @@ export async function start(message: Message, client: Client) {
     ┃ ➤ /tiktok + url - Baixa o vídeo pelo link.  
     ┃ ➤ /instagram + url - Baixa vídeo/reels pelo link.  
     ┃ ➤ /youtube + url - Baixa vídeo/shorts do YouTube.  
+    ┃ ➤ /twitter + url - Baixa o vídeo do Twitter / X.  
+    ┃ ➤ /pinterest + url - Baixa o vídeo/mídia do Pinterest.  
     ┃ ➤ /images + descrição - Buscar imagens.  
     ┃ ➤ /register - Registrar usuário.  
     ╰─────≺∆≻─────╯  

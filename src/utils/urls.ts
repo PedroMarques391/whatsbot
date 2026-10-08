@@ -1,4 +1,9 @@
-export type PlatformType = "tiktok" | "instagram" | "youtube";
+export type PlatformType =
+  | "tiktok"
+  | "instagram"
+  | "youtube"
+  | "twitter"
+  | "pinterest";
 
 export function createUrlRegex(domain: string | string[]): RegExp {
   const escape = (str: string) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -13,6 +18,8 @@ const platformDomains: Record<PlatformType, string | string[]> = {
   tiktok: "tiktok.com",
   instagram: "instagram.com",
   youtube: ["youtube.com", "youtu.be"],
+  twitter: ["twitter.com", "x.com"],
+  pinterest: ["pinterest.com", "pin.it"],
 };
 
 export function isValidUrl(url: string, platform: PlatformType): boolean {

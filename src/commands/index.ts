@@ -21,8 +21,10 @@ import { SetWelcomeCommand } from "./command.setWelcome";
 import { StartCommand } from "./command.start";
 import { StickerCommand } from "./command.sticker";
 import { TalkCommand } from "./command.talk";
+import { PinterestCommand } from "./command.pinterest";
 import { TestCommand } from "./command.test";
 import { TikTokCommand } from "./command.tiktok";
+import { TwitterCommand } from "./command.twitter";
 import { UnblockCommand } from "./command.unblock";
 import { YouTubeCommand } from "./command.youtube";
 
@@ -45,6 +47,8 @@ const commands: ICommand[] = [
   TikTokCommand,
   InstagramCommand,
   YouTubeCommand,
+  TwitterCommand,
+  PinterestCommand,
   InfoCommand,
   RegisterCommand,
   BlockCommand,
