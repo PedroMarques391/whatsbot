@@ -1,6 +1,5 @@
 import { AIService } from "./ai.service";
-import { downloadInstagram } from "./download.service/instagram";
-import { downloadTikTok } from "./download.service/tiktok";
+import { DownloadService } from "./download.service";
 import { addParticipant } from "./group.service/addParticipant";
 import { blockCommand } from "./group.service/blockCommand";
 import { demoteParticipant } from "./group.service/demoteParticipant";
@@ -24,12 +23,11 @@ import { makeSticker, renameSticker } from "./sticker";
 import { testFunction } from "./test";
 
 export {
-  AIService,
   addParticipant,
+  AIService,
   blockCommand,
   demoteParticipant,
-  downloadInstagram,
-  downloadTikTok,
+  DownloadService,
   getRevokedMessages,
   help,
   imageSearch,
