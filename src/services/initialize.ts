@@ -71,6 +71,7 @@ export async function start(message: Message, client: Client) {
     ┃ ➤ /removeBg - Remove o fundo da imagem marcada ou enviada. 
     ┃ ➤ /tiktok + url - Baixa o vídeo pelo link.  
     ┃ ➤ /instagram + url - Baixa vídeo/reels pelo link.  
+    ┃ ➤ /youtube + url - Baixa vídeo/shorts do YouTube.  
     ┃ ➤ /images + descrição - Buscar imagens.  
     ┃ ➤ /register - Registrar usuário.  
     ╰─────≺∆≻─────╯  
