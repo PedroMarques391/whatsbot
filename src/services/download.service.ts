@@ -12,6 +12,7 @@ export class DownloadService {
   private readonly RAPIDAPI_HOST_INSTAGRAM =
     process.env.RAPIDAPI_HOST_INSTAGRAM;
   private readonly MAX_DOWNLOAD_SIZE_MB = 60;
+  private stopReactionLoading?: () => void;
 
   constructor(
     private readonly client: Client,
@@ -151,6 +152,7 @@ export class DownloadService {
       const maxBytes = this.MAX_DOWNLOAD_SIZE_MB * 1024 * 1024;
 
       if (stats.size > maxBytes) {
+        this.stopLoading();
         const sizeMb = (stats.size / (1024 * 1024)).toFixed(1);
         await this.client.sendMessage(
           this.message.from,
@@ -177,11 +179,14 @@ export class DownloadService {
         },
       );
 
+      this.stopLoading();
       await sentMessage.react("✅");
       await this.message.react("✅");
     } catch (error) {
+      this.stopLoading();
       await this.handleError(error);
     } finally {
+      this.stopLoading();
       await fs.rm(jobDir, { recursive: true, force: true }).catch(() => {});
     }
   }
@@ -225,12 +230,33 @@ export class DownloadService {
   private async notifyStart(
     text = "Iniciando o download do vídeo. Isso levará apenas um momento...",
   ): Promise<void> {
-    await this.message.react("⏳");
-    await delay(2000);
-    await this.message.react("⌛");
+    this.stopLoading();
+
+    let isRunning = true;
+    const hearts = ["❤️", "🧡", "💛", "💚", "💙", "💜", "💖"];
+    let index = 0;
+
+    (async () => {
+      while (isRunning) {
+        await this.message.react(hearts[index % hearts.length]).catch(() => {});
+        index++;
+        await delay(500);
+      }
+    })();
+
+    this.stopReactionLoading = () => {
+      isRunning = false;
+    };
 
     const infoMessage = await this.client.sendMessage(this.message.from, text);
     await infoMessage.react("☕");
+  }
+
+  private stopLoading(): void {
+    if (this.stopReactionLoading) {
+      this.stopReactionLoading();
+      this.stopReactionLoading = undefined;
+    }
   }
 
   private async fetchJson<T>(
@@ -277,6 +303,7 @@ export class DownloadService {
       },
     );
 
+    this.stopLoading();
     await sentMessage.react("✅");
     await this.message.react("✅");
   }
@@ -295,6 +322,7 @@ export class DownloadService {
   }
 
   private async handleError(error: unknown): Promise<void> {
+    this.stopLoading();
     console.error("[AdaBot] Erro ao baixar ou enviar a mídia:", error);
 
     const errorMessage = await this.client.sendMessage(
