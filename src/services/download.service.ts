@@ -1,33 +1,17 @@
 import { delay, extractTextFromBody, isValidUrl } from "@/utils";
 import { PlatformType } from "@/utils/urls";
+import fs from "node:fs/promises";
+import path from "node:path";
 import { Client, Message, MessageMedia } from "whatsapp-web.js";
-import { IInstagramResponse } from "../../types";
-
-interface TikTokApiResponse {
-  code: number;
-  msg?: string;
-  data?: {
-    id?: string;
-    title?: string;
-    duration?: number;
-    play?: string;
-    wmplay?: string;
-    size?: number;
-    cover?: string;
-    music?: string;
-    author?: {
-      id?: string;
-      unique_id?: string;
-      nickname?: string;
-    };
-  };
-}
+import youtubedl from "youtube-dl-exec";
+import { IInstagramResponse, ITikTokResponse } from "../../types";
 
 export class DownloadService {
   private readonly TIKTOK_API_URL = "https://www.tikwm.com/api/";
   private readonly RAPIDAPI_KEY = process.env.RAPIDAPI_KEY;
   private readonly RAPIDAPI_HOST_INSTAGRAM =
     process.env.RAPIDAPI_HOST_INSTAGRAM;
+  private readonly MAX_YOUTUBE_SIZE_MB = 60;
 
   constructor(
     private readonly client: Client,
@@ -85,7 +69,7 @@ export class DownloadService {
 
     try {
       const endpoint = `${this.TIKTOK_API_URL}?url=${encodeURIComponent(url)}&count=1&version=1`;
-      const data = await this.fetchJson<TikTokApiResponse>(endpoint);
+      const data = await this.fetchJson<ITikTokResponse>(endpoint);
 
       const videoUrl = data.data?.play;
 
@@ -101,6 +85,75 @@ export class DownloadService {
       await this.sendMedia(videoUrl, caption);
     } catch (error) {
       await this.handleError(error);
+    }
+  }
+
+  async youtube(): Promise<void> {
+    const url = await this.extractTargetUrl();
+    const isValid = await this.validateUrl(url, "youtube");
+    if (!isValid || !url) return;
+
+    await this.notifyStart();
+
+    const jobDir = path.resolve(__dirname, `../../temp/${Date.now()}`);
+
+    try {
+      await fs.mkdir(jobDir, { recursive: true });
+
+      await youtubedl(url, {
+        output: path.join(jobDir, "%(title).80s.%(ext)s"),
+        format:
+          "bestvideo[height<=720][vcodec^=avc]+bestaudio[ext=m4a]/best[height<=720][vcodec^=avc]/best",
+        mergeOutputFormat: "mp4",
+        noCheckCertificates: true,
+        noWarnings: true,
+      });
+
+      const files = await fs.readdir(jobDir);
+      const videoFile = files.find((f) => f.endsWith(".mp4"));
+
+      if (!videoFile) {
+        throw new Error("Vídeo não encontrado após o download.");
+      }
+
+      const filePath = path.join(jobDir, videoFile);
+
+      const stats = await fs.stat(filePath);
+      const maxBytes = this.MAX_YOUTUBE_SIZE_MB * 1024 * 1024;
+
+      if (stats.size > maxBytes) {
+        const sizeMb = (stats.size / (1024 * 1024)).toFixed(1);
+        await this.client.sendMessage(
+          this.message.from,
+          `O vídeo é muito pesado (${sizeMb} MB)! Tá achando que eu tenho memória infinita seu ignóbil?! O limite é de ${this.MAX_YOUTUBE_SIZE_MB} MB. `,
+        );
+        await this.message.react("❌");
+        return;
+      }
+
+      const media = MessageMedia.fromFilePath(filePath);
+      const title = path.parse(videoFile).name;
+      const caption = this.formatCaption("YouTube", title);
+
+      const sendMediaAsDocument = stats.size > 16 * 1024 * 1024;
+
+      await delay(1000);
+
+      const sentMessage = await this.client.sendMessage(
+        this.message.from,
+        media,
+        {
+          caption,
+          sendMediaAsDocument,
+        },
+      );
+
+      await sentMessage.react("✅");
+      await this.message.react("✅");
+    } catch (error) {
+      await this.handleError(error);
+    } finally {
+      await fs.rm(jobDir, { recursive: true, force: true }).catch(() => {});
     }
   }
 

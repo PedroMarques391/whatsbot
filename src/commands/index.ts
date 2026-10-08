@@ -24,6 +24,7 @@ import { TalkCommand } from "./command.talk";
 import { TestCommand } from "./command.test";
 import { TikTokCommand } from "./command.tiktok";
 import { UnblockCommand } from "./command.unblock";
+import { YouTubeCommand } from "./command.youtube";
 
 const commands: ICommand[] = [
   ListCommand,
@@ -43,6 +44,7 @@ const commands: ICommand[] = [
   RemoveBgCommand,
   TikTokCommand,
   InstagramCommand,
+  YouTubeCommand,
   InfoCommand,
   RegisterCommand,
   BlockCommand,

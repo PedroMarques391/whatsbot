@@ -422,6 +422,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@kikobeats/time-span@npm:~1.0.5":
+  version: 1.0.13
+  resolution: "@kikobeats/time-span@npm:1.0.13"
+  checksum: 10c0/603a97b924500dbb14ddfdd266c4cf19035bb1970e31a124eead04e7b0744f86d2d232e5eafc33b97db8fa33905f3dbfd8409cc596d5e7d61fb9a42f8db0afca
+  languageName: node
+  linkType: hard
+
 "@mongodb-js/saslprep@npm:^1.3.0":
   version: 1.4.6
   resolution: "@mongodb-js/saslprep@npm:1.4.6"
@@ -1342,10 +1349,30 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dargs@npm:~7.0.0":
+  version: 7.0.0
+  resolution: "dargs@npm:7.0.0"
+  checksum: 10c0/ec7f6a8315a8fa2f8b12d39207615bdf62b4d01f631b96fbe536c8ad5469ab9ed710d55811e564d0d5c1d548fc8cb6cc70bf0939f2415790159f5a75e0f96c92
+  languageName: node
+  linkType: hard
+
 "data-uri-to-buffer@npm:^6.0.2":
   version: 6.0.2
   resolution: "data-uri-to-buffer@npm:6.0.2"
   checksum: 10c0/f76922bf895b3d7d443059ff278c9cc5efc89d70b8b80cd9de0aa79b3adc6d7a17948eefb8692e30398c43635f70ece1673d6085cc9eba2878dbc6c6da5292ac
+  languageName: node
+  linkType: hard
+
+"debug-logfmt@npm:~1.4.0":
+  version: 1.4.15
+  resolution: "debug-logfmt@npm:1.4.15"
+  dependencies:
+    "@kikobeats/time-span": "npm:~1.0.5"
+    null-prototype-object: "npm:~1.2.2"
+    pretty-ms: "npm:~7.0.1"
+  peerDependencies:
+    debug: "*"
+  checksum: 10c0/b76734c93b5de808cb5db9fcdff6bed72ba71b08ca9564a04eb995bc8fdd9384ef78b1c1fd5735e9cec1cadfe3e80bd1a3c293125aff0045f4c2dbdb472498fd
   languageName: node
   linkType: hard
 
@@ -2331,6 +2358,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"is-unix@npm:~2.0.10":
+  version: 2.0.14
+  resolution: "is-unix@npm:2.0.14"
+  checksum: 10c0/659653c438784dba38f6a7a9828d131e9180cc31a6f1aeb0fb9966c0f0c81f1c099d0891a2969e67f2d7a1dfb7657406c063ef0605db64d68580c26921d8c316
+  languageName: node
+  linkType: hard
+
 "isarray@npm:~1.0.0":
   version: 1.0.0
   resolution: "isarray@npm:1.0.0"
@@ -3010,6 +3044,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"null-prototype-object@npm:~1.2.2":
+  version: 1.2.7
+  resolution: "null-prototype-object@npm:1.2.7"
+  checksum: 10c0/87044165bf88b1cbae6df4c460f4582cd34d694b93bef064c89b400686a99372754f9f53d471484e20552a5fa1cc1ccd07baec4b32413aeb649c84990e7d0e5f
+  languageName: node
+  linkType: hard
+
 "once@npm:^1.3.1, once@npm:^1.4.0":
   version: 1.4.0
   resolution: "once@npm:1.4.0"
@@ -3156,6 +3197,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"parse-ms@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "parse-ms@npm:2.1.0"
+  checksum: 10c0/9c5c0a95c6267c84085685556a6e102ee806c3147ec11cbb9b98e35998eb4a48a757bd6ea7bfd930062de65909a33d24985055b4394e70aa0b65ee40cef16911
+  languageName: node
+  linkType: hard
+
 "path-exists@npm:^4.0.0":
   version: 4.0.0
   resolution: "path-exists@npm:4.0.0"
@@ -3253,6 +3301,15 @@ __metadata:
   version: 1.2.1
   resolution: "prelude-ls@npm:1.2.1"
   checksum: 10c0/b00d617431e7886c520a6f498a2e14c75ec58f6d93ba48c3b639cf241b54232d90daa05d83a9e9b9fef6baa63cb7e1e4602c2372fea5bc169668401eb127d0cd
+  languageName: node
+  linkType: hard
+
+"pretty-ms@npm:~7.0.1":
+  version: 7.0.1
+  resolution: "pretty-ms@npm:7.0.1"
+  dependencies:
+    parse-ms: "npm:^2.1.0"
+  checksum: 10c0/069aec9d939e7903846b3db53b020bed92e3dc5909e0fef09ec8ab104a0b7f9a846605a1633c60af900d288582fb333f6f30469e59d6487a2330301fad35a89c
   languageName: node
   linkType: hard
 
@@ -4042,6 +4099,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tinyspawn@npm:~1.5.10":
+  version: 1.5.10
+  resolution: "tinyspawn@npm:1.5.10"
+  checksum: 10c0/fa032742fa719dc50b66724da39be3136c43537b2125c9f13a68e2c38166a54e6c1c2ef5fb11f3f61425841244dc9612280f1dd96403eb21c3ca5798efbd6fa2
+  languageName: node
+  linkType: hard
+
 "to-regex-range@npm:^5.0.1":
   version: 5.0.1
   resolution: "to-regex-range@npm:5.0.1"
@@ -4329,6 +4393,7 @@ __metadata:
     typescript: "npm:^5.8.3"
     typescript-eslint: "npm:^8.31.1"
     whatsapp-web.js: "github:pedroslopez/whatsapp-web.js"
+    youtube-dl-exec: "npm:^3.1.17"
   languageName: unknown
   linkType: soft
 
@@ -4493,6 +4558,18 @@ __metadata:
   version: 0.1.0
   resolution: "yocto-queue@npm:0.1.0"
   checksum: 10c0/dceb44c28578b31641e13695d200d34ec4ab3966a5729814d5445b194933c096b7ced71494ce53a0e8820685d1d010df8b2422e5bf2cdea7e469d97ffbea306f
+  languageName: node
+  linkType: hard
+
+"youtube-dl-exec@npm:^3.1.17":
+  version: 3.1.17
+  resolution: "youtube-dl-exec@npm:3.1.17"
+  dependencies:
+    dargs: "npm:~7.0.0"
+    debug-logfmt: "npm:~1.4.0"
+    is-unix: "npm:~2.0.10"
+    tinyspawn: "npm:~1.5.10"
+  checksum: 10c0/28b654e35b7818cab231fdd0bc81b5c4311df3c202725f239d90f849ff1b42513c782a695efef22fdf9b417299dcadd0b0dbe0e02ddc1e082f6cdc42a51ba8e6
   languageName: node
   linkType: hard
 
