@@ -57,7 +57,7 @@ export class DownloadService {
       const caption = this.formatCaption("Instagram", data.caption);
       await this.sendMedia(videoUrl, caption);
     } catch (error) {
-      await this.handleError(error);
+      await this.handleError(error, "instagram");
     }
   }
 
@@ -85,7 +85,7 @@ export class DownloadService {
       const caption = this.formatCaption("TikTok", data.data?.title);
       await this.sendMedia(videoUrl, caption);
     } catch (error) {
-      await this.handleError(error);
+      await this.handleError(error, "tiktok");
     }
   }
 
@@ -110,6 +110,15 @@ export class DownloadService {
       "pinterest",
       "Pinterest",
       "best[ext=mp4]/best",
+      {
+        userAgent:
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+        referer: "https://www.pinterest.com/",
+        addHeader: [
+          "Accept-Language:en-US,en;q=0.9",
+          "Sec-Fetch-Mode:navigate",
+        ],
+      },
     );
   }
 
@@ -117,8 +126,13 @@ export class DownloadService {
     platform: PlatformType,
     displayName: string,
     format: string,
+    options?: {
+      userAgent?: string;
+      referer?: string;
+      addHeader?: string[];
+    },
   ): Promise<void> {
-    const url = await this.extractTargetUrl();
+    let url = await this.extractTargetUrl();
     const isValid = await this.validateUrl(url, platform);
     if (!isValid || !url) return;
 
@@ -135,6 +149,7 @@ export class DownloadService {
         mergeOutputFormat: "mp4",
         noCheckCertificates: true,
         noWarnings: true,
+        ...options,
       });
 
       const files = await fs.readdir(jobDir);
@@ -184,7 +199,7 @@ export class DownloadService {
       await this.message.react("✅");
     } catch (error) {
       this.stopLoading();
-      await this.handleError(error);
+      await this.handleError(error, platform);
     } finally {
       this.stopLoading();
       await fs.rm(jobDir, { recursive: true, force: true }).catch(() => {});
@@ -321,16 +336,38 @@ export class DownloadService {
     return `🎬 *${platform}*\n\n${formattedText}\n\n_Aqui está seu vídeo. ✨_`;
   }
 
-  private async handleError(error: unknown): Promise<void> {
+  private async handleError(
+    error: unknown,
+    platform?: PlatformType,
+  ): Promise<void> {
     this.stopLoading();
     console.error("[AdaBot] Erro ao baixar ou enviar a mídia:", error);
 
+    const err = error as any;
+    const isPinterest = platform === "pinterest";
+    const isAntiBotOrError =
+      err?.message?.includes("show_error=true") ||
+      err?.stderr?.includes("show_error=true") ||
+      err?.exitCode === 1 ||
+      err?.message?.includes("exit code 1") ||
+      err?.stderr?.includes("exit code 1") ||
+      err?.message?.includes("Unsupported URL") ||
+      err?.stderr?.includes("Unsupported URL");
+
+    let messageText =
+      "Deu ruim ao processar e baixar essa mídia. O serviço falhou ou o arquivo tá inacessível. Tenta de novo mais tarde!";
+
+    if (isPinterest && isAntiBotOrError) {
+      messageText =
+        "Não foi possível baixar essa mídia do Pinterest. O link é privado, expirou ou foi bloqueado pela proteção anti-bot da plataforma.";
+    }
+
     const errorMessage = await this.client.sendMessage(
       this.message.from,
-      "Deu ruim ao processar e baixar essa mídia. O serviço falhou ou o arquivo tá inacessível. Tenta de novo mais tarde!",
+      messageText,
     );
 
     await errorMessage.react("❌");
-    await this.message.react("");
+    await this.message.react("❌");
   }
 }
