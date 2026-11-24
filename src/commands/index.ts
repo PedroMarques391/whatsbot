@@ -4,7 +4,6 @@ import { BlockCommand } from "./command.block";
 import { DemoteCommand } from "./command.demote";
 import { GetRevokedMessagesCommand } from "./command.getRevokedMessages";
 import { HelpCommand } from "./command.help";
-import { ImagesCommand } from "./command.images";
 import { InfoCommand } from "./command.info";
 import { InstagramCommand } from "./command.instagram";
 import { ListCommand } from "./command.list";
@@ -36,7 +35,6 @@ const commands: ICommand[] = [
   RemoveCommand,
   PromoteCommand,
   DemoteCommand,
-  ImagesCommand,
   ResumeCommand,
   StickerCommand,
   SendUpdateCommand,
@@ -60,7 +58,7 @@ const commands: ICommand[] = [
 ];
 
 export async function commandHandler(body: string): Promise<ICommand | null> {
-  const normalized = body.toLowerCase().split(" ")[0];
+  const normalized = body.trim().toLowerCase().split(/\s+/)[0];
 
   const [commandName, ...args] = body.trim().split(/\s+/);
 

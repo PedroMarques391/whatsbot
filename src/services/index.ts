@@ -18,8 +18,7 @@ import { help } from "./help";
 import { init, start } from "./initialize";
 import { registerUser } from "./registerUser";
 import { removeBg } from "./removeBg";
-import { imageSearch } from "./searchImage";
-import { makeSticker, renameSticker } from "./sticker";
+import { StickerService } from "./sticker";
 import { testFunction } from "./test";
 
 export {
@@ -30,22 +29,20 @@ export {
   DownloadService,
   getRevokedMessages,
   help,
-  imageSearch,
   init,
   join,
   leave,
   listMembers,
-  makeSticker,
   promoteParticipant,
   registerUser,
   removeBg,
   removeParticipant,
-  renameSticker,
   sendUpdateMessages,
   setExitMessage,
   setWelcomeMessage,
   showPastMembers,
   start,
+  StickerService,
   testFunction,
   unblockCommand,
 };
