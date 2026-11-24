@@ -1,10 +1,19 @@
-import { delay, extractTextFromBody, isValidUrl } from "@/utils";
-import { PlatformType } from "@/utils/urls";
+import {
+  ReactionLoadingUtils,
+  StringUtils,
+  TimerUtils,
+  UrlUtils,
+} from "@/utils";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { Client, Message, MessageMedia } from "whatsapp-web.js";
 import youtubedl from "youtube-dl-exec";
-import { IInstagramResponse, ITikTokResponse } from "../../types";
+import {
+  IInstagramResponse,
+  ITikTokResponse,
+  IYtDlpDownloadOptions,
+  PlatformType,
+} from "../../types";
 
 export class DownloadService {
   private readonly TIKTOK_API_URL = "https://www.tikwm.com/api/";
@@ -12,7 +21,7 @@ export class DownloadService {
   private readonly RAPIDAPI_HOST_INSTAGRAM =
     process.env.RAPIDAPI_HOST_INSTAGRAM;
   private readonly MAX_DOWNLOAD_SIZE_MB = 60;
-  private stopReactionLoading?: () => void;
+  private stopReactionLoading?: () => Promise<void> | void;
 
   constructor(
     private readonly client: Client,
@@ -90,10 +99,14 @@ export class DownloadService {
   }
 
   async youtube(): Promise<void> {
+    const onlyAudio = this.hasOnlyAudioFlag();
     return this.downloadWithYtDlp(
       "youtube",
       "YouTube",
-      "bestvideo[height<=720][vcodec^=avc]+bestaudio[ext=m4a]/best[height<=720][vcodec^=avc]/best",
+      onlyAudio
+        ? "bestaudio/best"
+        : "bestvideo[height<=720][vcodec^=avc]+bestaudio[ext=m4a]/best[height<=720][vcodec^=avc]/best",
+      { onlyAudio },
     );
   }
 
@@ -126,17 +139,20 @@ export class DownloadService {
     platform: PlatformType,
     displayName: string,
     format: string,
-    options?: {
-      userAgent?: string;
-      referer?: string;
-      addHeader?: string[];
-    },
+    options?: IYtDlpDownloadOptions,
   ): Promise<void> {
+    const isAudioOnly = Boolean(options?.onlyAudio);
+    const { onlyAudio: _onlyAudio, ...ytDlpOptions } = options ?? {};
+
     let url = await this.extractTargetUrl();
     const isValid = await this.validateUrl(url, platform);
     if (!isValid || !url) return;
 
-    await this.notifyStart();
+    await this.notifyStart(
+      isAudioOnly
+        ? "Iniciando o download do áudio. Isso levará apenas um momento..."
+        : undefined,
+    );
 
     const jobDir = path.resolve(__dirname, `../../temp/${Date.now()}`);
 
@@ -146,22 +162,31 @@ export class DownloadService {
       await youtubedl(url, {
         output: path.join(jobDir, "%(title).80s.%(ext)s"),
         format,
-        mergeOutputFormat: "mp4",
+        ...(isAudioOnly
+          ? {
+              extractAudio: true,
+              audioFormat: "mp3",
+              audioQuality: 0,
+            }
+          : {
+              mergeOutputFormat: "mp4",
+            }),
         noCheckCertificates: true,
         noWarnings: true,
-        ...options,
+        ...ytDlpOptions,
       });
 
       const files = await fs.readdir(jobDir);
-      const videoFile = files.find((f) => f.endsWith(".mp4"));
+      const targetExt = isAudioOnly ? ".mp3" : ".mp4";
+      const mediaFile = files.find((f) => f.endsWith(targetExt));
 
-      if (!videoFile) {
+      if (!mediaFile) {
         throw new Error(
-          `Vídeo do ${displayName} não encontrado após o download.`,
+          `${isAudioOnly ? "Áudio" : "Vídeo"} do ${displayName} não encontrado após o download.`,
         );
       }
 
-      const filePath = path.join(jobDir, videoFile);
+      const filePath = path.join(jobDir, mediaFile);
 
       const stats = await fs.stat(filePath);
       const maxBytes = this.MAX_DOWNLOAD_SIZE_MB * 1024 * 1024;
@@ -171,25 +196,25 @@ export class DownloadService {
         const sizeMb = (stats.size / (1024 * 1024)).toFixed(1);
         await this.client.sendMessage(
           this.message.from,
-          `O vídeo é muito pesado (${sizeMb} MB)! Tá achando que eu tenho memória infinita seu ignóbil?! O limite é de ${this.MAX_DOWNLOAD_SIZE_MB} MB. `,
+          `O ${isAudioOnly ? "áudio" : "vídeo"} é muito pesado (${sizeMb} MB)! Tá achando que eu tenho memória infinita seu ignóbil?! O limite é de ${this.MAX_DOWNLOAD_SIZE_MB} MB. `,
         );
         await this.message.react("❌");
         return;
       }
 
       const media = MessageMedia.fromFilePath(filePath);
-      const title = path.parse(videoFile).name;
+      const title = path.parse(mediaFile).name;
       const caption = this.formatCaption(displayName, title);
 
       const sendMediaAsDocument = stats.size > 16 * 1024 * 1024;
 
-      await delay(1000);
+      await TimerUtils.delay(1000);
 
       const sentMessage = await this.client.sendMessage(
         this.message.from,
         media,
         {
-          caption,
+          ...(isAudioOnly && !sendMediaAsDocument ? {} : { caption }),
           sendMediaAsDocument,
         },
       );
@@ -206,12 +231,25 @@ export class DownloadService {
     }
   }
 
+  private hasOnlyAudioFlag(): boolean {
+    const argsText = StringUtils.extractTextFromBody(this.message.body);
+    return /(?:^|\s)(?:--onlyaudio|--oa)(?:\s|$)/i.test(argsText);
+  }
+
+  private stripDownloadFlags(text: string): string {
+    return text
+      .replace(/(?:^|\s)(?:--onlyaudio|--oa)(?=\s|$)/gi, " ")
+      .trim();
+  }
+
   private async extractTargetUrl(): Promise<string> {
     const quotedMessage = await this.message.getQuotedMessage();
     if (this.message.hasQuotedMsg && quotedMessage?.body?.length) {
-      return quotedMessage.body.trim();
+      return this.stripDownloadFlags(quotedMessage.body);
     }
-    return extractTextFromBody(this.message.body) ?? "";
+    return this.stripDownloadFlags(
+      StringUtils.extractTextFromBody(this.message.body) ?? "",
+    );
   }
 
   private async validateUrl(
@@ -226,7 +264,7 @@ export class DownloadService {
       return false;
     }
 
-    const isValid = isValidUrl(url, platform);
+    const isValid = UrlUtils.isValidUrl(url, platform);
 
     if (!isValid) {
       if (this.message.body.includes("baixar")) return false;
@@ -246,22 +284,7 @@ export class DownloadService {
     text = "Iniciando o download do vídeo. Isso levará apenas um momento...",
   ): Promise<void> {
     this.stopLoading();
-
-    let isRunning = true;
-    const hearts = ["❤️", "🧡", "💛", "💚", "💙", "💜", "💖"];
-    let index = 0;
-
-    (async () => {
-      while (isRunning) {
-        await this.message.react(hearts[index % hearts.length]).catch(() => {});
-        index++;
-        await delay(500);
-      }
-    })();
-
-    this.stopReactionLoading = () => {
-      isRunning = false;
-    };
+    this.stopReactionLoading = ReactionLoadingUtils.start(this.message);
 
     const infoMessage = await this.client.sendMessage(this.message.from, text);
     await infoMessage.react("☕");
@@ -307,7 +330,7 @@ export class DownloadService {
     caption = "Aqui está seu vídeo. ✨",
   ): Promise<void> {
     const media = await MessageMedia.fromUrl(mediaUrl, { unsafeMime: true });
-    await delay(1000);
+    await TimerUtils.delay(1000);
 
     const sentMessage = await this.client.sendMessage(
       this.message.from,

@@ -3,8 +3,9 @@ import { ICommand } from "../../types";
 
 export const YouTubeCommand: ICommand = {
   name: "/youtube",
-  description: "Baixa um vídeo ou shorts do YouTube",
-  sintaxe: "/youtube <link>",
+  description:
+    "Baixa um vídeo, shorts ou apenas o áudio (--onlyAudio / --oa) do YouTube",
+  sintaxe: "/youtube <link> [--onlyAudio | --oa]",
   aliases: ["/yt", "/ytb", "/shorts"],
   onlyGroup: false,
   async execute({ message, client }) {
