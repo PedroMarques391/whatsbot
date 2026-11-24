@@ -1,3 +1,4 @@
+import { StickerHelper } from "@/helpers";
 import { mongooseConnect } from "@/lib/mongoose";
 import { init } from "@/services";
 import mongoose from "mongoose";
@@ -41,6 +42,7 @@ export function connections(client: Client) {
   });
 
   client.on("ready", async () => {
+    await StickerHelper.enableSoundStickerGating(client);
     await mongooseConnect(process.env.MONGO_URL);
     await printWelcomeMessage(
       client.info.pushname,

@@ -1,4 +1,4 @@
-import { renameSticker } from "@/services";
+import { StickerFactory } from "@/factories";
 import { ICommand } from "../../types";
 
 export const RenameCommand: ICommand = {
@@ -7,6 +7,7 @@ export const RenameCommand: ICommand = {
   sintaxe: "/rename <novo autor>",
   onlyGroup: false,
   async execute({ client, message, chat }) {
-    await renameSticker(message, chat, client);
+    const stickerService = StickerFactory.getStickerService(client, message);
+    await stickerService.renameSticker(chat);
   },
 };

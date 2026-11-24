@@ -1,102 +1,149 @@
-import { dynamicSticker, staticSticker } from "@/helpers";
-import { extractTextFromBody, sendStickerErrors } from "@/utils";
-import fs from "fs";
-import path from "path";
-import { Chat, Client, Message, MessageMedia } from "whatsapp-web.js";
+import { StickerHelper } from "@/helpers";
+import { ReactionLoadingUtils, StringUtils } from "@/utils";
+import { Chat, Message, MessageMedia } from "whatsapp-web.js";
 
-export async function makeSticker(message: Message, client: Client) {
-  const quotedMessage = await message.getQuotedMessage();
-  const msg = message.hasQuotedMsg ? quotedMessage : message;
+export class StickerService {
+  constructor(
+    private readonly message: Message,
+    private readonly stickerHelper: StickerHelper,
+  ) {}
 
-  const chat = await msg.getChat();
-  const media = (await msg.downloadMedia()) as MessageMedia;
+  async makeSticker(chatId: string): Promise<void> {
+    const withAudio = this.hasAudioFlag();
+    const quotedMessage = this.message.hasQuotedMsg
+      ? await this.message.getQuotedMessage()
+      : null;
 
-  const authorName = message._data.notifyName || "Ada Ada";
-  const errorMessage: string =
-    sendStickerErrors[Math.floor(Math.random() * sendStickerErrors.length)];
-  if (!media || !media.data) {
-    await msg
-      .reply(
-        "A magia precisa de um pouco de matéria-prima. Envie uma imagem ou um vídeo para que eu possa criar sua figurinha. ✨",
-      )
-      .then((message: Message) => {
-        message.react("🌸");
+    const sourceMessage = this.resolveSourceMessage(quotedMessage);
+    if (!sourceMessage) {
+      await this.replyEmptyMedia();
+      return;
+    }
+
+    const audioMessage =
+      withAudio &&
+      sourceMessage === this.message &&
+      quotedMessage &&
+      this.isAudioMessage(quotedMessage)
+        ? quotedMessage
+        : null;
+
+    const stopLoading = ReactionLoadingUtils.start(this.message);
+
+    try {
+      const [media, audioMedia] = await Promise.all([
+        sourceMessage.downloadMedia() as Promise<MessageMedia>,
+        audioMessage
+          ? (audioMessage.downloadMedia() as Promise<MessageMedia | undefined>)
+          : Promise.resolve(undefined),
+      ]);
+
+      if (!media?.data) {
+        stopLoading();
+        await this.replyEmptyMedia();
+        return;
+      }
+
+      const sentSticker = await this.stickerHelper.sendSticker({
+        type: sourceMessage.type === "video" ? "video" : "image",
+        message: this.message,
+        chatId,
+        media,
+        withAudio,
+        audioMedia,
       });
-    return;
+
+      stopLoading();
+      if (sentSticker) {
+        await this.reactCompleted(sentSticker);
+      }
+    } finally {
+      stopLoading();
+    }
   }
 
-  const outputDir: string = path.resolve(process.cwd(), "src/assets/stickers");
-  if (!fs.existsSync(outputDir)) {
-    fs.mkdirSync(outputDir, { recursive: true });
+  async renameSticker(chat: Chat): Promise<void> {
+    const stickerName = StringUtils.extractTextFromBody(this.message.body);
+    const quotedMessage = await this.message.getQuotedMessage();
+
+    if (!this.message.hasQuotedMsg || quotedMessage.type !== "sticker") {
+      await this.message
+        .reply(
+          "Você quer que eu renomeie o quê exatamente? O vazio? Marca uma figurinha primeiro! 🙄",
+        )
+        .then(async (reply) => await reply.react("👀"));
+      await this.message.react("❌");
+      return;
+    }
+
+    if (stickerName.length > 20 || stickerName.length === 0) {
+      const replyText =
+        stickerName.length > 20
+          ? "Escreveu um TCC no nome da figurinha? O limite é 20 caracteres, abrevia isso aí. 🙄"
+          : "Renomear pra... nada? Digita algum nome depois do comando, não sou vidente. ☕";
+      await this.message
+        .reply(replyText)
+        .then(async (reply) => await reply.react("🙄"));
+      await this.message.react("❌");
+      return;
+    }
+
+    const stopLoading = ReactionLoadingUtils.start(this.message);
+
+    try {
+      const media = (await quotedMessage.downloadMedia()) as MessageMedia;
+
+      const sentSticker = await this.stickerHelper.sendSticker({
+        type: "sticker",
+        message: this.message,
+        chatId: chat.id._serialized,
+        media,
+        stickerName,
+      });
+
+      stopLoading();
+      if (sentSticker) {
+        await this.reactCompleted(sentSticker);
+      }
+    } finally {
+      stopLoading();
+    }
   }
 
-  if (msg.type === "video") {
-    await dynamicSticker(
-      msg,
-      media,
-      chat,
-      client,
-      authorName,
-      outputDir,
-      errorMessage,
-    );
-    return;
+  private async reactCompleted(sentSticker: Message): Promise<void> {
+    await Promise.all([
+      sentSticker.react("❤️").catch(() => undefined),
+      this.message.react("❤️").catch(() => undefined),
+    ]);
   }
-  if (msg.type === "image") {
-    await staticSticker(
-      msg,
-      media,
-      chat,
-      client,
-      authorName,
-      outputDir,
-      errorMessage,
-    );
-    return;
+
+  private isMedia(msg: Message | null): msg is Message {
+    return Boolean(msg && (msg.type === "image" || msg.type === "video"));
   }
-}
 
-export async function renameSticker(
-  message: Message,
-  chat: Chat,
-  client: Client,
-) {
-  const name = extractTextFromBody(message.body);
-  const quotedMessage = await message.getQuotedMessage();
+  private isAudioMessage(msg: Message): boolean {
+    return msg.type === "audio";
+  }
 
-  await message.react("⏳");
+  private hasAudioFlag(): boolean {
+    const argsText = StringUtils.extractTextFromBody(
+      this.message.body,
+    ).toLowerCase();
+    return /(?:^|\s)--audio(?:\s|$)/i.test(argsText);
+  }
 
-  if (!message.hasQuotedMsg || quotedMessage.type !== "sticker") {
-    await message
+  private resolveSourceMessage(quotedMessage: Message | null): Message | null {
+    if (this.isMedia(this.message)) return this.message;
+    if (this.isMedia(quotedMessage)) return quotedMessage;
+    return null;
+  }
+
+  private async replyEmptyMedia(): Promise<void> {
+    await this.message
       .reply(
-        "Eu preciso de uma figurinha como referência para poder renomeá-acredite, facilita muito o meu trabalho. ☕",
+        "Quer que eu crie figurinha do vento? Manda ou marca uma imagem ou um vídeo primeiro, né. 🙄",
       )
-      .then(async (message) => await message.react("👀"));
-    await message.react("❌");
-
-    return;
+      .then((sent: Message) => sent.react("🙄").catch(() => undefined));
+    await this.message.react("❌").catch(() => undefined);
   }
-  if (name.length > 20 || name.length === 0) {
-    const reply =
-      name.length > 20
-        ? "Um nome tão longo perde o charme, não acha? Tente ser um pouco mais breve."
-        : "Mudar para um nome vazio não me parece muito útil. Me dê algum texto para trabalhar. ✨";
-    await message
-      .reply(reply)
-      .then(async (message) => await message.react("🙄"));
-    await message.react("❌");
-    return;
-  }
-
-  const media = (await quotedMessage.downloadMedia()) as MessageMedia;
-
-  await client
-    .sendMessage(chat.id._serialized, media, {
-      sendMediaAsSticker: true,
-      stickerName: name,
-      stickerAuthor: "AdaBot",
-      stickerCategories: ["figs"],
-    })
-    .then(async (message) => await message.react("❤️"));
-  await message.react("✅");
 }

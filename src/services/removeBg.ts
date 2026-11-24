@@ -1,5 +1,5 @@
-import { staticSticker } from "@/helpers";
-import { delay, sendStickerErrors } from "@/utils";
+import { StickerHelper } from "@/helpers";
+import { TimerUtils } from "@/utils";
 import removeBackground from "@imgly/background-removal-node";
 import fs from "fs";
 import path from "path";
@@ -7,20 +7,18 @@ import { Chat, Client, Message, MessageMedia } from "whatsapp-web.js";
 
 export async function removeBg(message: Message, chat: Chat, client: Client) {
   const quotedMessage = await message.getQuotedMessage();
-  const msg = message.hasQuotedMsg ? quotedMessage : message;
-  await msg.react("⏳");
-  const errorMessage =
-    sendStickerErrors[Math.floor(Math.random() * sendStickerErrors.length)];
+  const sourceMessage = message.hasQuotedMsg ? quotedMessage : message;
+  await sourceMessage.react("⏳");
 
-  if (msg.type !== "image" && msg.type !== "sticker") {
-    await msg
+  if (sourceMessage.type !== "image" && sourceMessage.type !== "sticker") {
+    await sourceMessage
       .reply("😑 Sério mesmo? Esse comando é só pra imagens. Não tá claro? 🙃")
-      .then(async (message) => await message.react("🙄"));
-    await msg.react("❌");
+      .then(async (reply) => await reply.react("🙄"));
+    await sourceMessage.react("❌");
     return;
   }
 
-  const media = (await msg.downloadMedia()) as MessageMedia;
+  const media = (await sourceMessage.downloadMedia()) as MessageMedia;
 
   const outputDir: string = path.resolve(
     process.cwd(),
@@ -45,45 +43,49 @@ export async function removeBg(message: Message, chat: Chat, client: Client) {
 
       fs.writeFileSync(imageOutput, Buffer.from(arrayBuffer));
 
-      const media = MessageMedia.fromFilePath(imageOutput);
+      const processedMedia = MessageMedia.fromFilePath(imageOutput);
 
-      if (msg.type === "image") {
+      if (sourceMessage.type === "image") {
         await client
-          .sendMessage(chat.id._serialized, media, {
+          .sendMessage(chat.id._serialized, processedMedia, {
             sendMediaAsDocument: true,
             caption: "Aqui está sua imagem com o fundo removido! ",
           })
-          .then(async (message) => await message.react("❤️"));
-        await msg.react("⌛");
+          .then(async (sentDoc) => await sentDoc.react("❤️"));
+        await sourceMessage.react("⌛");
         return;
       }
 
-      if (msg.type === "sticker") {
-        await staticSticker(
+      if (sourceMessage.type === "sticker") {
+        const stickerHelper = new StickerHelper(client);
+        const sentSticker = await stickerHelper.sendSticker({
+          type: "image",
           message,
-          media,
-          chat,
-          client,
-          message._data.notifyName,
-          outputDir,
-          errorMessage,
-        );
+          chatId: chat.id._serialized,
+          media: processedMedia,
+        });
+        if (sentSticker) {
+          await Promise.all([
+            sentSticker.react("❤️").catch(() => undefined),
+            message.react("❤️").catch(() => undefined),
+          ]);
+        }
         return;
       }
     })
     .catch(async (error) => {
       console.error("Erro ao remover o fundo:", error);
-      await msg
+      await sourceMessage
         .reply(
-          "Tivemos um problema processando o arquivo. Tente novamente em alguns instantes, por favor. ☕",
+          "Não consegui processar esse arquivo. Ou está corrompido, ou o sistema cansou de você. Tente mais tarde.",
         )
-        .then(async (message) => await message.react("😥"));
-      await msg.react("😥");
+        .then(async (reply) => await reply.react("❌"));
+      await sourceMessage.react("❌");
     })
     .finally(async () => {
-      await msg.react("✅");
+      await sourceMessage.react("✅");
       fs.unlinkSync(imagePath);
-      await delay(2000);
+      await TimerUtils.delay(2000);
       fs.unlinkSync(imageOutput);
     });
 }

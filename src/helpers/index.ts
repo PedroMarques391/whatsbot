@@ -8,8 +8,7 @@ import { showPastMembers } from "../services/group.service/showPastMembers";
 import { sendUpdateMessages } from "../services/group.service/update";
 import { getGroupAdmins } from "./group/groupAdmins";
 import { groupParticipants } from "./group/groupParticipants";
-import { dynamicSticker } from "./sticker/dynamicSticker";
-import { staticSticker } from "./sticker/staticSticker";
+import { StickerHelper } from "./sticker/sticker.helper";
 import { authorIsAdmin } from "./validation/authorIsAdmin";
 import { botIsAdmin } from "./validation/botIsAdmin";
 import { isAuthorOrBot } from "./validation/isAuthorOrBot";
@@ -21,7 +20,6 @@ export {
   authorIsAdmin,
   botIsAdmin,
   demoteParticipant,
-  dynamicSticker,
   getGroupAdmins,
   groupParticipants,
   isAuthorOrBot,
@@ -33,5 +31,5 @@ export {
   removeParticipant,
   sendUpdateMessages,
   showPastMembers,
-  staticSticker,
+  StickerHelper,
 };
