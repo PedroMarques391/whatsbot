@@ -2,13 +2,31 @@ services:
   whatsbot:
     build: .
     container_name: adabot
-    restart: always
+    restart: unless-stopped
     init: true
-    shm_size: '2gb'
-    volumes:
-      - .:/app
-      - /app/node_modules
+    tty: true
+    stdin_open: true
+    stop_grace_period: 20s
+    shm_size: "2gb"
+    mem_limit: "2g"
+    command: ["node", "dist/main.js"]
     environment:
+      - TZ=America/Sao_Paulo
+      - NODE_ENV=production
       - CHROME_PATH=/usr/bin/google-chrome-stable
     env_file:
       - ./.env
+    volumes:
+      - wwebjs_auth:/app/.wwebjs_auth
+      - wwebjs_cache:/app/.wwebjs_cache
+    tmpfs:
+      - /app/temp:size=256m
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  wwebjs_auth:
+  wwebjs_cache:

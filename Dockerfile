@@ -17,8 +17,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN yarn install --immutable
 
-RUN yarn install --frozen-lockfile
-
 COPY . .
 
 RUN yarn build 
@@ -51,4 +49,4 @@ RUN corepack enable
 
 COPY --from=builder /app ./
 
-CMD ["yarn", "start"]
+CMD ["node", "dist/main.js"]
