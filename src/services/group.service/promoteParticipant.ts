@@ -5,7 +5,7 @@ import {
   isUserNotInGroup,
   notAValidNumber,
 } from "@/helpers";
-import { serializeMention } from "@/utils";
+import { MentionUtils } from "@/utils";
 import { Client, GroupChat, Message } from "whatsapp-web.js";
 import { BotError } from "@/errors/BotErrors";
 
@@ -21,7 +21,8 @@ export async function promoteParticipant(
     isUserNotInGroup(chat, message),
   ]);
 
-  const { serializedNumber, user } = await serializeMention(message);
+  const { serializedNumber, user } =
+    await MentionUtils.serializeMention(message);
 
   if (getGroupAdmins(chat).includes(serializedNumber)) {
     throw BotError.validation(

@@ -1,5 +1,5 @@
 import RevokedMessageModel from "@/models/revokeMessages";
-import { formatDate } from "@/utils";
+import { DateUtils } from "@/utils";
 import { Chat, Client, Message } from "whatsapp-web.js";
 
 export async function getRevokedMessages(
@@ -10,7 +10,7 @@ export async function getRevokedMessages(
   interface IRevokedMessage {
     userName: string;
     message: string;
-    revokedAt: Date;
+    revokedAt?: Date;
   }
 
   const mentioned = message.mentionedIds[0];
@@ -42,7 +42,9 @@ export async function getRevokedMessages(
   let header = `> ${pushname} apagou as seguintes mensagens:\n\n`;
   const messages = revogedMessages
     .map((msg) => {
-      const formatedDate = formatDate(msg.revokedAt);
+      const formatedDate = msg.revokedAt
+        ? DateUtils.formatDate(msg.revokedAt)
+        : "Data desconhecida";
 
       return `- [${formatedDate}] "${msg.message}"`;
     })

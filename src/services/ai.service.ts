@@ -1,6 +1,6 @@
 import { BotError } from "@/errors/BotErrors";
 import { AIProvider } from "@/providers/ai.provider";
-import { extractTextFromBody, resumeErrorMessages, resumePrompt } from "@/utils";
+import { MessageUtils, StringUtils } from "@/utils";
 import { Client, Message } from "whatsapp-web.js";
 
 export class AIService {
@@ -13,7 +13,7 @@ export class AIService {
   ): Promise<void> {
     if (message.fromMe) return;
     try {
-      const question = extractTextFromBody(message.body);
+      const question = StringUtils.extractTextFromBody(message.body);
 
       const text = await this.provider.response(
         `responda: ${question}`,
@@ -28,7 +28,7 @@ export class AIService {
       throw BotError.externalApi(
         "An error occurred while processing the response",
         error,
-        "Desculpe, não sei como responder isso. 😫😫",
+        "Ou a pergunta foi irrelevante demais, ou a API caiu. De qualquer forma, não vou responder agora.",
       );
     }
   }
@@ -57,21 +57,18 @@ export class AIService {
     if (textMessages.length < 20) {
       await msg.react("✅");
 
-      const randomMessage =
-        resumeErrorMessages[
-          Math.floor(Math.random() * resumeErrorMessages.length)
-        ];
+      const randomMessage = MessageUtils.errorMessages("resume");
 
       await client
         .sendMessage(chat.id._serialized, randomMessage)
-        .then(async (message) => await message.react("😥"));
-      await msg.react("😥");
+        .then(async (message) => await message.react("🙄"));
+      await msg.react("❌");
       return;
     }
 
     await msg.react("⌛");
 
-    const prompt = resumePrompt(textMessages);
+    const prompt = MessageUtils.promptsAI(textMessages);
 
     try {
       const summary = await this.provider.response(prompt, 0.7, 500);
@@ -83,7 +80,7 @@ export class AIService {
       await msg.react("❌");
       await client.sendMessage(
         chat.id._serialized,
-        "Peço desculpas, mas não consegui organizar o resumo neste momento. Talvez devamos tentar de novo. ☕",
+        "Não consegui gerar esse resumo agora. Talvez nem valesse a pena ler mesmo. ☕",
       );
     }
   }

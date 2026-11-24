@@ -5,7 +5,7 @@ import {
   notAValidNumber,
 } from "@/helpers";
 import { isUserNotInGroup } from "@/helpers/validation/isUserNotInGroup";
-import { serializeMention } from "@/utils";
+import { MentionUtils } from "@/utils";
 import { GroupChat, Message } from "whatsapp-web.js";
 import { BotError } from "@/errors/BotErrors";
 
@@ -17,7 +17,7 @@ export async function removeParticipant(message: Message, chat: GroupChat) {
     isUserNotInGroup(chat, message),
   ]);
 
-  const { serializedNumber } = await serializeMention(message);
+  const { serializedNumber } = await MentionUtils.serializeMention(message);
 
   if (isAuthorOrBot(message)) {
     throw BotError.validation(

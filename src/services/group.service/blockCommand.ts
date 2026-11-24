@@ -1,14 +1,14 @@
 import { commandHandler } from "@/commands";
 import { authorIsAdmin } from "@/helpers";
 import GroupModel from "@/models/group";
-import { extractTextFromBody } from "@/utils";
+import { StringUtils } from "@/utils";
 import { Chat, GroupChat, Message } from "whatsapp-web.js";
 import { BotError } from "@/errors/BotErrors";
 
 export async function blockCommand(message: Message, chat: Chat) {
   const chatId = chat.id._serialized;
   const isAdmin = await authorIsAdmin(chat as GroupChat, message);
-  const commandToBlock = extractTextFromBody(message.body);
+  const commandToBlock = StringUtils.extractTextFromBody(message.body);
   const command = await commandHandler(commandToBlock);
   if (!isAdmin) return;
 

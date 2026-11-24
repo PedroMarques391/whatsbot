@@ -6,7 +6,7 @@ import {
   isUserNotInGroup,
   notAValidNumber,
 } from "@/helpers";
-import { serializeMention } from "@/utils";
+import { MentionUtils } from "@/utils";
 import { Client, GroupChat, Message } from "whatsapp-web.js";
 import { BotError } from "@/errors/BotErrors";
 
@@ -22,7 +22,8 @@ export async function demoteParticipant(
     isUserNotInGroup(chat, message),
   ]);
 
-  const { serializedNumber, user } = await serializeMention(message);
+  const { serializedNumber, user } =
+    await MentionUtils.serializeMention(message);
 
   const groupAdmins = getGroupAdmins(chat).includes(serializedNumber);
 

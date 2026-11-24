@@ -1,16 +1,16 @@
 import { commandHandler } from "@/commands";
-import { extractTextFromBody } from "@/utils";
+import { StringUtils } from "@/utils";
 import { Message } from "whatsapp-web.js";
 import { BotError } from "@/errors/BotErrors";
 
 export async function help(message: Message) {
-  const commandToGetHelp = extractTextFromBody(message.body);
+  const commandToGetHelp = StringUtils.extractTextFromBody(message.body);
   const command = await commandHandler(commandToGetHelp);
 
   if (!commandToGetHelp || !command) {
     const response = !commandToGetHelp
-      ? `> Mostra o jeito correto de usar os comandos, use a sintaxe correta: \`/help <comando>\`.`
-      : `> O comando *${commandToGetHelp}* não existe. Não preciso me preocupar com ele, né?`;
+      ? `> Sintaxe básica: \`/help <comando>\`. Não é tão difícil.`
+      : `> O comando *${commandToGetHelp}* não existe. Não vou perder tempo procurando algo que você inventou.`;
 
     throw BotError.validation(response);
   }

@@ -1,5 +1,5 @@
 import { authorIsAdmin, botIsAdmin, groupParticipants } from "@/helpers";
-import { extractTextFromBody } from "@/utils";
+import { StringUtils } from "@/utils";
 import { GroupChat, Message } from "whatsapp-web.js";
 import { BotError } from "@/errors/BotErrors";
 
@@ -13,7 +13,7 @@ export async function addParticipant(message: Message, chat: GroupChat) {
   await Promise.all([botIsAdmin(chat), authorIsAdmin(chat, message)]);
   if (
     groupParticipants(chat).includes(
-      `${extractTextFromBody(message.body)}@c.us`,
+      `${StringUtils.extractTextFromBody(message.body)}@c.us`,
     )
   ) {
     throw BotError.validation(
@@ -21,7 +21,7 @@ export async function addParticipant(message: Message, chat: GroupChat) {
     );
   }
 
-  const newMenbers = extractTextFromBody(message.body)
+  const newMenbers = StringUtils.extractTextFromBody(message.body)
     .split(" ")
     .map((num) => `${num}@c.us`);
 

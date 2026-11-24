@@ -1,4 +1,4 @@
-import { serializeMention } from "@/utils";
+import { MentionUtils } from "@/utils";
 import { GroupChat, Message } from "whatsapp-web.js";
 import { BotError } from "@/errors/BotErrors";
 
@@ -14,7 +14,7 @@ export async function isUserNotInGroup(
   chat: GroupChat,
   message: Message,
 ): Promise<boolean> {
-  const { serializedNumber } = await serializeMention(message);
+  const { serializedNumber } = await MentionUtils.serializeMention(message);
 
   const isParticipant = chat.participants.some(
     (participant) => participant.id._serialized === serializedNumber,

@@ -1,18 +1,14 @@
 import { Message } from "whatsapp-web.js";
+import { SerializedMention } from "../../types";
 
-type SerializedMention = {
-  serializedNumber: string;
-  user: string;
-};
+export class MentionUtils {
+  static async serializeMention(message: Message): Promise<SerializedMention> {
+    const mentions = await message.getMentions();
+    const targetMention = mentions[0];
 
-async function serializeMention(message: Message): Promise<SerializedMention> {
-  const mentions = await message.getMentions();
-  const targetMention = mentions[0];
-
-  return {
-    serializedNumber: targetMention.id._serialized,
-    user: targetMention.id.user,
-  };
+    return {
+      serializedNumber: targetMention.id._serialized,
+      user: targetMention.id.user,
+    };
+  }
 }
-
-export { serializeMention };

@@ -1,12 +1,12 @@
 import { authorIsAdmin } from "@/helpers";
 import GroupModel from "@/models/group";
-import { extractTextFromBody } from "@/utils";
+import { StringUtils } from "@/utils";
 import { GroupChat, Message } from "whatsapp-web.js";
 import { BotError } from "@/errors/BotErrors";
 
 export async function setExitMessage(chat: GroupChat, message: Message) {
   const idAdmin = await authorIsAdmin(chat as GroupChat, message);
-  const exitMessage = extractTextFromBody(message.body);
+  const exitMessage = StringUtils.extractTextFromBody(message.body);
   if (!idAdmin) return;
 
   const updateGroup = await GroupModel.findOneAndUpdate(

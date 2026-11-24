@@ -1,11 +1,11 @@
 import { AIFactory } from "@/factories";
-import { delay, extractTextFromBody } from "@/utils";
+import { StringUtils, TimerUtils } from "@/utils";
 import path from "path";
 import { Client, Message, MessageMedia } from "whatsapp-web.js";
 
 export const sendUpdateMessages = async (client: Client, message: Message) => {
   const aiService = AIFactory.getAiService();
-  const body: string = extractTextFromBody(message.body);
+  const body: string = StringUtils.extractTextFromBody(message.body);
   const chats = await client.getChats();
   const groups = chats
     .filter((chat) => chat.isGroup)
@@ -31,6 +31,6 @@ export const sendUpdateMessages = async (client: Client, message: Message) => {
   );
   for (const group of groups) {
     await client.sendMessage(group, media, { caption: text });
-    await delay(2000);
+    await TimerUtils.delay(2000);
   }
 };

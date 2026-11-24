@@ -1,10 +1,10 @@
-import { delay } from "@/utils";
+import { TimerUtils } from "@/utils";
 import path from "path";
 import { Client, Message, MessageMedia } from "whatsapp-web.js";
 
 export async function init(client: Client) {
   try {
-    await delay(200);
+    await TimerUtils.delay(200);
 
     const groupID = process.env.GROUPS_IDS?.split(",") || [];
     for (let i = 0; i < groupID.length; i++) {
@@ -65,16 +65,15 @@ export async function start(message: Message, client: Client) {
     ╰──────≺∆≻──────╯  
     
     ╭─≺ *Geral* ≻─╮  
-    ┃ ➤ /sticker - Criar figurinha (envie imagem/vídeo).  
+    ┃ ➤ /sticker - Criar figurinha (use --audio para som).  
     ┃ ➤ /resume - Resumir últimas mensagens.  
     ┃ ➤ /rename + nome - Altera o nome da figurinha.  
     ┃ ➤ /removeBg - Remove o fundo da imagem marcada ou enviada. 
     ┃ ➤ /tiktok + url - Baixa o vídeo pelo link.  
     ┃ ➤ /instagram + url - Baixa vídeo/reels pelo link.  
-    ┃ ➤ /youtube + url - Baixa vídeo/shorts do YouTube.  
+    ┃ ➤ /youtube + url - Baixa vídeo/shorts ou áudio (--oa) do YouTube.  
     ┃ ➤ /twitter + url - Baixa o vídeo do Twitter / X.  
     ┃ ➤ /pinterest + url - Baixa o vídeo/mídia do Pinterest.  
-    ┃ ➤ /images + descrição - Buscar imagens.  
     ┃ ➤ /register - Registrar usuário.  
     ╰─────≺∆≻─────╯  
 

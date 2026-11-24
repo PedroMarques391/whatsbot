@@ -1,4 +1,4 @@
-import { botResponses } from '@/utils';
+import { MessageUtils } from '@/utils';
 import { Chat, Message } from 'whatsapp-web.js';
 
 const greetingRegexGroup = /\b(o{1,}i+|ol+[áa]+|o{2,}p+a+|e+\s*a+[íi]+|f+a+l+a+|s+a+l+v+e+|b+o+m+\s*d+i+a+|b+o+a+\s*t+a+r+d+e+|b+o+a+\s*n+o+i+t+e+|h+e+y+|h+i+|h+e+l+l+o+|y+o+|e+a+e+|e+a+i+|o+i+e+|o+e{2,})\s*(ada|adabot)\b/i;
@@ -21,7 +21,7 @@ export async function greeting(message: Message, chat: Chat): Promise<boolean> {
         : greetingRegexPrivate.test(body);
 
     if (matchedGreeting || isMentionedDirectly) {
-        const reply = botResponses[Math.floor(Math.random() * botResponses.length)];
+        const reply = MessageUtils.mentions();
         await message.reply(reply);
         return true;
     }
