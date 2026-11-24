@@ -9,7 +9,7 @@ export async function notAValidNumber(
 
   if (mentions.length === 0) {
     throw BotError.validation(
-      `Faltou um pequeno detalhe. Indique o usuário usando '@' logo após o comando '${command}'. ☕`,
+      `Faltou o óbvio: marque o usuário com '@' logo após '${command}'.`,
     );
   }
   return false;

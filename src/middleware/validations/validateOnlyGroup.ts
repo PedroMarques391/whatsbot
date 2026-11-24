@@ -3,7 +3,7 @@ import { ICommand } from '../../../types';
 
 export async function validateOnlyGroup(command: ICommand, chat: Chat, message: Message): Promise<boolean> {
     if (command.onlyGroup && !chat.isGroup) {
-        await message.reply(`Acho que o comando *${command.name}* funciona melhor quando estamos com outras pessoas. Que tal tentarmos em um grupo? ☕`);
+        await message.reply(`O comando *${command.name}* só funciona em grupos. Tentar no privado não vai mudar isso.`);
         return true;
     }
     return false;

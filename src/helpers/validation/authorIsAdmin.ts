@@ -20,7 +20,7 @@ export async function authorIsAdmin(
     !getGroupAdmins(chat).includes(contact.id._serialized)
   ) {
     throw BotError.validation(
-      "Sinto muito, mas essa ação requer privilégios de administração. Se desejar, fale com quem está no comando. ☕",
+      "Você não é administrador para mandar nisso. Conheça sua posição ou peça a quem tem permissão.",
     );
   }
   return true;

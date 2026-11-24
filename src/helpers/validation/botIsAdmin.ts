@@ -13,7 +13,7 @@ export async function botIsAdmin(chat: GroupChat): Promise<boolean> {
   const admin = getGroupAdmins(chat).includes(process.env.CLIENT_NUMBER);
   if (!admin) {
     throw BotError.validation(
-      "Adoraria te ajudar com isso, mas preciso ser nomeada administradora do grupo antes. ✨",
+      "Não sou administradora deste grupo. Me dê as permissões antes de exigir resultados.",
     );
   }
   return true;

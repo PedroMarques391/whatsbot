@@ -28,7 +28,7 @@ export async function quotedReply(message: Message): Promise<boolean> {
     } catch (error) {
       console.error("Erro ao processar resposta citada:", error);
       await message.reply(
-        "Encontrei uma barreira técnica temporária e não consegui processar o contexto dessa resposta. Retorno em breve. 🌱",
+        "Falha ao processar essa resposta. Nem tudo merece continuidade imediata — tente depois.",
       );
     }
     return true;

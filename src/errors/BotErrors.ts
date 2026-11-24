@@ -68,7 +68,7 @@ export class BotError extends Error {
     return new BotError(
       logMessage,
       userMessage ||
-        "Tivemos um pequeno imprevisto interno. Seja gentil e avise meu desenvolvedor enquanto tento me recompor. ✨",
+        "Algo falhou internamente. Avise meu desenvolvedor — de preferência com menos drama e mais contexto.",
       ErrorType.INTERNAL,
       originalError,
     );
@@ -82,7 +82,7 @@ export class BotError extends Error {
     return new BotError(
       logMessage,
       userMessage ||
-        "Tivemos uma instabilidade com um serviço externo. Tente novamente em alguns instantes. ✨",
+        "O serviço externo decidiu não colaborar agora. Tente novamente mais tarde, se ainda importar.",
       ErrorType.EXTERNAL_API,
       originalError,
     );

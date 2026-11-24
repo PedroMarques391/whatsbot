@@ -43,7 +43,7 @@ export async function onMessageCreate(client: Client, message: Message) {
     }
     console.error(`🔴 [UNHANDLED CRASH] ${command.name}`, error);
     await message.reply(
-      "Tivemos um pequeno imprevisto interno. Seja gentil e avise meu desenvolvedor enquanto tento me recompor. ✨",
+      "Algo quebrou internamente. Parabéns, você ou o servidor conseguiram essa proeza — avise meu desenvolvedor.",
     );
   }
 }

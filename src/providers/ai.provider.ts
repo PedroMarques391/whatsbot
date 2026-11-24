@@ -77,13 +77,13 @@ export class AIProvider {
       throw BotError.externalApi(
         "Limite de requisições da API OpenRouter excedido",
         error,
-        "Estou analisando muitas coisas ao mesmo tempo. Pode me chamar de novo em alguns instantes? 🌱",
+        "Excederam o limite de requisições. Esperem um pouco antes de exigir minha atenção de novo. ☕",
       );
     }
     throw BotError.externalApi(
       "Ocorreu um erro ao processar sua solicitação na API OpenRouter",
       error,
-      "Ocorreu um erro ao processar sua solicitação. Por favor, tente novamente mais tarde. 🌱",
+      "A requisição falhou. Tente de novo mais tarde, se ainda fizer diferença.",
     );
   }
 }
