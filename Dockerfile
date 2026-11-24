@@ -15,6 +15,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     g++ \
     && rm -rf /var/lib/apt/lists/*
 
+ENV PUPPETEER_SKIP_DOWNLOAD=true \
+    PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
+    npm_config_onnxruntime_node_install_cuda=skip
+
 RUN yarn install --immutable
 
 COPY . .
