@@ -110,16 +110,15 @@
                     "/unblock": "Sintax: /unblock + /command. Unblocks specific commands within the group, allowing their use and interaction."
                 },
                 "media_and_processing": {
-                    "/sticker": "Transmutes images or videos into stickers. Requires media input.",
+                    "/sticker": "Syntax: /sticker or /s (optional --audio flag). Transmutes images or videos into stickers. With --audio, creates native WhatsApp Sound Stickers in a single message: extracts audio from videos (up to 5s) or pairs an image with a quoted audio message (up to 10s).",
                     "/rename": "Sintax: /rename + name. Adjusts media metadata and naming.",
                     "/resume": "Distills recent interactions into a logical synthesis of knowledge.",
-                    "/removeBg": "Processes images to isolate the primary subject from the background.",
+                    "/removeBg": "Processes images or stickers to isolate the primary subject from the background.",
                     "/tiktok": "Sintax: /tiktok + url. Extracts video data packets from external links.",
                     "/instagram": "Sintax: /instagram + url. Extracts video or reels data packets from Instagram links.",
-                    "/youtube": "Sintax: /youtube + url. Extracts video or shorts data packets from YouTube links.",
-                    "/twitter": "Sintax: /twitter + url. Extracts video data packets from Twitter / X links.",
-                    "/pinterest": "Sintax: /pinterest + url. Extracts video or media data packets from Pinterest links.",
-                    "/images": "Sintax: /images + description. Performs visual searches based on descriptive parameters.",
+                    "/youtube": "Syntax: /youtube <url> (aliases: /yt, /ytb, /shorts; optional --onlyAudio or --oa flag). Extracts video/shorts from YouTube or downloads only the MP3 audio track when --onlyAudio / --oa is provided.",
+                    "/twitter": "Sintax: /twitter + url (aliases: /tw, /x). Extracts video data packets from Twitter / X links.",
+                    "/pinterest": "Sintax: /pinterest + url (alias: /pin). Extracts video or media data packets from Pinterest links.",
                     "/getRevoked": "Sintax: /getRevoked or /getRevoked + @user. Retrieves messages that have been deleted within the group, providing insights into removed content and interactions."
                 },
                 "personalization": {

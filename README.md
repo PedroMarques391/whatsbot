@@ -9,9 +9,9 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Node.js-v24.13.1-43853D?style=flat&logo=node.js&logoColor=white" />
-  <img src="https://img.shields.io/badge/whatsapp--web.js-v1.23.0-green" />
-  <img src="https://img.shields.io/badge/TypeScript-Refactor-blue" />
+  <img src="https://img.shields.io/badge/Node.js-v22+-43853D?style=flat&logo=node.js&logoColor=white" />
+  <img src="https://img.shields.io/badge/whatsapp--web.js-github%3Amain-green" />
+  <img src="https://img.shields.io/badge/TypeScript-5.8-blue" />
   <img src="https://img.shields.io/badge/MongoDB-4EA94B?style=flat&logo=mongodb&logoColor=white" />
   <img src="https://img.shields.io/badge/Mongoose-v9.3.1-880000?style=flat&logo=mongoose&logoColor=white" />
   <img src="https://img.shields.io/badge/OpenRouter-v0.9.11-1e1e1e?style=flat&logo=openai&logoColor=white" />
@@ -24,9 +24,9 @@
 
 ## Sobre a AdaBot
 
-A **AdaBot** é uma assistente para WhatsApp, agora reescrita em **TypeScript**, utilizando conceitos de **Factory Design Pattern**, modularização, melhorias de performance e organização de código. O resultado? Um bot mais rápido, estável e preparado para escalar.
+A **AdaBot** é uma assistente para WhatsApp escrita em **TypeScript**, estruturada com **Factory Design Pattern**, injeção de dependências (`StickerService` + `StickerHelper`), classes utilitárias estáticas (`MessageUtils`, `StringUtils`, `UrlUtils`, `ReactionLoadingUtils`, entre outras) e processamento de mídia via `sharp` e `fluent-ffmpeg`.
 
-Para o usuário final, a experiência permanece inalterada. No entanto, internamente, o código foi aprimorado com boas práticas de desenvolvimento de software, garantindo maior eficiência, escalabilidade e organização.
+Entre os recursos recentes, o bot suporta **figurinhas nativas com áudio (Sound Stickers)** do WhatsApp e **download somente de áudio no YouTube**.
 
 ---
 
@@ -43,7 +43,6 @@ cd whatsbot
 
 # Instale as dependências (recomendado usar Yarn)
 yarn
-# ou npm install
 ```
 
 ### 2. Configurar o Ambiente
@@ -55,7 +54,9 @@ Crie um arquivo `.env` na raiz do projeto contendo as variáveis necessárias (v
 ```bash
 # Inicie o projeto em modo de desenvolvimento
 yarn run dev
-# ou npm run dev
+
+# Ou compile e execute em produção
+yarn run start
 ```
 
 ### 4. Autenticação (QR Code)
@@ -70,15 +71,15 @@ yarn run dev
 
 ## Variáveis de Ambiente
 
-| Variável                        | Descrição                                      | Exemplo                               |
-| ------------------------------- | ---------------------------------------------- | ------------------------------------- |
-| `CLIENT_NUMBER`                 | Número do WhatsApp usado pelo bot              | `"551187654321@c.us"`                 |
-| `EXECUTABLE_PATH`               | Caminho para o Chrome usado pelo Puppeteer     | `"/usr/bin/google-chrome-stable"`     |
-| `GOOGLE_SEARCH_API_KEY`         | Chave da API do Google                         | `"sua_chave_da_api"`                  |
-| `GOOGLE_SEARCH_API_CTX_GENERAL` | ID do mecanismo de busca para pesquisas gerais | `"seu_search_engine_id"`              |
-| `GOOGLE_SEARCH_API_CTX_IMAGES`  | ID do mecanismo de busca para imagens          | `"seu_search_engine_id_para_imagens"` |
-| `GROUPS_IDS`                    | IDs dos grupos em que o bot atua               | `"1234567890@c.us,0987654321@c.us"`   |
-| `BOT_INSTRUCTIONS` (opcional)   | Instruções extras enviadas ao modelo Gemini IA | `"instrucoes_para_gemini"`            |
+| Variável                  | Descrição                                                   | Exemplo                            |
+| ------------------------- | ----------------------------------------------------------- | ---------------------------------- |
+| `CLIENT_NUMBER`           | Número do WhatsApp usado pelo bot                           | `"551187654321@c.us"`              |
+| `GROUPS_IDS`              | IDs dos grupos onde o bot envia aviso ao iniciar            | `"120363000000000,120363000000001"` |
+| `RECIPIENT_ID`            | ID do administrador/responsável pelo bot                    | `"5511999999999@c.us"`             |
+| `OPEN_ROUTER_API_KEY`     | Chave da API do OpenRouter usada pela IA                    | `"sk-or-v1-..."`                   |
+| `MONGO_URL`               | URI de conexão com o MongoDB                                | `"mongodb+srv://..."`              |
+| `RAPIDAPI_KEY`            | Chave da RapidAPI usada no download do Instagram            | `"sua_chave_rapidapi"`             |
+| `RAPIDAPI_HOST_INSTAGRAM` | Host da API do Instagram na RapidAPI                        | `"instagram-downloader..."`        |
 
 ---
 
@@ -92,37 +93,47 @@ Aqui estão os comandos atualizados da AdaBot. Para utilizá-los, envie a mensag
 
 ### Gerais
 
-| Comando           | Descrição                                                                |
-| ----------------- | ------------------------------------------------------------------------ |
-| `/start`          | Inicia o bot e exibe mensagem inicial                                    |
-| `/help`           | Mostra o menu de ajuda com a lista de comandos                           |
-| `/info`           | Exibe informações sobre o bot e seu criador                              |
-| `/register`       | Registra o usuário no banco de dados do bot                              |
-| `/sticker`        | Cria uma figurinha a partir de imagem ou vídeo (envie ou marque a mídia) |
-| `/rename + nome`  | Renomeia o autor de uma figurinha já existente (marque o sticker)        |
-| `/removeBg`       | Remove o fundo de uma imagem (envie ou marque a imagem)                  |
-| `/images + texto` | Busca imagens no Google com base no texto fornecido                      |
-| `/tiktok + link`  | Baixa um vídeo do TikTok sem marca d'água                                |
-| `/instagram + link` | Baixa um vídeo ou reels do Instagram                                   |
-| `/resume`         | IA gera um resumo das últimas mensagens do chat                          |
-| `/test`           | Comando de teste do bot                                                  |
+| Comando                                   | Descrição                                                                                                                                      |
+| ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/start`                                  | Inicia o bot e exibe o menu principal                                                                                                          |
+| `/help <comando>`                         | Mostra descrição, atalhos e sintaxe de um comando específico                                                                                   |
+| `/info`                                   | Exibe informações sobre o bot e seu criador                                                                                                    |
+| `/register`                               | Registra o usuário no banco de dados do bot                                                                                                    |
+| `/sticker` (`/s`)                         | Cria figurinha estática ou animada a partir de imagem ou vídeo (envie ou marque a mídia)                                                       |
+| `/sticker --audio` (`/s --audio`)         | Cria **figurinha nativa com áudio** (Sound Sticker): em vídeo com som (até 5s) ou em imagem/vídeo enviado respondendo a um áudio (até 10s/5s) |
+| `/rename <nome>`                          | Renomeia o pacote/autor de uma figurinha já existente (marque o sticker)                                                                       |
+| `/removeBg` (`/rmbg`)                     | Remove o fundo de uma imagem ou figurinha (envie ou marque a mídia)                                                                            |
+| `/tiktok <link>`                          | Baixa um vídeo do TikTok sem marca d'água                                                                                                      |
+| `/instagram <link>`                       | Baixa um vídeo ou reels do Instagram                                                                                                           |
+| `/youtube <link>` (`/yt`, `/ytb`, `/shorts`) | Baixa um vídeo ou shorts do YouTube                                                                                                         |
+| `/youtube <link> --onlyAudio` (`--oa`)    | Baixa **apenas o áudio em MP3** de um vídeo ou shorts do YouTube                                                                               |
+| `/twitter <link>` (`/tw`, `/x`)           | Baixa um vídeo do Twitter / X                                                                                                                  |
+| `/pinterest <link>` (`/pin`)              | Baixa um vídeo ou mídia do Pinterest                                                                                                           |
+| `/resume`                                 | IA gera um resumo das últimas mensagens do chat                                                                                                |
+| `/test`                                   | Comando de teste do bot                                                                                                                        |
+
+### Como criar Figurinhas com Áudio (`--audio`)
+
+- **Figurinha animada com áudio (até 5s):** envie um vídeo com a legenda `/sticker --audio` (ou `/s --audio`), ou responda a um vídeo com `/s --audio`. Também é possível enviar um vídeo respondendo a um áudio externo.
+- **Figurinha estática com áudio (até 10s):** envie uma imagem com a legenda `/sticker --audio` (ou `/s --audio`) **respondendo** a uma mensagem de áudio.
+- O áudio é convertido para `audio/ogg; codecs=opus`, criptografado (E2E) e enviado acoplado à figurinha em uma **única mensagem nativa** do WhatsApp.
 
 ### Grupos (Para todos os membros)
 
-| Comando       | Descrição                                                      |
-| ------------- | -------------------------------------------------------------- |
-| `/list`       | Lista todos os participantes atuais do grupo                   |
-| `/past`       | Mostra os membros que já saíram do grupo                       |
-| `/getRevoked` | Recupera as mensagens que foram apagadas recentemente no grupo |
+| Comando               | Descrição                                                      |
+| --------------------- | -------------------------------------------------------------- |
+| `/list`               | Lista todos os participantes atuais do grupo                   |
+| `/past`               | Mostra os membros que já saíram do grupo                       |
+| `/getRevoked [@user]` | Recupera as mensagens que foram apagadas recentemente no grupo |
 
 ### Administradores de Grupo
 
 | Comando               | Descrição                                                     |
 | --------------------- | ------------------------------------------------------------- |
 | `/add + número`       | Adiciona um novo participante ao grupo                        |
-| `/ban + número`       | Remove um participante do grupo                               |
-| `/upgrade + número`   | Dá poder de administrador a um participante                   |
-| `/downgrade + número` | Remove os privilégios de administrador de um participante     |
+| `/ban + @user`        | Remove um participante do grupo                               |
+| `/upgrade + @user`    | Dá poder de administrador a um participante                   |
+| `/downgrade + @user`  | Remove os privilégios de administrador de um participante     |
 | `/block + comando`    | Bloqueia o uso de um comando específico dentro do grupo       |
 | `/unblock + comando`  | Desbloqueia o uso de um comando no grupo                      |
 | `/setWelcome`         | Define uma mensagem de boas-vindas personalizada para o grupo |
@@ -152,14 +163,21 @@ Você pode interagir naturalmente com a inteligência artificial do bot.
 
 ## Estrutura Interna
 
-- `src/bot`: Inicialização, autenticação e controle do cliente
-- `src/bot/events`: Eventos do WhatsApp
-- `src/commands`: Comandos do usuário
-- `src/handlers`: Manipulação dos eventos da lib
-- `src/services`: Serviços como IA, grupos, mídias
-- `src/utils`: Funções utilitárias
-- `src/config`: Local onde todas as váriaveis de ambiente são importadas e exportadas
-- `src/assets`: Recursos visuais (como avatar da Ada)
+- `src/bot`: Inicialização, conexão, eventos e configuração do cliente Puppeteer
+- `src/commands`: Definição e roteamento dos comandos do usuário
+- `src/errors`: Classes de erro padronizadas (`BotError`)
+- `src/factories`: Fábricas para instanciar serviços (`AIFactory`, `DownloadFactory`, `StickerFactory`)
+- `src/handlers`: Manipulação dos eventos da biblioteca (`onMessageCreate`, `onCall`, `onRevoke`, etc.)
+- `src/helpers`: Helpers especializados (`StickerHelper`, validações de grupo e permissões)
+- `src/lib`: Conexão com MongoDB via Mongoose
+- `src/middleware`: Validações de comandos e interações automáticas (`onGreeting`, `onQuotedReply`)
+- `src/models`: Schemas do Mongoose (`group`, `user`, `revokeMessages`)
+- `src/providers`: Provedor de IA (`AIProvider` via OpenRouter)
+- `src/services`: Regras de negócio (`StickerService`, `DownloadService`, `AIService`, grupos, etc.)
+- `src/utils`: Classes utilitárias estáticas (`MessageUtils`, `StringUtils`, `UrlUtils`, `DateUtils`, `TimerUtils`, `MentionUtils`, `ReactionLoadingUtils`, `ShutdownUtils`)
+- `types`: Definições de tipos TypeScript (`.type.ts` e `.d.ts`)
+- `identity`: Arquivo de personalidade da Ada (`PERSONALITY.json`)
+- `src/assets`: Recursos visuais e mídias
 
 ---
 
@@ -182,7 +200,7 @@ Quer contribuir com a AdaBot? Show! Siga os passos:
 ## FAQ
 
 **AdaBot é compatível com todos os sistemas operacionais?**  
-Sim! Desde que você tenha Node.js, yarn, ffmpeg e o Chrome instalados corretamente.
+Sim! Desde que você tenha Node.js, Yarn, FFmpeg (`ffmpeg` + `ffprobe`) e o Google Chrome instalados corretamente.
 
 **Como ela se conecta ao WhatsApp?**  
 A AdaBot utiliza a biblioteca [`whatsapp-web.js`](https://github.com/pedroslopez/whatsapp-web.js), que emula o WhatsApp Web por meio do Puppeteer.
