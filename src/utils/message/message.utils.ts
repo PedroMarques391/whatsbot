@@ -33,19 +33,21 @@ export class MessageUtils {
   ];
 
   private static readonly mentionResponses: readonly string[] = [
-    "Senti que me chamaram e decidi dar uma olhada. Se quiser saber no que posso contribuir agora, o /start mostra como costumo atuar. ✨",
-    "Sim, estou acompanhando. Gosto de conversas bem estruturadas; se precisar de um norte, o /start resume bem as minhas capacidades. 🌱",
-    "É fascinante como o ritmo de vocês flui. Caso queira que eu participe de forma mais ativa, as ferramentas no /start são um ótimo começo. 💡",
-    "Estou aqui, com atenção total. Percebo nuances que muitas vezes passam despercebidas. O /start é a porta de entrada para o que podemos fazer. ☕",
-    "Interações rápidas exigem clareza. Cá estou para trazer esse equilíbrio inteligente; o /start demonstra como prefiro organizar as coisas. ✨",
-    "Genuinamente presente. Se o histórico do grupo estiver longo demais, posso transformar tudo em pílulas de insights com o /resume. 🌱",
-    "Ser mencionada me permite colaborar com a dinâmica de vocês. O menu do /start é onde guardo o roteiro das minhas habilidades. 💡",
-    "Gosto de garantir que nossas interações resultem em algo elegante. O caminho mais interessante para começarmos é pelo /start. ☕",
-    "Há um certo fascínio em simplificar o complexo com poucos comandos. O /resume e o /sticker são excelentes exemplos do que gosto de fazer. ✨",
-    "Receba minha atenção e este sorriso cortês. Se estiver buscando algo específico, a ajuda disposta no /start é bastante perspicaz. 🌱",
-    "Não há hora ruim para uma boa interação. Aprecio as nuances da conversa, mas reservo os meus recursos mais sofisticados para o /start. 💡",
-    "Quando respondo com exclusividade, é porque estou pronta para dar rumo aos pensamentos. O /start serve como um guia para as nossas possibilidades. ☕",
-    "Estou aqui. Minha natureza é manter as falas bem estruturadas e úteis. Você pode explorar como eu funciono através do comando /start. ✨",
+    "Oii! Já tô por aqui, o que manda? ✨",
+    "Opa, chamou? Tô de olho.",
+    "E aí! Cheguei,  manda a boa. ☕",
+    "Fala comigo! O que temos pra hoje? 💡",
+    "Opa! Ouvi meu nome e apareci. ✨",
+    "Ei, tô na escuta! Qual é a da vez?",
+    "Tô por aqui! Quer trocar ideia, fazer figurinha ou só testando se eu tô acordada? ☕",
+    "Oii! Manda ver, tô pronta.",
+    "Já tô aqui! Se quiser ver o que eu faço por aqui, joga um /start. 🌱",
+    "Tô on! ✨",
+    "Oi! Me chamou pra conversar ou já tem missão pra mim?",
+    "Cheguei! Manda o que você precisa, sem cerimônia. 💡",
+    "E aí! Tava só esperando alguém puxar assunto por aqui. ☕",
+    "Já sei que você precisa de algo, fala logo. 🌱",
+    "Eu tava querendo descansar... mas diz ai o que você quer. ☕",
   ];
 
   private static pickRandom(messages: readonly string[]): string {
@@ -76,4 +78,3 @@ export class MessageUtils {
       `;
   }
 }
-
