@@ -14,7 +14,7 @@ import {
 
 export class StickerHelper {
   private readonly MAX_STATIC_AUDIO_DURATION = 10;
-  private readonly MAX_ANIMATED_AUDIO_DURATION = 5;
+  private readonly MAX_ANIMATED_AUDIO_DURATION = 10;
   private readonly MAX_STICKER_AUDIO_SIZE_BYTES = 500 * 1024;
   private readonly MAX_STICKER_WEBP_BYTES = 1_000_000;
   private readonly STICKER_AUTHOR = "adabot";
