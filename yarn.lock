@@ -460,12 +460,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@openrouter/sdk@npm:^0.9.11":
-  version: 0.9.11
-  resolution: "@openrouter/sdk@npm:0.9.11"
+"@openrouter/agent@npm:^1.3.0":
+  version: 1.3.0
+  resolution: "@openrouter/agent@npm:1.3.0"
+  dependencies:
+    "@openrouter/sdk": "npm:^1.5.85"
+    zod: "npm:^4.0.0"
+  peerDependencies:
+    "@modelcontextprotocol/client": ^2.0.0
+  peerDependenciesMeta:
+    "@modelcontextprotocol/client":
+      optional: true
+  checksum: 10c0/ea1287b3dedfbe7fee101cb68d203c5d728e96c75e800088e3c80a6421bc9df98fe827488f618566adfe481c86a8ff1766e5cbf7d8bc355b1c83a3d9012622e1
+  languageName: node
+  linkType: hard
+
+"@openrouter/sdk@npm:^1.5.142, @openrouter/sdk@npm:^1.5.85":
+  version: 1.5.142
+  resolution: "@openrouter/sdk@npm:1.5.142"
   dependencies:
     zod: "npm:^3.25.0 || ^4.0.0"
-  checksum: 10c0/d61da0f1434e5ad8d0d70b926fc1d36abd2bd5de172b80cedfca46ba3c1141ab58a3d26218353b5665a90a9e993a1574d9d995ace6859e0bfee510b78c595d80
+  checksum: 10c0/e1d36be3a6c48ef9ef73683e8d806a11ff872704063a17b0a094fada5aa8e997a0ec84213aa647b531b740cddda361042e469aa00afd4a26a50c2acc2564c44e
   languageName: node
   linkType: hard
 
@@ -3925,7 +3940,8 @@ __metadata:
     "@eslint/js": "npm:^9.26.0"
     "@google/genai": "npm:^0.8.0"
     "@imgly/background-removal-node": "npm:^1.4.5"
-    "@openrouter/sdk": "npm:^0.9.11"
+    "@openrouter/agent": "npm:^1.3.0"
+    "@openrouter/sdk": "npm:^1.5.142"
     "@types/figlet": "npm:^1.7.0"
     "@types/fluent-ffmpeg": "npm:^2.1.27"
     "@types/module-alias": "npm:^2.0.4"
@@ -3952,6 +3968,7 @@ __metadata:
     typescript-eslint: "npm:^8.31.1"
     whatsapp-web.js: "github:pedroslopez/whatsapp-web.js"
     youtube-dl-exec: "npm:^3.1.17"
+    zod: "npm:^4.6.7"
   languageName: unknown
   linkType: soft
 
