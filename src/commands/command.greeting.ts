@@ -6,7 +6,7 @@ export const GreetingCommand: ICommand = {
   description: "Inicia uma interação de saudação com o bot",
   aliases: ["adabot", `@${process.env.CLIENT_NUMBER.split("@")[0]}`],
   conditions: ({ message }) => !message.fromMe,
-  async execute({ message, chat }) {
-    await greeting(message, chat);
+  async execute({ message, chat, client }) {
+    await greeting(message, chat, client);
   },
 };

@@ -11,4 +11,14 @@ export class MentionUtils {
       user: targetMention.id.user,
     };
   }
+
+  static isBotMentioned(message: Message, botLid: string | null): boolean {
+    if (!botLid) return false;
+
+    const mentionedIds = message.mentionedIds ?? [];
+
+    if (mentionedIds.length !== 1) return false;
+
+    return mentionedIds[0] === botLid;
+  }
 }
