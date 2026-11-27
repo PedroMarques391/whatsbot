@@ -7,8 +7,8 @@ export const TalkCommand: ICommand = {
   sintaxe: "ada <mensagem>",
   onlyGroup: false,
   aliases: ["ada,", "adabot,"],
-  async execute({ message }) {
+  async execute({ chat, client, message }) {
     const aiService = AIFactory.getAiService();
-    await aiService.response(message, 1, 200);
+    await aiService.response(client, message, 1, 200, chat);
   },
 };

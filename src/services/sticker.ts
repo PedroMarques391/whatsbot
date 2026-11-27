@@ -8,8 +8,8 @@ export class StickerService {
     private readonly stickerHelper: StickerHelper,
   ) {}
 
-  async makeSticker(chatId: string): Promise<void> {
-    const withAudio = this.hasAudioFlag();
+  async makeSticker(chatId: string, hasAudioFlag?: boolean): Promise<void> {
+    const withAudio = hasAudioFlag ? hasAudioFlag : this.hasAudioFlag();
     const quotedMessage = this.message.hasQuotedMsg
       ? await this.message.getQuotedMessage()
       : null;

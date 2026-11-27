@@ -9,6 +9,7 @@ import { sendUpdateMessages } from "../services/group.service/update";
 import { getGroupAdmins } from "./group/groupAdmins";
 import { groupParticipants } from "./group/groupParticipants";
 import { StickerHelper } from "./sticker/sticker.helper";
+import { ToolsHelper } from "./tools/tools.helper";
 import { authorIsAdmin } from "./validation/authorIsAdmin";
 import { botIsAdmin } from "./validation/botIsAdmin";
 import { isAuthorOrBot } from "./validation/isAuthorOrBot";
@@ -32,4 +33,5 @@ export {
   sendUpdateMessages,
   showPastMembers,
   StickerHelper,
+  ToolsHelper,
 };
