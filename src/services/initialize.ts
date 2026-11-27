@@ -28,6 +28,12 @@ export async function init(client: Client) {
 export async function start(message: Message, client: Client) {
   const chat = await message.getChat();
   const contact = await message.getContact();
+  const userName =
+    contact.pushname ||
+    contact.name ||
+    contact.shortName ||
+    message._data?.notifyName ||
+    "usuário";
   const date = new Date();
   const hours: string | number =
     date.getHours() < 10 ? `0${date.getHours()}` : date.getHours();
@@ -39,9 +45,9 @@ export async function start(message: Message, client: Client) {
     ╭━━━ ◉ *Menu* ◉ ━━━╮
     
     ◉━━━ *AdaBot* ━━━◉  
-    🌺 Olá, @${contact.number}! Eu sou a Ada.  
+    🌺 Olá, ${userName}! Eu sou a Ada.  
     🌺 Todos os comandos devem iniciar com " / ".  
-    🌺 Chat: ${contact.pushname} 
+    🌺 Chat: ${contact.pushname || userName} 
     🌺 Hora: ${hours}:${minutes}:${seconds}  
     
     ╭─≺ *Infos* ≻─╮  
@@ -97,7 +103,6 @@ export async function start(message: Message, client: Client) {
   );
   await client.sendMessage(chat.id._serialized, media, {
     caption: menu,
-    mentions: [contact.id._serialized],
   });
 
   await message.react("❤️");
